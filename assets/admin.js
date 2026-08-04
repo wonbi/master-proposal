@@ -41,7 +41,7 @@
     return "images/products/"+s.replace(/^\/+/,"");
   }
   function uid(){ return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():("k"+Math.random().toString(36).slice(2)+Date.now()); }
-  function setDirty(v){ dirty=v; var st=document.getElementById("save-status"); var bt=document.getElementById("btn-save"); if(st){st.textContent=v?"저장 안 된 변경사항이 있습니다":"모든 변경사항이 저장됨";st.className="status"+(v?" dirty":"");} if(bt)bt.disabled=!v; }
+  function setDirty(v){ dirty=v; var st=document.getElementById("save-status"); var bt=document.getElementById("btn-save"); if(st){st.textContent=v?"저장 안 된 변경사항이 있습니다 — [저장] 또는 [전체 저장]":"각 상품의 [저장] 버튼으로 저장하세요";st.className="status"+(v?" dirty":"");} if(bt)bt.disabled=!v; }
   function toast(msg,isErr){ var t=document.createElement("div"); t.className="toast"+(isErr?" err":""); t.textContent=msg; document.body.appendChild(t); requestAnimationFrame(function(){t.classList.add("show");}); setTimeout(function(){t.classList.remove("show");setTimeout(function(){t.remove();},300);},2600); }
 
   /* ---------------- 화면들 ---------------- */
@@ -116,6 +116,7 @@
         '</div>'+
         '<div class="card-foot">'+
           '<label class="toggle"><input type="checkbox" data-f="show"'+(it.show!==false?' checked':'')+'> 사이트에 표시</label>'+
+          '<button class="btn-saveone" data-saveone="'+it._key+'">저장</button>'+
           '<button class="btn-del" data-del="'+it._key+'">삭제</button>'+
         '</div>'+
       '</div>'+
@@ -219,7 +220,7 @@
       '<a href="'+pubHref+'" target="_blank" rel="noopener">공개 사이트 보기 ↗</a>'+
       '<button class="btn-ghost" id="btn-logout">로그아웃</button></div>'+
       '<div class="wrap">'+
-      '<div class="hint">상품을 수정·추가·삭제한 뒤 아래 <b>[확정 저장]</b> 버튼을 누르면 공개 사이트에 반영됩니다. 사진은 각 상품의 <b>[사진 업로드]</b>로 바꿀 수 있어요.</div>'+
+      '<div class="hint">상품을 고친 뒤 그 상품의 <b>[저장]</b> 버튼을 누르면 바로 공개 사이트에 반영됩니다. 사진은 <b>[사진 업로드]</b>, 삭제는 <b>[삭제]</b>로 즉시 처리돼요. (아래 <b>[전체 저장]</b>은 여러 개를 한 번에 저장할 때만 쓰세요.)</div>'+
       settingsPanelHTML();
 
     CATS.forEach(function(c){
@@ -232,8 +233,8 @@
     });
 
     html+='</div>'+
-      '<div class="savebar"><span class="status" id="save-status">모든 변경사항이 저장됨</span>'+
-      '<button class="btn-save" id="btn-save" disabled>확정 저장</button></div>';
+      '<div class="savebar"><span class="status" id="save-status">각 상품의 [저장] 버튼으로 저장하세요</span>'+
+      '<button class="btn-save" id="btn-save" disabled>전체 저장</button></div>';
     root.innerHTML=html;
     setDirty(dirty);
     bindEditor();
@@ -316,8 +317,10 @@
       }
       if(e.target.id==="btn-add-cancel"){ addingCat=null; newItem=null; renderEditor(); return; }
       if(e.target.id==="btn-add-save"){ saveNewItem(e.target); return; }
+      var saveKey=e.target.getAttribute("data-saveone");
+      if(saveKey){ saveOne(saveKey, e.target); return; }
       var delKey=e.target.getAttribute("data-del");
-      if(delKey){ var it=findItem(delKey); if(it&&it.id)deletedIds.push(it.id); items=items.filter(function(x){return x._key!==delKey;}); setDirty(true); renderEditor(); }
+      if(delKey){ deleteOne(delKey); return; }
     });
   }
 
@@ -452,6 +455,33 @@
     }).catch(function(err){ btn.disabled=false; btn.textContent="이 상품 추가"; toast("추가 실패: "+(err.message||err), true); });
   }
 
+  // 기존 상품 1개만 즉시 저장
+  function saveOne(key, btn){
+    var it=findItem(key); if(!it) return;
+    if(!(it.name||"").trim()){ toast("상품명을 입력하세요", true); return; }
+    if(btn){ btn.disabled=true; btn.textContent="저장중…"; }
+    var r=dbRow(it, (typeof it.sort_order==="number"?it.sort_order:0));
+    var q = it.id ? client.from("products").update(r).eq("id",it.id) : client.from("products").insert(r).select();
+    q.then(function(res){
+      if(res && res.error) throw res.error;
+      if(!it.id && res && res.data && res.data[0]) it.id=res.data[0].id;
+      if(btn){ btn.disabled=false; btn.textContent="저장됨 ✓"; setTimeout(function(){ if(btn) btn.textContent="저장"; }, 1500); }
+      toast("저장됐어요 ✅ 공개 사이트에 반영됩니다");
+    }).catch(function(err){ if(btn){ btn.disabled=false; btn.textContent="저장"; } toast("저장 실패: "+(err.message||err), true); });
+  }
+
+  // 상품 1개 즉시 삭제
+  function deleteOne(key){
+    var it=findItem(key); if(!it) return;
+    if(!window.confirm("이 상품을 삭제할까요?\n공개 사이트에서 바로 사라집니다.")) return;
+    function done(){ items=items.filter(function(x){return x._key!==key;}); renderEditor(); toast("삭제됐어요"); }
+    if(it.id){
+      client.from("products").delete().eq("id",it.id).then(function(res){
+        if(res && res.error) throw res.error; done();
+      }).catch(function(err){ toast("삭제 실패: "+(err.message||err), true); });
+    } else { done(); }
+  }
+
   function dbRow(it, order){
     var r={ category:it.category, name:(it.name||"").trim(), warehouse:(it.warehouse||"").trim(), spec:(it.spec||"").trim(),
       supply_price:parseInt(it.supply_price,10)||0, courier:(it.courier||"").trim(), ship_fee:parseInt(it.ship_fee,10)||0,
@@ -479,7 +509,7 @@
     }).then(function(){
       renderEditor(); toast("저장 완료 — 공개 사이트에 반영됐어요 ✅");
     }).catch(function(err){
-      btn.disabled=false; btn.textContent="확정 저장";
+      btn.disabled=false; btn.textContent="전체 저장";
       toast("저장 실패: "+(err.message||err), true);
     });
   }
