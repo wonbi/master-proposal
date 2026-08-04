@@ -53,7 +53,7 @@
 
 ## 다 됐습니다 — 이렇게 쓰면 됩니다
 
-1. 브라우저에서 **`https://wonbi.github.io/master-proposal/admin`** 접속
+1. 브라우저에서 **`https://wonbi.github.io/master-proposal/admin.html`** 접속
 2. 3단계에서 만든 이메일/비밀번호로 **로그인**
 3. 상품 카드에서 수정:
    - 공급가·택배비·상품명·설명 등 텍스트 수정
