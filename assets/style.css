@@ -68,9 +68,8 @@ a:hover { color: var(--navy); }
 /* 사진 위에서도 제목이 또렷하게 */
 .hero h1 { text-shadow: 0 2px 22px rgba(0,0,0,0.42); }
 .hero-lead { text-shadow: 0 1px 12px rgba(0,0,0,0.38); }
-.hero-circle { position: absolute; border-radius: 50%; }
-.hero-circle.c1 { right: -60px; top: -40px; width: 360px; height: 360px; background: rgba(255,176,32,0.14); }
-.hero-circle.c2 { right: 120px; bottom: -80px; width: 240px; height: 240px; background: rgba(255,91,57,0.16); }
+/* 배경 사진이 있으므로 장식 원은 숨김 (사진이 지저분해 보이는 것 방지) */
+.hero-circle { display: none; }
 .hero > *:not(.hero-circle):not(.hero-wave) { position: relative; }
 
 /* 표지 아래 파도 곡선 */
