@@ -623,9 +623,19 @@
   function chk(res){ if(res && res.error) throw res.error; return res; }
 
   /* ---------------- 로드 / 부팅 ---------------- */
+  // 한글 이름에 자주 쓰는 단어 → 영문 주소
+  var SLUG_HINTS = [
+    ["셀러","seller"], ["온라인","online"], ["스마트스토어","store"], ["스토어","store"],
+    ["공동구매","market"], ["공구","market"], ["마켓","market"], ["도매","wholesale"],
+    ["급식","catering"], ["식자재","food"], ["소매","retail"], ["선물","gift"], ["기본","default"]
+  ];
   function slugify(name){
-    var s=(name||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
-    if(!s) s="v"+uid().slice(0,6);
+    var raw=(name||"").toLowerCase();
+    var s=raw.replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+    if(!s){ // 한글 등 영문이 없을 때: 키워드 추정
+      for(var i=0;i<SLUG_HINTS.length;i++){ if(raw.indexOf(SLUG_HINTS[i][0])>-1){ s=SLUG_HINTS[i][1]; break; } }
+    }
+    if(!s) s="v"+(versions.length+1);
     var base=s, n=2;
     while(versions.some(function(v){return v.slug===s;})){ s=base+"-"+n; n++; }
     return s;
@@ -641,13 +651,20 @@
   }
   function renameVersion(){
     if(!currentVersion) return;
-    var name=window.prompt("버전 이름 변경", currentVersion.name); if(!name||!name.trim()) return;
-    name=name.trim();
-    client.from("versions").update({name:name}).eq("id",currentVersion.id).then(chk).then(function(){
-      currentVersion.name=name;
-      var v=versions.filter(function(x){return x.id===currentVersion.id;})[0]; if(v)v.name=name;
-      renderEditor(); toast("이름을 바꿨어요");
-    }).catch(function(err){ toast("이름 변경 실패: "+(err.message||err), true); });
+    var name=window.prompt("버전 이름 변경", currentVersion.name); if(name===null) return;
+    name=(name||"").trim(); if(!name) return;
+    var slug=window.prompt(
+      "이 버전의 주소(영문)를 정하세요.\n예: seller  →  .../?v=seller\n\n영문 소문자·숫자·하이픈(-)만 쓸 수 있습니다.",
+      currentVersion.slug);
+    if(slug===null) return;
+    slug=(slug||"").trim().toLowerCase().replace(/[^a-z0-9-]/g,"");
+    if(!slug){ toast("주소는 영문/숫자로 입력해주세요", true); return; }
+    if(versions.some(function(v){ return v.slug===slug && v.id!==currentVersion.id; })){ toast("이미 쓰고 있는 주소예요. 다른 걸로 해주세요", true); return; }
+    client.from("versions").update({name:name, slug:slug}).eq("id",currentVersion.id).then(chk).then(function(){
+      currentVersion.name=name; currentVersion.slug=slug;
+      var v=versions.filter(function(x){return x.id===currentVersion.id;})[0]; if(v){ v.name=name; v.slug=slug; }
+      renderEditor(); toast("변경됐어요 — 주소: ?v="+slug);
+    }).catch(function(err){ toast("변경 실패: "+(err.message||err), true); });
   }
   function copyVersionLink(){
     if(!currentVersion) return;
