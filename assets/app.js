@@ -308,6 +308,29 @@
       .then(function (r) { return r.json(); });
   }
 
+  function loadSettings() {
+    var sb = CFG.supabase || {};
+    if (!sb.url || !sb.anonKey || !window.supabase) return Promise.resolve();
+    var c = window.supabase.createClient(sb.url, sb.anonKey);
+    return c.from("settings").select("*").then(function (res) {
+      if (res.error || !res.data) return;
+      var m = {};
+      res.data.forEach(function (r) { m[r.key] = r.value; });
+      if (m.hero_eyebrow != null) CFG.heroEyebrow = m.hero_eyebrow;
+      if (m.hero_lead != null) CFG.heroLead = m.hero_lead;
+      if (m.hero_title1 != null || m.hero_title2 != null || m.hero_title3 != null) {
+        CFG.heroTitleLines = [
+          m.hero_title1 != null ? m.hero_title1 : (CFG.heroTitleLines || [])[0] || "",
+          m.hero_title2 != null ? m.hero_title2 : (CFG.heroTitleLines || [])[1] || "",
+          m.hero_title3 != null ? m.hero_title3 : (CFG.heroTitleLines || [])[2] || ""
+        ];
+      }
+      ["company","team","kakao","phone","email"].forEach(function(k){ if(m[k]!=null) CFG[k]=m[k]; });
+      if (m.manager_name != null) CFG.managerName = m.manager_name;
+      if (m.manager_title != null) CFG.managerTitle = m.manager_title;
+    }).catch(function () {});
+  }
+
   function loadSupabase() {
     var sb = CFG.supabase || {};
     if (!sb.url || !sb.anonKey || !window.supabase) return Promise.reject("no-supabase");
@@ -357,7 +380,7 @@
       if (e !== "no-sheet") console.warn("구글 시트 로드 실패 → 기본 데이터 사용:", e);
       return loadFallback();
     })
-    .then(function (list) { render(normalize(list)); })
+    .then(function (list) { return loadSettings().then(function () { render(normalize(list)); }); })
     .catch(function (e) {
       console.error(e);
       document.getElementById("app").innerHTML =

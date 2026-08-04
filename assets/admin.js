@@ -23,6 +23,8 @@
   var acResults = [];    // 자동완성 검색결과(비공개 카탈로그)
   var acTimer = null;
   var _delegated = false; // root 이벤트는 한 번만 바인딩
+  var siteSettings = {};  // 상단·회사 문구 설정
+  var settingsOpen = false;
 
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
   function imgUrl(v){
@@ -116,6 +118,49 @@
     '</div>';
   }
 
+  function settingsEffective(){
+    var d = {
+      hero_eyebrow: CFG.heroEyebrow||"", hero_lead: CFG.heroLead||"",
+      hero_title1: (CFG.heroTitleLines||[])[0]||"", hero_title2: (CFG.heroTitleLines||[])[1]||"", hero_title3: (CFG.heroTitleLines||[])[2]||"",
+      company: CFG.company||"", team: CFG.team||"", manager_name: CFG.managerName||"", manager_title: CFG.managerTitle||"",
+      phone: CFG.phone||"", email: CFG.email||"", kakao: CFG.kakao||""
+    };
+    for(var k in siteSettings){ if(siteSettings[k]!=null) d[k]=siteSettings[k]; }
+    return d;
+  }
+  function settingsPanelHTML(){
+    var s=settingsEffective();
+    function ti(k,label,ph){ return '<div><span class="mini">'+label+'</span><input data-sf="'+k+'" value="'+esc(s[k])+'" placeholder="'+(ph||"")+'"></div>'; }
+    if(!settingsOpen){
+      return '<div class="settings-panel"><div class="sp-head" id="sp-toggle"><span>📝 상단·회사 문구 편집</span><span class="sp-caret">펼치기 ▾</span></div></div>';
+    }
+    return '<div class="settings-panel open">'+
+      '<div class="sp-head" id="sp-toggle"><span>📝 상단·회사 문구 편집</span><span class="sp-caret">접기 ▴</span></div>'+
+      '<div class="sp-body">'+
+        '<div class="sp-sec">표지(상단)</div>'+
+        '<div class="row r2">'+ti("hero_eyebrow","상단 작은 문구","공동구매 마켓 제안서 · B2B 도매")+
+          '<div><span class="mini">표지 설명(문단)</span><textarea data-sf="hero_lead" rows="2">'+esc(s.hero_lead)+'</textarea></div></div>'+
+        '<div class="row r3">'+ti("hero_title1","제목 1줄")+ti("hero_title2","제목 2줄")+ti("hero_title3","제목 3줄(노란색)")+'<div></div></div>'+
+        '<div class="sp-sec">회사 · 담당자</div>'+
+        '<div class="row r2">'+ti("company","회사명")+ti("team","팀명")+'</div>'+
+        '<div class="row r2">'+ti("manager_name","담당자명")+ti("manager_title","직함")+'</div>'+
+        '<div class="sp-sec">연락처</div>'+
+        '<div class="row r3">'+ti("phone","전화")+ti("email","이메일")+ti("kakao","카카오톡 ID")+'<div></div></div>'+
+        '<div class="sp-foot"><span class="sp-note">저장하면 공개 사이트 상단·문의에 바로 반영됩니다.</span><button class="btn-addsave" id="btn-save-settings">문구 저장</button></div>'+
+      '</div></div>';
+  }
+  function saveSettings(btn){
+    btn.disabled=true; btn.textContent="저장 중…";
+    var keys=["hero_eyebrow","hero_title1","hero_title2","hero_title3","hero_lead","company","team","manager_name","manager_title","phone","email","kakao"];
+    var eff=settingsEffective();
+    var rows=keys.map(function(k){ return {key:k, value:(eff[k]!=null?String(eff[k]):"")}; });
+    client.from("settings").upsert(rows).then(chk).then(function(){
+      rows.forEach(function(r){ siteSettings[r.key]=r.value; });
+      btn.disabled=false; btn.textContent="문구 저장";
+      toast("문구가 저장됐어요 ✅ 공개 사이트에 반영됩니다");
+    }).catch(function(err){ btn.disabled=false; btn.textContent="문구 저장"; toast("저장 실패: "+(err.message||err), true); });
+  }
+
   function addFormHTML(){
     var it=newItem; var pv=imgUrl(it.image);
     var taxSel=function(v){return '<option'+(it.tax===v?' selected':'')+'>'+v+'</option>';};
@@ -159,7 +204,8 @@
       '<a href="index.html" target="_blank" rel="noopener">공개 사이트 보기 ↗</a>'+
       '<button class="btn-ghost" id="btn-logout">로그아웃</button></div>'+
       '<div class="wrap">'+
-      '<div class="hint">상품을 수정·추가·삭제한 뒤 아래 <b>[확정 저장]</b> 버튼을 누르면 공개 사이트에 반영됩니다. 사진은 각 상품의 <b>[사진 업로드]</b>로 바꿀 수 있어요.</div>';
+      '<div class="hint">상품을 수정·추가·삭제한 뒤 아래 <b>[확정 저장]</b> 버튼을 누르면 공개 사이트에 반영됩니다. 사진은 각 상품의 <b>[사진 업로드]</b>로 바꿀 수 있어요.</div>'+
+      settingsPanelHTML();
 
     CATS.forEach(function(c){
       var list=items.filter(function(i){return i.category===c.key;});
@@ -191,6 +237,8 @@
 
     // 필드 입력 (재렌더 없이 값만 반영 → 포커스 유지)
     root.addEventListener("input", function(e){
+      var sf=e.target.getAttribute("data-sf");
+      if(sf){ siteSettings[sf]=e.target.value; return; }
       var nf=e.target.getAttribute("data-nf");
       if(nf && newItem){
         if(nf==="supply_price"||nf==="ship_fee"){ newItem[nf]=parseInt(e.target.value.replace(/[^0-9]/g,""),10)||0; }
@@ -230,6 +278,8 @@
     root.addEventListener("click", function(e){
       if(e.target.id==="btn-logout"){ client.auth.signOut().then(function(){ items=[];deletedIds=[];dirty=false; addingCat=null;newItem=null; showLogin(); }); return; }
       if(e.target.id==="btn-save"){ saveAll(); return; }
+      if(e.target.closest && e.target.closest("#sp-toggle")){ settingsOpen=!settingsOpen; renderEditor(); return; }
+      if(e.target.id==="btn-save-settings"){ saveSettings(e.target); return; }
       var addCat=e.target.getAttribute("data-add");
       if(addCat){
         addingCat=addCat;
@@ -373,10 +423,17 @@
     });
   }
 
+  function loadAdminSettings(){
+    return client.from("settings").select("*").then(function(res){
+      siteSettings={};
+      if(!res.error && res.data){ res.data.forEach(function(r){ siteSettings[r.key]=r.value; }); }
+    }).catch(function(){ siteSettings={}; });
+  }
+
   function boot(){
     root.innerHTML='<div class="loading">상품을 불러오는 중…</div>';
     client.auth.getUser().then(function(u){ window.__adminEmail=(u&&u.data&&u.data.user&&u.data.user.email)||""; });
-    loadProducts().then(function(){ dirty=false; renderEditor(); })
+    Promise.all([loadProducts(), loadAdminSettings()]).then(function(){ dirty=false; renderEditor(); })
       .catch(function(err){ toast("상품 로드 실패: "+(err.message||err), true); showLogin("데이터를 불러오지 못했습니다. DB 설정을 확인하세요."); });
   }
 
