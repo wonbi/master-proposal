@@ -308,6 +308,25 @@
       .then(function (r) { return r.json(); });
   }
 
+  function loadSupabase() {
+    var sb = CFG.supabase || {};
+    if (!sb.url || !sb.anonKey || !window.supabase) return Promise.reject("no-supabase");
+    var client = window.supabase.createClient(sb.url, sb.anonKey);
+    return client.from("products").select("*").order("sort_order", { ascending: true })
+      .then(function (res) {
+        if (res.error) throw res.error;
+        var rows = res.data || [];
+        if (!rows.length) throw new Error("supabase empty");
+        return rows.map(function (r) {
+          return {
+            category: r.category, name: r.name, warehouse: r.warehouse, spec: r.spec,
+            supplyPrice: r.supply_price, courier: r.courier, shipFee: r.ship_fee,
+            tax: r.tax, image: r.image, show: r.show
+          };
+        });
+      });
+  }
+
   function loadSheet() {
     var id = (CFG.sheetId || "").trim();
     if (!id) return Promise.reject("no-sheet");
@@ -329,7 +348,11 @@
   document.getElementById("app").innerHTML =
     '<div class="notice">상품 정보를 불러오는 중…</div>';
 
-  loadSheet()
+  loadSupabase()
+    .catch(function (e) {
+      if (e !== "no-supabase") console.warn("Supabase 로드 실패 → 다음 소스 시도:", e);
+      return loadSheet();
+    })
     .catch(function (e) {
       if (e !== "no-sheet") console.warn("구글 시트 로드 실패 → 기본 데이터 사용:", e);
       return loadFallback();
