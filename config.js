@@ -20,8 +20,8 @@ window.PROPOSAL_CONFIG = {
      공개 사이트는 기본 상품 24종을 표시합니다.
   ----------------------------------------------------------- */
   supabase: {
-    url: "",       // 예: "https://xxxxxxxx.supabase.co"
-    anonKey: ""    // 예: "eyJhbGciOi..."
+    url: "https://mcqcksuhqqppjxfdorzu.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jcWNrc3VocXFwcGp4ZmRvcnp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4MjAzOTMsImV4cCI6MjEwMTM5NjM5M30.yG5u5w4PsEt2O5Mo8F5gnJAwx-qY_RYJH1FxBZaQzDI"
   },
 
   /* -----------------------------------------------------------
