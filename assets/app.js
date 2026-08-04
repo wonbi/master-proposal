@@ -287,7 +287,7 @@
         '<div class="callout">' +
           '<div class="tile display">全</div>' +
           '<div style="flex:1;">' +
-            '<div class="title display">전체 상품은 약 500여 종 — 구글 시트로 실시간 공유합니다</div>' +
+            '<div class="title">전체 상품은 약 500여 종 — 구글 시트로 실시간 공유합니다</div>' +
             '<p>이 제안서는 대표 품목만 추린 요약본입니다. 시세·재고에 따라 수시로 업데이트되는 <strong style="color:#08324B;">전체 품목·공급가 리스트</strong>는 구글 시트로 안내드리니, 아래 연락처로 요청 주시면 열람 링크를 바로 보내드립니다.</p>' +
           '</div>' +
           '<a class="cta" href="#contact">전체 리스트 요청 →</a>' +
