@@ -30,6 +30,7 @@
   var siteSettings = {};  // 상단·회사 문구 설정(현재 버전)
   var settingsOpen = false;
   var catsOpen = false;   // 카테고리 관리 패널 펼침
+  var expandedCats = {};  // 상품목록에서 펼쳐진 카테고리 (기본 접힘)
   var versions = [];      // 제안서 버전 목록
   var currentVersion = null; // 현재 편집 중인 버전
 
@@ -301,13 +302,22 @@
       settingsPanelHTML()+
       catPanelHTML();
 
+    var anyOpen = CATS.some(function(c){ return expandedCats[c.key]; });
+    html+='<div class="prodlist-head"><span class="plh-title">상품 목록 <span class="plh-hint">(카테고리 제목을 눌러 펼치기/접기)</span></span>'+
+          '<button class="btn-ghost2" id="btn-expand-all">'+(anyOpen?'전체 접기 ▴':'전체 펼치기 ▾')+'</button></div>';
+
     CATS.forEach(function(c){
       var list=items.filter(function(i){return i.category===c.key;});
-      var hiddenMark = c.show===false ? ' <span style="color:#e0483d;font-weight:800;">· 숨김(사이트에 안 보임)</span>' : '';
-      html+='<div class="cat-block'+(c.show===false?' cat-hidden':'')+'"><div class="cat-title"><span class="dot" style="background:'+c.accent+'"></span>'+esc(c.name)+' <span class="count">'+list.length+'개</span>'+hiddenMark+'</div>';
-      html+=list.map(cardHTML).join("");
-      if(addingCat===c.key){ html+=addFormHTML(); }
-      else { html+='<div class="add-row"><button class="btn-add" data-add="'+c.key+'">+ '+esc(c.name)+' 상품 1개 추가</button></div>'; }
+      var isOpen = !!expandedCats[c.key] || addingCat===c.key;
+      var caret = isOpen ? '▾' : '▸';
+      var hiddenMark = c.show===false ? ' <span style="color:#e0483d;font-weight:800;">· 숨김</span>' : '';
+      html+='<div class="cat-block'+(c.show===false?' cat-hidden':'')+'">';
+      html+='<div class="cat-title cat-toggle-head" data-catview="'+esc(c.key)+'"><span class="tcaret">'+caret+'</span><span class="dot" style="background:'+c.accent+'"></span>'+esc(c.name)+' <span class="count">'+list.length+'개</span>'+hiddenMark+'</div>';
+      if(isOpen){
+        html+=list.map(cardHTML).join("");
+        if(addingCat===c.key){ html+=addFormHTML(); }
+        else { html+='<div class="add-row"><button class="btn-add" data-add="'+c.key+'">+ '+esc(c.name)+' 상품 1개 추가</button></div>'; }
+      }
       html+='</div>';
     });
 
@@ -388,12 +398,19 @@
       if(catSaveKey){ saveCategory(catSaveKey, e.target); return; }
       var catDelKey=e.target.getAttribute("data-catdel");
       if(catDelKey){ deleteCategory(catDelKey); return; }
+      var headEl=e.target.closest && e.target.closest(".cat-toggle-head");
+      if(headEl){ var vk=headEl.getAttribute("data-catview"); expandedCats[vk]=!expandedCats[vk]; renderEditor(); return; }
+      if(e.target.id==="btn-expand-all"){
+        var openNow=CATS.some(function(c){ return expandedCats[c.key]; });
+        expandedCats={}; if(!openNow){ CATS.forEach(function(c){ expandedCats[c.key]=true; }); }
+        renderEditor(); return;
+      }
       if(e.target.id==="btn-ver-new"){ newVersion(); return; }
       if(e.target.id==="btn-ver-rename"){ renameVersion(); return; }
       if(e.target.id==="btn-ver-link"){ copyVersionLink(); return; }
       var addCat=e.target.getAttribute("data-add");
       if(addCat){
-        addingCat=addCat;
+        addingCat=addCat; expandedCats[addCat]=true;
         newItem={_key:"NEW",category:addCat,name:"",warehouse:"",spec:"",supply_price:0,courier:"",ship_fee:addCat==="living"?2500:4000,tax:addCat==="fish"?"면세":"과세",image:"",show:true};
         renderEditor(); focusNewName(); return;
       }
