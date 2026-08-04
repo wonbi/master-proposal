@@ -22,6 +22,8 @@
   var newItem = null;    // 입력 중인 새 상품
   var acResults = [];    // 자동완성 검색결과(비공개 카탈로그)
   var acTimer = null;
+  var catalogCache = null;   // 시트 API로 받아온 전체 카탈로그(메모리 캐시)
+  var catalogLoading = false;
   var _delegated = false; // root 이벤트는 한 번만 바인딩
   var siteSettings = {};  // 상단·회사 문구 설정(현재 버전)
   var settingsOpen = false;
@@ -342,20 +344,55 @@
     if(q.length<1){ hideAc(); return; }
     acTimer=setTimeout(function(){ runCatalog(q); }, 220);
   }
+  function renderAcList(list){
+    if(!acResults.length){ list.className="ac-list show"; list.innerHTML='<div class="ac-empty">일치하는 상품이 없어요</div>'; return; }
+    list.innerHTML=acResults.map(function(r,i){
+      var price=r.supply_price?("₩"+Number(r.supply_price).toLocaleString()):"";
+      var out=r.status==="품절"?'<span class="ac-out">품절</span>':"";
+      return '<div class="ac-item" data-ac="'+i+'"><span class="ac-name">'+esc(r.name)+'</span>'+
+             '<span class="ac-meta">'+esc(r.warehouse||"")+(price?" · "+price:"")+" "+out+'</span></div>';
+    }).join("");
+    list.className="ac-list show";
+  }
+
+  // 구글 시트 Apps Script 웹앱에서 전체 카탈로그를 JSONP로 받아옴(1회 캐시)
+  function loadCatalogFromApi(){
+    var url=(CFG.catalogApiUrl||"").trim();
+    if(!url || catalogLoading) return;
+    catalogLoading=true;
+    var cbName="__cat_cb_"+(new Date()).getTime();
+    var s=document.createElement("script");
+    var sep=url.indexOf("?")>-1?"&":"?";
+    window[cbName]=function(data){
+      catalogCache = Array.isArray(data) ? data : ((data&&data.rows)||[]);
+      catalogLoading=false;
+      try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
+      if(s.parentNode) s.parentNode.removeChild(s);
+      var inp=root.querySelector('.new-card input[data-nf="name"]');
+      if(inp && inp.value) runCatalog(inp.value);
+    };
+    s.onerror=function(){ catalogLoading=false; if(s.parentNode) s.parentNode.removeChild(s);
+      var l=document.getElementById("ac-list"); if(l){ l.className="ac-list show"; l.innerHTML='<div class="ac-empty">시트 연결 실패 — 주소를 확인하세요</div>'; } };
+    s.src=url+sep+"callback="+cbName;
+    document.body.appendChild(s);
+  }
+
   function runCatalog(q){
-    if(!client) return;
+    var list=document.getElementById("ac-list"); if(!list) return;
+    // (1) 시트 API 모드: 캐시에서 로컬 필터
+    if((CFG.catalogApiUrl||"").trim()){
+      if(catalogCache===null){ loadCatalogFromApi(); list.className="ac-list show"; list.innerHTML='<div class="ac-empty">상품 목록 불러오는 중…</div>'; return; }
+      var ql=String(q).toLowerCase();
+      acResults=catalogCache.filter(function(r){ return String(r.name||"").toLowerCase().indexOf(ql)>-1; }).slice(0,8);
+      renderAcList(list); return;
+    }
+    // (2) Supabase catalog 표 모드(폴백)
+    if(!client){ hideAc(); return; }
     client.from("catalog").select("*").ilike("name","%"+q+"%").order("status",{ascending:true}).limit(8).then(function(res){
-      var list=document.getElementById("ac-list"); if(!list) return;
-      if(res.error){ hideAc(); return; }              // 카탈로그 표 없음 등 → 조용히 무시
+      var l=document.getElementById("ac-list"); if(!l) return;
+      if(res.error){ hideAc(); return; }
       acResults=res.data||[];
-      if(!acResults.length){ list.className="ac-list show"; list.innerHTML='<div class="ac-empty">일치하는 상품이 없어요</div>'; return; }
-      list.innerHTML=acResults.map(function(r,i){
-        var price=r.supply_price?("₩"+Number(r.supply_price).toLocaleString()):"";
-        var out=r.status==="품절"?'<span class="ac-out">품절</span>':"";
-        return '<div class="ac-item" data-ac="'+i+'"><span class="ac-name">'+esc(r.name)+'</span>'+
-               '<span class="ac-meta">'+esc(r.warehouse||"")+(price?" · "+price:"")+" "+out+'</span></div>';
-      }).join("");
-      list.className="ac-list show";
+      renderAcList(l);
     }).catch(function(){ hideAc(); });
   }
 
@@ -523,7 +560,7 @@
     client.auth.getUser().then(function(u){ window.__adminEmail=(u&&u.data&&u.data.user&&u.data.user.email)||""; });
     loadVersions().then(function(){
       return Promise.all([loadProducts(), loadAdminSettings()]);
-    }).then(function(){ dirty=false; renderEditor(); })
+    }).then(function(){ dirty=false; renderEditor(); if((CFG.catalogApiUrl||"").trim()) loadCatalogFromApi(); })
       .catch(function(err){ toast("상품 로드 실패: "+(err.message||err), true); showLogin("데이터를 불러오지 못했습니다. DB 설정을 확인하세요."); });
   }
 
