@@ -18,6 +18,8 @@
   var items = [];        // 작업중 상품 목록
   var deletedIds = [];   // 저장 시 삭제할 id
   var dirty = false;
+  var addingCat = null;  // 현재 새 상품 추가 중인 카테고리
+  var newItem = null;    // 입력 중인 새 상품
 
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
   function imgUrl(v){
@@ -111,6 +113,41 @@
     '</div>';
   }
 
+  function addFormHTML(){
+    var it=newItem; var pv=imgUrl(it.image);
+    var taxSel=function(v){return '<option'+(it.tax===v?' selected':'')+'>'+v+'</option>';};
+    var catOpts=CATS.map(function(c){return '<option value="'+c.key+'"'+(it.category===c.key?' selected':'')+'>'+c.label+'</option>';}).join("");
+    return '<div class="card new-card">'+
+      '<div class="thumb">'+
+        '<div class="imgbox">'+(pv?'<img src="'+esc(pv)+'" alt="">':'<span style="font-size:12px;color:#9aa7ad;">사진 없음</span>')+'</div>'+
+        '<div class="up"><label class="btn-up" data-upnew="1">사진 업로드<input type="file" accept="image/*" data-nfile="1" style="display:none;"></label></div>'+
+      '</div>'+
+      '<div class="fields">'+
+        '<div class="new-badge">＋ 새 상품 입력</div>'+
+        '<div class="row r1">'+
+          '<div><span class="mini">카테고리</span><select data-nf="category">'+catOpts+'</select></div>'+
+          '<div><span class="mini">상품명</span><input data-nf="name" value="'+esc(it.name)+'" placeholder="상품 이름"></div>'+
+          '<div><span class="mini">창고(배지)</span><input data-nf="warehouse" value="'+esc(it.warehouse)+'" placeholder="예: 동해"></div>'+
+        '</div>'+
+        '<div class="row r2">'+
+          '<div><span class="mini">설명(회색 글씨)</span><input data-nf="spec" value="'+esc(it.spec)+'" placeholder="예: 동해 창고 · 냉동"></div>'+
+          '<div><span class="mini">택배사</span><input data-nf="courier" value="'+esc(it.courier)+'" placeholder="예: 씨제이대한통운"></div>'+
+        '</div>'+
+        '<div class="row r3">'+
+          '<div><span class="mini">공급가(원)</span><input data-nf="supply_price" type="number" inputmode="numeric" value="'+esc(it.supply_price)+'"></div>'+
+          '<div><span class="mini">택배비(원)</span><input data-nf="ship_fee" type="number" inputmode="numeric" value="'+esc(it.ship_fee)+'"></div>'+
+          '<div><span class="mini">면과세</span><select data-nf="tax">'+taxSel("면세")+taxSel("과세")+'</select></div>'+
+          '<div><span class="mini">&nbsp;</span></div>'+
+        '</div>'+
+        '<div class="card-foot">'+
+          '<label class="toggle"><input type="checkbox" data-nf="show"'+(it.show!==false?' checked':'')+'> 사이트에 표시</label>'+
+          '<button class="btn-cancel" id="btn-add-cancel">취소</button>'+
+          '<button class="btn-addsave" id="btn-add-save">이 상품 추가</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }
+
   function renderEditor(){
     var email = (client && client.auth && window.__adminEmail) || "";
     var html =
@@ -125,7 +162,9 @@
       var list=items.filter(function(i){return i.category===c.key;});
       html+='<div class="cat-block"><div class="cat-title"><span class="dot" style="background:'+c.color+'"></span>'+c.label+' <span class="count">'+list.length+'개</span></div>';
       html+=list.map(cardHTML).join("");
-      html+='<div class="add-row"><button class="btn-add" data-add="'+c.key+'">+ '+c.label+' 상품 추가</button></div></div>';
+      if(addingCat===c.key){ html+=addFormHTML(); }
+      else { html+='<div class="add-row"><button class="btn-add" data-add="'+c.key+'">+ '+c.label+' 상품 1개 추가</button></div>'; }
+      html+='</div>';
     });
 
     html+='</div>'+
@@ -146,6 +185,12 @@
 
     // 필드 입력 (재렌더 없이 값만 반영 → 포커스 유지)
     root.addEventListener("input", function(e){
+      var nf=e.target.getAttribute("data-nf");
+      if(nf && newItem){
+        if(nf==="supply_price"||nf==="ship_fee"){ newItem[nf]=parseInt(e.target.value.replace(/[^0-9]/g,""),10)||0; }
+        else { newItem[nf]=e.target.value; }
+        return;
+      }
       var f=e.target.getAttribute("data-f"); if(!f)return;
       var card=e.target.closest(".card"); if(!card)return;
       var it=findItem(card.getAttribute("data-key")); if(!it)return;
@@ -154,6 +199,16 @@
       setDirty(true);
     });
     root.addEventListener("change", function(e){
+      // 새 상품 입력폼
+      var nf=e.target.getAttribute("data-nf");
+      if(nf && newItem){
+        if(nf==="show"){ newItem.show=e.target.checked; return; }
+        if(nf==="tax"){ newItem.tax=e.target.value; return; }
+        if(nf==="category"){ newItem.category=e.target.value; addingCat=e.target.value; renderEditor(); focusNewName(); return; }
+      }
+      if(e.target.getAttribute("data-nfile") && e.target.files && e.target.files[0]){ uploadNew(e.target.files[0]); return; }
+
+      // 기존 상품
       var f=e.target.getAttribute("data-f");
       if(f){
         var card=e.target.closest(".card"); var it=findItem(card.getAttribute("data-key")); if(!it)return;
@@ -164,11 +219,16 @@
       var fk=e.target.getAttribute("data-file");
       if(fk && e.target.files && e.target.files[0]){ doUpload(fk, e.target.files[0], e.target); }
     });
-    // 추가 / 삭제
+    // 추가폼 열기 / 저장 / 취소 / 삭제
     root.addEventListener("click", function(e){
       var addCat=e.target.getAttribute("data-add");
-      if(addCat){ var ni={_key:uid(),category:addCat,name:"",warehouse:"",spec:"",supply_price:0,courier:"",ship_fee:addCat==="living"?2500:4000,tax:addCat==="living"||addCat==="meal"?"과세":"면세",image:"",show:true}; items.push(ni); setDirty(true); renderEditor();
-        var el=root.querySelector('.card[data-key="'+ni._key+'"] input[data-f="name"]'); if(el)el.focus(); return; }
+      if(addCat){
+        addingCat=addCat;
+        newItem={_key:"NEW",category:addCat,name:"",warehouse:"",spec:"",supply_price:0,courier:"",ship_fee:addCat==="living"?2500:4000,tax:addCat==="fish"?"면세":"과세",image:"",show:true};
+        renderEditor(); focusNewName(); return;
+      }
+      if(e.target.id==="btn-add-cancel"){ addingCat=null; newItem=null; renderEditor(); return; }
+      if(e.target.id==="btn-add-save"){ saveNewItem(e.target); return; }
       var delKey=e.target.getAttribute("data-del");
       if(delKey){ var it=findItem(delKey); if(it&&it.id)deletedIds.push(it.id); items=items.filter(function(x){return x._key!==delKey;}); setDirty(true); renderEditor(); }
     });
@@ -187,6 +247,45 @@
       if(label){label.classList.remove("busy");label.childNodes[0].nodeValue="사진 업로드";}
       toast("사진 업로드 실패: "+(err.message||err), true);
     });
+  }
+
+  function focusNewName(){ var el=root.querySelector('.new-card input[data-nf="name"]'); if(el){ el.focus(); var v=el.value; el.value=""; el.value=v; } }
+
+  function uploadNew(file){
+    if(!newItem)return;
+    var label=root.querySelector('.new-card .btn-up[data-upnew]'); if(label){label.classList.add("busy");label.childNodes[0].nodeValue="업로드 중…";}
+    var ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+    var path=uid()+"."+ext;
+    client.storage.from("product-images").upload(path, file, { cacheControl:"3600", upsert:false }).then(function(res){
+      if(res.error) throw res.error;
+      newItem.image=client.storage.from("product-images").getPublicUrl(path).data.publicUrl;
+      renderEditor(); focusNewName(); toast("사진이 업로드됐어요");
+    }).catch(function(err){
+      if(label){label.classList.remove("busy");label.childNodes[0].nodeValue="사진 업로드";}
+      toast("사진 업로드 실패: "+(err.message||err), true);
+    });
+  }
+
+  function saveNewItem(btn){
+    if(!newItem)return;
+    if(!(newItem.name||"").trim()){ toast("상품명을 입력하세요", true); focusNewName(); return; }
+    btn.disabled=true; btn.textContent="추가 중…";
+    var maxSort=0; items.forEach(function(i){ if((i.sort_order||0)>maxSort)maxSort=i.sort_order; });
+    var row=dbRow(newItem, maxSort+10);
+    client.from("products").insert(row).select().then(function(res){
+      if(res.error) throw res.error;
+      var r=(res.data && res.data[0]) || null;
+      if(r){
+        items.push({ _key:uid(), id:r.id, category:r.category||"fish", name:r.name||"", warehouse:r.warehouse||"", spec:r.spec||"",
+          supply_price:r.supply_price||0, courier:r.courier||"", ship_fee:r.ship_fee||0, tax:r.tax||"면세", image:r.image||"", show:r.show!==false, sort_order:r.sort_order||(maxSort+10) });
+        addingCat=null; newItem=null; renderEditor();
+        toast("상품이 추가됐어요 ✅ 공개 사이트에 반영됩니다");
+      } else {
+        // 반환값이 없으면 안전하게 전체 다시 불러오기
+        addingCat=null; newItem=null;
+        loadProducts().then(function(){ dirty=false; renderEditor(); toast("상품이 추가됐어요 ✅"); });
+      }
+    }).catch(function(err){ btn.disabled=false; btn.textContent="이 상품 추가"; toast("추가 실패: "+(err.message||err), true); });
   }
 
   function dbRow(it, order){
@@ -228,7 +327,7 @@
       items=(res.data||[]).map(function(r){ return {
         _key:uid(), id:r.id, category:r.category||"fish", name:r.name||"", warehouse:r.warehouse||"", spec:r.spec||"",
         supply_price:r.supply_price||0, courier:r.courier||"", ship_fee:r.ship_fee||0, tax:r.tax||"면세",
-        image:r.image||"", show:r.show!==false }; });
+        image:r.image||"", show:r.show!==false, sort_order:r.sort_order||0 }; });
     });
   }
 

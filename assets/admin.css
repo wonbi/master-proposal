@@ -71,6 +71,15 @@ input:focus,select:focus{outline:2px solid var(--teal);outline-offset:0;border-c
 .btn-add{background:#fff;border:2px dashed var(--teal);color:var(--teal);padding:12px;width:100%;font-size:14px;}
 .btn-add:hover{background:#f0f8f8;}
 
+/* 새 상품 입력 카드 */
+.card.new-card{border:2px solid var(--teal);background:#f4fbfb;box-shadow:0 8px 24px rgba(14,138,143,0.12);}
+.new-badge{display:inline-block;font-size:12px;font-weight:800;color:#fff;background:var(--teal);padding:4px 10px;border-radius:999px;margin-bottom:4px;}
+.btn-cancel{background:#eee7d6;color:#6b5b3e;font-size:13px;padding:9px 16px;margin-left:auto;}
+.btn-cancel:hover{background:#e3d8bf;}
+.btn-addsave{background:var(--teal);color:#fff;font-size:14px;padding:10px 20px;}
+.btn-addsave:hover{background:#0c7a7f;}
+.btn-addsave:disabled{background:#a9c9ca;cursor:default;}
+
 /* ---------- 저장 바 ---------- */
 .savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(8,50,75,0.08);padding:12px 20px;display:flex;align-items:center;gap:14px;}
 .savebar .status{flex:1;font-size:13px;color:var(--muted);}
