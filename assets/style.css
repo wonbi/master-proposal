@@ -20,6 +20,7 @@
 
 * { box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
 html, body { margin: 0; }
 body {
   background: var(--sand);
@@ -146,9 +147,14 @@ a:hover { color: var(--navy); }
   width: 64px; height: 64px; border-radius: 16px; background: var(--teal); color: #fff; font-size: 30px;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.callout .title { font-size: 26px; color: var(--navy); }
+.callout .title { font-size: 24px; color: var(--navy); line-height: 1.25; white-space: nowrap; letter-spacing: -0.5px; }
 .callout p { margin: 8px 0 0; font-size: 15px; color: var(--muted); line-height: 1.6; }
-.callout .cta { background: var(--navy); color: var(--amber); font-weight: 700; font-size: 15px; padding: 14px 22px; border-radius: 12px; white-space: nowrap; }
+.callout .cta {
+  background: var(--navy); color: var(--amber); font-weight: 700; font-size: 15px;
+  padding: 14px 22px; border-radius: 12px; white-space: nowrap;
+  text-decoration: none; display: inline-block; transition: background .15s, transform .15s;
+}
+.callout .cta:hover { background: #0a4059; color: var(--amber); }
 
 /* ---------------- Contact ---------------- */
 .contact { padding: 60px 72px 70px; background: var(--amber); }
@@ -182,6 +188,7 @@ a:hover { color: var(--navy); }
   .page { width: 100%; }
   .section, .hero, .callout-sec, .contact { padding-left: 40px; padding-right: 40px; }
   .prod-grid { grid-template-columns: repeat(2, 1fr); }
+  .callout .title { font-size: 21px; white-space: normal; }
 }
 @media (max-width: 767px) {
   .section, .callout-sec { padding-left: 20px; padding-right: 20px; }
@@ -199,7 +206,7 @@ a:hover { color: var(--navy); }
   .prod-grid { grid-template-columns: 1fr; }
   .price-row .val { font-size: 24px; }
   .callout { flex-direction: column; align-items: flex-start; gap: 18px; }
-  .callout .title { font-size: 21px; }
+  .callout .title { font-size: 20px; white-space: normal; }
   .contact-in { flex-direction: column; align-items: stretch; }
   .contact h2 { font-size: 30px; }
   .contact-card { min-width: 0; }

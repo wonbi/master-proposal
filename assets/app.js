@@ -285,7 +285,7 @@
             '<div class="title display">전체 상품은 약 500여 종 — 구글 시트로 실시간 공유합니다</div>' +
             '<p>이 제안서는 대표 품목만 추린 요약본입니다. 시세·재고에 따라 수시로 업데이트되는 <strong style="color:#08324B;">전체 품목·공급가 리스트</strong>는 구글 시트로 안내드리니, 아래 연락처로 요청 주시면 열람 링크를 바로 보내드립니다.</p>' +
           '</div>' +
-          '<div class="cta">전체 리스트 요청 →</div>' +
+          '<a class="cta" href="#contact">전체 리스트 요청 →</a>' +
         '</div>' +
       '</section>';
   }
@@ -294,7 +294,7 @@
     var mark = (CFG.managerName || "박").trim().charAt(0) || "박";
     var phone = CFG.phone || "", email = CFG.email || "", kakao = CFG.kakao || "";
     return '' +
-      '<section class="contact">' +
+      '<section class="contact" id="contact">' +
         '<div class="contact-in">' +
           '<div>' +
             '<h2 class="display">지금 바로<br>거래 문의하세요</h2>' +
