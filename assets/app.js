@@ -211,11 +211,11 @@
     var cards = items.map(cardHTML).join("");
     return '' +
       '<section id="' + cat + '" class="section">' +
-        '<div class="sec-head" style="border-bottom:3px solid ' + c.accent + ';">' +
+        '<div class="sec-head" style="--acc:' + c.accent + ';">' +
           '<div class="left">' +
             '<div class="tile display" style="background:' + c.accent + ';">' + c.mark + '</div>' +
             '<div>' +
-              '<div class="kicker" style="color:' + c.accent + ';">' + esc(c.eyebrow) + '</div>' +
+              '<div class="kicker">' + esc(c.eyebrow) + '</div>' +
               '<h2 class="display">' + esc(c.name) + '</h2>' +
             '</div>' +
           '</div>' +
