@@ -1,0 +1,206 @@
+/* =========================================================
+   상품 제안서 인포그래픽 — 스타일
+   디자인 토큰은 원본 핸드오프 스펙 그대로.
+   ========================================================= */
+
+:root {
+  --navy: #08324B;
+  --teal: #0E8A8F;
+  --coral: #FF5B39;
+  --green: #3BA559;
+  --amber: #FFB020;
+  --cream: #FFF6EA;
+  --sand: #E8DFCF;
+  --card-border: #EFE3CF;
+  --dashed: #E3D8C4;
+  --muted: #4a5a63;
+  --muted2: #6b7a82;
+  --muted3: #7a8891;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+body {
+  background: var(--sand);
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--navy);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--coral); text-decoration: none; }
+a:hover { color: var(--navy); }
+.display { font-family: 'Black Han Sans', sans-serif; font-weight: 400; }
+
+/* 1080px 고정 컨테이너 (반응형은 아래 미디어쿼리) */
+.page {
+  width: 1080px;
+  max-width: 100%;
+  margin: 0 auto;
+  background: var(--cream);
+  overflow: hidden;
+}
+.section { padding: 64px 72px 20px; }
+
+/* ---------------- Hero ---------------- */
+.hero {
+  position: relative;
+  padding: 70px 72px 90px;
+  background: radial-gradient(120% 120% at 85% -10%, #0E8A8F 0%, #08324B 60%);
+  color: var(--cream);
+  overflow: hidden;
+}
+.hero-circle { position: absolute; border-radius: 50%; }
+.hero-circle.c1 { right: -60px; top: -40px; width: 360px; height: 360px; background: rgba(255,176,32,0.14); }
+.hero-circle.c2 { right: 120px; bottom: -80px; width: 240px; height: 240px; background: rgba(255,91,57,0.16); }
+.hero > *:not(.hero-circle) { position: relative; }
+.eyebrow { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: 2px; font-size: 15px; color: var(--amber); }
+.eyebrow .bar { width: 34px; height: 4px; background: var(--amber); border-radius: 2px; }
+.hero h1 { font-size: 88px; line-height: 0.98; margin: 26px 0 0; letter-spacing: -1px; }
+.hero h1 .hl { color: var(--amber); }
+.hero-lead { max-width: 640px; margin: 26px 0 0; font-size: 19px; line-height: 1.6; color: rgba(255,246,234,0.9); }
+.stats { display: flex; gap: 40px; margin-top: 46px; }
+.stats .num { font-size: 46px; color: var(--amber); line-height: 1; }
+.stats .lbl { font-size: 14px; margin-top: 6px; color: rgba(255,246,234,0.85); }
+.stats .divider { width: 1px; background: rgba(255,246,234,0.25); }
+.owner-chip {
+  display: inline-flex; align-items: center; gap: 14px; margin-top: 44px;
+  padding: 14px 22px; background: rgba(255,246,234,0.1);
+  border: 1px solid rgba(255,246,234,0.25); border-radius: 14px;
+}
+.owner-chip .avatar {
+  width: 46px; height: 46px; border-radius: 50%; background: var(--amber); color: var(--navy);
+  font-size: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.owner-chip .name { font-weight: 700; font-size: 16px; }
+.owner-chip .sub { font-size: 13px; color: rgba(255,246,234,0.8); }
+
+/* ---------------- Category overview ---------------- */
+.cat-head { text-align: center; }
+.cat-head .kicker { font-weight: 700; letter-spacing: 2px; font-size: 14px; color: var(--teal); }
+.cat-head h2 { font-size: 46px; margin: 10px 0 0; color: var(--navy); }
+.cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 44px; }
+.cat-card { display: block; border-radius: 20px; padding: 30px 26px; color: var(--navy); }
+.cat-card .tile {
+  width: 58px; height: 58px; border-radius: 16px; color: #fff; font-size: 30px;
+  display: flex; align-items: center; justify-content: center;
+}
+.cat-card h3 { font-size: 27px; margin: 20px 0 6px; }
+.cat-card p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+.cat-card .go { margin-top: 18px; font-weight: 700; font-size: 13px; }
+
+/* ---------------- Product sections ---------------- */
+.sec-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding-bottom: 16px;
+}
+.sec-head .left { display: flex; align-items: center; gap: 16px; }
+.sec-head .tile {
+  width: 52px; height: 52px; border-radius: 14px; color: #fff; font-size: 28px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sec-head .kicker { font-weight: 700; letter-spacing: 2px; font-size: 13px; }
+.sec-head h2 { font-size: 40px; margin: 2px 0 0; color: var(--navy); }
+.sec-head .meta { font-size: 14px; color: var(--muted2); padding-bottom: 6px; text-align: right; }
+
+.prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 34px; }
+.prod-card {
+  border-radius: 20px; overflow: hidden; background: #fff;
+  box-shadow: 0 10px 30px rgba(8,50,75,0.08); border: 1px solid var(--card-border);
+  display: flex; flex-direction: column;
+}
+.prod-img { position: relative; height: 190px; }
+.prod-img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.prod-img.contain { background: #fff; padding: 14px; }
+.prod-img.contain img { object-fit: contain; }
+.badge-tag {
+  position: absolute; top: 12px; left: 12px; color: #fff; font-size: 12px; font-weight: 700;
+  padding: 5px 11px; border-radius: 999px;
+}
+.badge-tax {
+  position: absolute; top: 12px; right: 12px; background: rgba(8,50,75,0.75); color: #fff;
+  font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 999px;
+}
+.prod-body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; }
+.prod-body h3 { font-size: 18px; font-weight: 700; margin: 0; color: var(--navy); line-height: 1.35; }
+.prod-spec { font-size: 12px; color: var(--muted3); margin-top: 5px; }
+.price-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-top: 14px; padding-top: 13px; border-top: 1px dashed var(--dashed);
+}
+.price-row .lbl { font-size: 13px; font-weight: 700; color: var(--navy); }
+.price-row .val { font-size: 27px; color: var(--coral); }
+.ship-row {
+  display: flex; align-items: center; gap: 8px; margin-top: 13px;
+  border-radius: 10px; padding: 9px 12px;
+}
+.ship-row .pill { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.ship-row .txt { font-size: 13px; color: var(--muted); }
+
+/* ---------------- Full-catalog banner ---------------- */
+.callout-sec { margin: 46px 0 0; padding: 46px 72px; background: var(--cream); border-bottom: 1px solid #EFE1C9; }
+.callout {
+  display: flex; align-items: center; gap: 26px;
+  background: #E4F1F1; border: 2px dashed var(--teal); border-radius: 20px; padding: 30px 34px;
+}
+.callout .tile {
+  width: 64px; height: 64px; border-radius: 16px; background: var(--teal); color: #fff; font-size: 30px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.callout .title { font-size: 26px; color: var(--navy); }
+.callout p { margin: 8px 0 0; font-size: 15px; color: var(--muted); line-height: 1.6; }
+.callout .cta { background: var(--navy); color: var(--amber); font-weight: 700; font-size: 15px; padding: 14px 22px; border-radius: 12px; white-space: nowrap; }
+
+/* ---------------- Contact ---------------- */
+.contact { padding: 60px 72px 70px; background: var(--amber); }
+.contact-in { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.contact h2 { font-size: 40px; color: var(--navy); line-height: 1.1; margin: 0; }
+.contact .lead { font-size: 16px; color: #5a4a1a; margin: 18px 0 0; max-width: 420px; line-height: 1.6; }
+.contact-card { background: var(--navy); color: var(--cream); border-radius: 20px; padding: 32px 36px; min-width: 340px; }
+.contact-card .who { display: flex; align-items: center; gap: 14px; }
+.contact-card .avatar {
+  width: 52px; height: 52px; border-radius: 50%; background: var(--amber); color: var(--navy);
+  font-size: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.contact-card .who .name { font-weight: 700; font-size: 18px; }
+.contact-card .who .name small { font-size: 14px; color: rgba(255,246,234,0.7); font-weight: 400; }
+.contact-card .who .org { font-size: 14px; color: rgba(255,246,234,0.7); }
+.contact-lines { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; font-size: 15px; }
+.contact-lines .line { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,246,234,0.15); padding-bottom: 10px; }
+.contact-lines .line:last-child { border-bottom: none; padding-bottom: 0; }
+.contact-lines .k { color: var(--amber); }
+.contact-lines .v { text-align: right; }
+.contact-lines a.v { color: var(--cream); }
+.contact-lines a.v:hover { color: var(--amber); }
+
+/* ---------------- Loading / error notice ---------------- */
+.notice { text-align: center; padding: 40px; color: var(--muted2); font-size: 15px; }
+
+/* =========================================================
+   반응형
+   ========================================================= */
+@media (max-width: 1079px) {
+  .page { width: 100%; }
+  .section, .hero, .callout-sec, .contact { padding-left: 40px; padding-right: 40px; }
+  .prod-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .section, .callout-sec { padding-left: 20px; padding-right: 20px; }
+  .hero { padding: 48px 20px 60px; }
+  .contact { padding: 44px 20px 52px; }
+  .hero h1 { font-size: 44px; }
+  .hero-lead { font-size: 16px; }
+  .stats { gap: 22px; flex-wrap: wrap; }
+  .stats .num { font-size: 36px; }
+  .cat-head h2 { font-size: 30px; }
+  .cat-grid { grid-template-columns: 1fr; gap: 16px; }
+  .sec-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .sec-head .meta { text-align: left; padding-bottom: 0; }
+  .sec-head h2 { font-size: 28px; }
+  .prod-grid { grid-template-columns: 1fr; }
+  .price-row .val { font-size: 24px; }
+  .callout { flex-direction: column; align-items: flex-start; gap: 18px; }
+  .callout .title { font-size: 21px; }
+  .contact-in { flex-direction: column; align-items: stretch; }
+  .contact h2 { font-size: 30px; }
+  .contact-card { min-width: 0; }
+}
