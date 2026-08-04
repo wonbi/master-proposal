@@ -8,11 +8,13 @@
   var SB = CFG.supabase || {};
   var root = document.getElementById("admin-root");
 
-  var CATS = [
-    { key: "fish",   label: "신선 수산물", color: "#0E8A8F" },
-    { key: "meal",   label: "간편식품",   color: "#FF5B39" },
-    { key: "living", label: "생활용품",   color: "#3BA559" }
+  var DEFAULT_CATS = [
+    { key: "fish",   name: "신선 수산물", mark: "魚", eyebrow: "SEAFOOD · 메인 카테고리", descr: "동해·군산·인천 창고에서 1만 원대 대표 품목을 각 3종씩 선별.", meta: "동해 · 군산 · 인천 창고", accent: "#0E8A8F", fit: "cover",   sort_order: 10 },
+    { key: "meal",   name: "간편식품",   mark: "食", eyebrow: "CONVENIENCE FOOD",       descr: "탕·전골·튀김 등 회전율 높은 즉석·냉동 품목 (하남·김포).",       meta: "하남 · 김포 · 푸카 창고", accent: "#FF5B39", fit: "cover",   sort_order: 20 },
+    { key: "living", name: "생활용품",   mark: "生", eyebrow: "LIVING GOODS",           descr: "찐한국 위생·주방 소모품, 정기 납품에 유리한 저단가 구성.",       meta: "찐한국 · 위생/주방",     accent: "#3BA559", fit: "contain", sort_order: 30 }
   ];
+  var CATS = DEFAULT_CATS.slice();   // Supabase categories 로 교체됨
+  function catByKey(k){ for(var i=0;i<CATS.length;i++) if(CATS[i].key===k) return CATS[i]; return null; }
 
   var client = null;
   var items = [];        // 작업중 상품 목록
@@ -27,6 +29,7 @@
   var _delegated = false; // root 이벤트는 한 번만 바인딩
   var siteSettings = {};  // 상단·회사 문구 설정(현재 버전)
   var settingsOpen = false;
+  var catsOpen = false;   // 카테고리 관리 패널 펼침
   var versions = [];      // 제안서 버전 목록
   var currentVersion = null; // 현재 편집 중인 버전
 
@@ -92,7 +95,7 @@
   function cardHTML(it){
     var pv=imgUrl(it.image);
     var taxSel=function(v){return '<option'+(it.tax===v?' selected':'')+'>'+v+'</option>';};
-    var catOpts=CATS.map(function(c){return '<option value="'+c.key+'"'+(it.category===c.key?' selected':'')+'>'+c.label+'</option>';}).join("");
+    var catOpts=CATS.map(function(c){return '<option value="'+c.key+'"'+(it.category===c.key?' selected':'')+'>'+c.name+'</option>';}).join("");
     return '<div class="card'+(it.show===false?' hidden-row':'')+'" data-key="'+it._key+'">'+
       '<div class="thumb">'+
         '<div class="imgbox">'+(pv?'<img src="'+esc(pv)+'" alt="">':'<span style="font-size:12px;color:#9aa7ad;">사진 없음</span>')+'</div>'+
@@ -121,6 +124,79 @@
         '</div>'+
       '</div>'+
     '</div>';
+  }
+
+  function loadCategoriesAdmin(){
+    return client.from("categories").select("*").order("sort_order",{ascending:true}).then(function(res){
+      if(res.error || !res.data || !res.data.length){ CATS=DEFAULT_CATS.slice(); return; }
+      CATS=res.data.map(function(r){ return { id:r.id, key:r.key, name:r.name||"", mark:r.mark||"", eyebrow:r.eyebrow||"",
+        descr:r.descr||"", meta:r.meta||"", accent:r.accent||"#0E8A8F", fit:r.fit||"cover", sort_order:r.sort_order||0 }; });
+    }).catch(function(){ CATS=DEFAULT_CATS.slice(); });
+  }
+
+  function catRowHTML(c){
+    return '<div class="cat-edit" data-catkey="'+esc(c.key)+'">'+
+      '<div class="row" style="grid-template-columns:66px 1fr 1.4fr 74px;">'+
+        '<div><span class="mini">아이콘</span><input data-cf="mark" value="'+esc(c.mark)+'" maxlength="2"></div>'+
+        '<div><span class="mini">이름</span><input data-cf="name" value="'+esc(c.name)+'"></div>'+
+        '<div><span class="mini">소개(카드 설명)</span><input data-cf="descr" value="'+esc(c.descr)+'"></div>'+
+        '<div><span class="mini">색상</span><input data-cf="accent" type="color" value="'+esc(c.accent)+'"></div>'+
+      '</div>'+
+      '<div class="row" style="grid-template-columns:1fr 1fr 110px;">'+
+        '<div><span class="mini">영문 라벨(작은 글씨)</span><input data-cf="eyebrow" value="'+esc(c.eyebrow)+'"></div>'+
+        '<div><span class="mini">헤더 우측 메타</span><input data-cf="meta" value="'+esc(c.meta)+'"></div>'+
+        '<div><span class="mini">사진 맞춤</span><select data-cf="fit"><option value="cover"'+(c.fit!=="contain"?" selected":"")+'>꽉채움</option><option value="contain"'+(c.fit==="contain"?" selected":"")+'>여백(포장)</option></select></div>'+
+      '</div>'+
+      '<div class="card-foot" style="padding-top:8px;">'+
+        '<span class="mini" style="margin:0;">상품 '+items.filter(function(i){return i.category===c.key;}).length+'개</span>'+
+        '<button class="btn-saveone" data-catsave="'+esc(c.key)+'">저장</button>'+
+        '<button class="btn-del" data-catdel="'+esc(c.key)+'">삭제</button>'+
+      '</div>'+
+    '</div>';
+  }
+  function catPanelHTML(){
+    if(!catsOpen){
+      return '<div class="settings-panel"><div class="sp-head" id="cat-toggle"><span>🗂️ 카테고리 관리 (추가·수정·삭제)</span><span class="sp-caret">펼치기 ▾</span></div></div>';
+    }
+    return '<div class="settings-panel open">'+
+      '<div class="sp-head" id="cat-toggle"><span>🗂️ 카테고리 관리 (추가·수정·삭제)</span><span class="sp-caret">접기 ▴</span></div>'+
+      '<div class="sp-body">'+
+        CATS.map(catRowHTML).join("")+
+        '<div class="add-row"><button class="btn-add" id="btn-cat-new">+ 카테고리 추가</button></div>'+
+      '</div></div>';
+  }
+  function saveCategory(key, btn){
+    var c=catByKey(key); if(!c) return;
+    if(!(c.name||"").trim()){ toast("카테고리 이름을 입력하세요", true); return; }
+    if(btn){ btn.disabled=true; btn.textContent="저장중…"; }
+    var row={ key:c.key, name:(c.name||"").trim(), mark:c.mark||"", eyebrow:c.eyebrow||"", descr:c.descr||"", meta:c.meta||"", accent:c.accent||"#0E8A8F", fit:c.fit||"cover", sort_order:c.sort_order||0 };
+    var q = c.id ? client.from("categories").update(row).eq("id",c.id) : client.from("categories").insert(row).select();
+    q.then(function(res){
+      if(res && res.error) throw res.error;
+      if(!c.id && res && res.data && res.data[0]) c.id=res.data[0].id;
+      if(btn){ btn.disabled=false; btn.textContent="저장됨 ✓"; setTimeout(function(){ if(btn) btn.textContent="저장"; },1500); }
+      renderEditor(); toast("카테고리 저장됨 ✅ 공개 사이트에 반영됩니다");
+    }).catch(function(err){ if(btn){ btn.disabled=false; btn.textContent="저장"; } toast("저장 실패: "+(err.message||err), true); });
+  }
+  function newCategory(){
+    var name=window.prompt("새 카테고리 이름 (예: 신선 정육)"); if(!name||!name.trim()) return; name=name.trim();
+    var key="cat"+uid().replace(/[^a-z0-9]/gi,"").slice(0,8).toLowerCase();
+    var sort=(CATS.length?Math.max.apply(null,CATS.map(function(c){return c.sort_order||0;})):0)+10;
+    var c={ key:key, name:name, mark:(name.charAt(0)||""), eyebrow:"", descr:"", meta:"", accent:"#0E8A8F", fit:"cover", sort_order:sort };
+    client.from("categories").insert(c).select().then(function(res){
+      if(res.error) throw res.error;
+      if(res.data && res.data[0]) c.id=res.data[0].id;
+      CATS.push(c); catsOpen=true; renderEditor(); toast("카테고리 '"+name+"' 추가됨 ✅ 아이콘·색상을 정한 뒤 저장하세요");
+    }).catch(function(err){ toast("추가 실패: "+(err.message||err), true); });
+  }
+  function deleteCategory(key){
+    var c=catByKey(key); if(!c) return;
+    var cnt=items.filter(function(i){return i.category===key;}).length;
+    var msg = cnt>0 ? ("이 카테고리에 상품 "+cnt+"개가 있습니다.\n삭제하면 그 상품들은 사이트에서 안 보이게 됩니다(상품 데이터는 남음).\n삭제할까요?") : "이 카테고리를 삭제할까요?";
+    if(!window.confirm(msg)) return;
+    function done(){ CATS=CATS.filter(function(x){return x.key!==key;}); renderEditor(); toast("카테고리 삭제됨"); }
+    if(c.id){ client.from("categories").delete().eq("id",c.id).then(function(res){ if(res&&res.error) throw res.error; done(); }).catch(function(err){ toast("삭제 실패: "+(err.message||err), true); }); }
+    else done();
   }
 
   function settingsEffective(){
@@ -170,7 +246,7 @@
   function addFormHTML(){
     var it=newItem; var pv=imgUrl(it.image);
     var taxSel=function(v){return '<option'+(it.tax===v?' selected':'')+'>'+v+'</option>';};
-    var catOpts=CATS.map(function(c){return '<option value="'+c.key+'"'+(it.category===c.key?' selected':'')+'>'+c.label+'</option>';}).join("");
+    var catOpts=CATS.map(function(c){return '<option value="'+c.key+'"'+(it.category===c.key?' selected':'')+'>'+c.name+'</option>';}).join("");
     return '<div class="card new-card">'+
       '<div class="thumb">'+
         '<div class="imgbox">'+(pv?'<img src="'+esc(pv)+'" alt="">':'<span style="font-size:12px;color:#9aa7ad;">사진 없음</span>')+'</div>'+
@@ -221,14 +297,15 @@
       '<button class="btn-ghost" id="btn-logout">로그아웃</button></div>'+
       '<div class="wrap">'+
       '<div class="hint">상품을 고친 뒤 그 상품의 <b>[저장]</b> 버튼을 누르면 바로 공개 사이트에 반영됩니다. 사진은 <b>[사진 업로드]</b>, 삭제는 <b>[삭제]</b>로 즉시 처리돼요. (아래 <b>[전체 저장]</b>은 여러 개를 한 번에 저장할 때만 쓰세요.)</div>'+
-      settingsPanelHTML();
+      settingsPanelHTML()+
+      catPanelHTML();
 
     CATS.forEach(function(c){
       var list=items.filter(function(i){return i.category===c.key;});
-      html+='<div class="cat-block"><div class="cat-title"><span class="dot" style="background:'+c.color+'"></span>'+c.label+' <span class="count">'+list.length+'개</span></div>';
+      html+='<div class="cat-block"><div class="cat-title"><span class="dot" style="background:'+c.accent+'"></span>'+esc(c.name)+' <span class="count">'+list.length+'개</span></div>';
       html+=list.map(cardHTML).join("");
       if(addingCat===c.key){ html+=addFormHTML(); }
-      else { html+='<div class="add-row"><button class="btn-add" data-add="'+c.key+'">+ '+c.label+' 상품 1개 추가</button></div>'; }
+      else { html+='<div class="add-row"><button class="btn-add" data-add="'+c.key+'">+ '+esc(c.name)+' 상품 1개 추가</button></div>'; }
       html+='</div>';
     });
 
@@ -255,6 +332,8 @@
     root.addEventListener("input", function(e){
       var sf=e.target.getAttribute("data-sf");
       if(sf){ siteSettings[sf]=e.target.value; return; }
+      var cf=e.target.getAttribute("data-cf");
+      if(cf){ var cw=e.target.closest(".cat-edit"); var c=cw&&catByKey(cw.getAttribute("data-catkey")); if(c) c[cf]=e.target.value; return; }
       var nf=e.target.getAttribute("data-nf");
       if(nf && newItem){
         if(nf==="supply_price"||nf==="ship_fee"){ newItem[nf]=parseInt(e.target.value.replace(/[^0-9]/g,""),10)||0; }
@@ -271,6 +350,8 @@
     });
     root.addEventListener("change", function(e){
       if(e.target.id==="ver-select"){ switchVersion(e.target.value); return; }
+      var cf=e.target.getAttribute("data-cf");
+      if(cf){ var cw=e.target.closest(".cat-edit"); var cc=cw&&catByKey(cw.getAttribute("data-catkey")); if(cc) cc[cf]=e.target.value; return; }
       // 새 상품 입력폼
       var nf=e.target.getAttribute("data-nf");
       if(nf && newItem){
@@ -298,6 +379,12 @@
       if(e.target.id==="btn-save"){ saveAll(); return; }
       if(e.target.closest && e.target.closest("#sp-toggle")){ settingsOpen=!settingsOpen; renderEditor(); return; }
       if(e.target.id==="btn-save-settings"){ saveSettings(e.target); return; }
+      if(e.target.closest && e.target.closest("#cat-toggle")){ catsOpen=!catsOpen; renderEditor(); return; }
+      if(e.target.id==="btn-cat-new"){ newCategory(); return; }
+      var catSaveKey=e.target.getAttribute("data-catsave");
+      if(catSaveKey){ saveCategory(catSaveKey, e.target); return; }
+      var catDelKey=e.target.getAttribute("data-catdel");
+      if(catDelKey){ deleteCategory(catDelKey); return; }
       if(e.target.id==="btn-ver-new"){ newVersion(); return; }
       if(e.target.id==="btn-ver-rename"){ renameVersion(); return; }
       if(e.target.id==="btn-ver-link"){ copyVersionLink(); return; }
@@ -608,7 +695,7 @@
     root.innerHTML='<div class="loading">불러오는 중…</div>';
     client.auth.getUser().then(function(u){ window.__adminEmail=(u&&u.data&&u.data.user&&u.data.user.email)||""; });
     loadVersions().then(function(){
-      return Promise.all([loadProducts(), loadAdminSettings()]);
+      return Promise.all([loadProducts(), loadAdminSettings(), loadCategoriesAdmin()]);
     }).then(function(){ dirty=false; renderEditor(); if(apiUrl()) loadCatalogFromApi(); })
       .catch(function(err){ toast("상품 로드 실패: "+(err.message||err), true); showLogin("데이터를 불러오지 못했습니다. DB 설정을 확인하세요."); });
   }

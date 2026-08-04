@@ -8,13 +8,43 @@
 
   var CFG = window.PROPOSAL_CONFIG || {};
 
-  // 카테고리별 디자인 값 (고정)
-  var CAT = {
-    fish:   { key: "fish",   name: "신선 수산물", mark: "魚", eyebrow: "SEAFOOD · 메인 카테고리", accent: "#0E8A8F", soft: "#E4F1F1", imgBg: "#E4F1F1", rowBg: "#F3F8F8", pillBg: "#DCEDED", fit: "cover" },
-    meal:   { key: "meal",   name: "간편식품",   mark: "食", eyebrow: "CONVENIENCE FOOD",       accent: "#FF5B39", soft: "#FCE7E0", imgBg: "#FCE7E0", rowBg: "#FDF1ED", pillBg: "#FAD9CF", fit: "cover" },
-    living: { key: "living", name: "생활용품",   mark: "生", eyebrow: "LIVING GOODS",           accent: "#3BA559", soft: "#E6F2E9", imgBg: "#ffffff", rowBg: "#EEF6F0", pillBg: "#D6EBDC", fit: "contain" }
-  };
-  var CAT_ORDER = ["fish", "meal", "living"];
+  // accent 색에서 연한 배경색들을 계산
+  function mix(hex, ratio) {
+    hex = String(hex || "#0E8A8F").replace("#", "");
+    if (hex.length === 3) hex = hex.split("").map(function (c) { return c + c; }).join("");
+    var r = parseInt(hex.substr(0, 2), 16), g = parseInt(hex.substr(2, 2), 16), b = parseInt(hex.substr(4, 2), 16);
+    if (isNaN(r)) { r = 14; g = 138; b = 143; }
+    function m(c) { return Math.round(255 - (255 - c) * ratio); }
+    function h(c) { return ("0" + m(c).toString(16)).slice(-2); }
+    return "#" + h(r) + h(g) + h(b);
+  }
+  function buildCat(row) {
+    var accent = row.accent || "#0E8A8F";
+    var fit = row.fit || "cover";
+    return {
+      key: row.key, name: row.name || "", mark: row.mark || "", eyebrow: row.eyebrow || "",
+      descr: row.descr || "", meta: row.meta || "", accent: accent, fit: fit,
+      soft: mix(accent, 0.12), imgBg: fit === "contain" ? "#ffffff" : mix(accent, 0.12),
+      rowBg: mix(accent, 0.06), pillBg: mix(accent, 0.18)
+    };
+  }
+  // 기본 카테고리(테이블 없거나 비었을 때 폴백)
+  var DEFAULT_CATS = [
+    { key: "fish",   name: "신선 수산물", mark: "魚", eyebrow: "SEAFOOD · 메인 카테고리", descr: "동해·군산·인천 창고에서 1만 원대 대표 품목을 각 3종씩 선별.", meta: "동해 · 군산 · 인천 창고", accent: "#0E8A8F", fit: "cover" },
+    { key: "meal",   name: "간편식품",   mark: "食", eyebrow: "CONVENIENCE FOOD",       descr: "탕·전골·튀김 등 회전율 높은 즉석·냉동 품목 (하남·김포).",       meta: "하남 · 김포 · 푸카 창고", accent: "#FF5B39", fit: "cover" },
+    { key: "living", name: "생활용품",   mark: "生", eyebrow: "LIVING GOODS",           descr: "찐한국 위생·주방 소모품, 정기 납품에 유리한 저단가 구성.",       meta: "찐한국 · 위생/주방",     accent: "#3BA559", fit: "contain" }
+  ];
+  var CAT = {};
+  var CAT_ORDER = [];
+  function setCategories(rows) {
+    CAT = {}; CAT_ORDER = [];
+    (rows && rows.length ? rows : DEFAULT_CATS).forEach(function (row) {
+      if (!row.key) return;
+      CAT[row.key] = buildCat(row);
+      CAT_ORDER.push(row.key);
+    });
+  }
+  setCategories(DEFAULT_CATS);
 
   // 창고 이름 → 배지 색
   var WH_COLOR = {
@@ -129,8 +159,9 @@
     var products = [];
     list.forEach(function (p) {
       if (!isShown(p.show)) return;
-      var cat = normCat(p.category);
-      if (!cat) return;
+      var raw = String(p.category || "").trim();
+      var cat = CAT[raw] ? raw : normCat(raw);
+      if (!cat || !CAT[cat]) return;
       var wh = String(p.warehouse || "").trim();
       products.push({
         cat: cat,
@@ -175,7 +206,7 @@
 
   function sectionHTML(cat, items) {
     var c = CAT[cat];
-    var meta = (CFG.categoryText && CFG.categoryText[cat] && CFG.categoryText[cat].meta) || "";
+    var meta = c.meta || (CFG.categoryText && CFG.categoryText[cat] && CFG.categoryText[cat].meta) || "";
     var cards = items.map(cardHTML).join("");
     return '' +
       '<section id="' + cat + '" class="section">' +
@@ -201,7 +232,7 @@
         '<a class="cat-card" href="#' + k + '" style="background:' + c.soft + ';border:2px solid ' + c.accent + ';">' +
           '<div class="tile display" style="background:' + c.accent + ';">' + c.mark + '</div>' +
           '<h3 class="display">' + esc(c.name) + '</h3>' +
-          '<p>' + esc(t.desc || "") + '</p>' +
+          '<p>' + esc(c.descr || t.desc || "") + '</p>' +
           '<div class="go" style="color:' + c.accent + ';">' + grouped[k].length + '품목 · 바로가기 ↓</div>' +
         '</a>';
     }).join("");
@@ -209,7 +240,7 @@
       '<section class="section">' +
         '<div class="cat-head">' +
           '<div class="kicker">CATEGORY LINEUP</div>' +
-          '<h2 class="display">세 갈래로 채우는 한 장의 제안</h2>' +
+          '<h2 class="display">' + esc(CFG.overviewTitle || "카테고리별로 채우는 한 장의 제안") + '</h2>' +
         '</div>' +
         '<div class="cat-grid">' + cards + '</div>' +
       '</section>';
@@ -288,7 +319,8 @@
   }
 
   function render(products) {
-    var grouped = { fish: [], meal: [], living: [] };
+    var grouped = {};
+    CAT_ORDER.forEach(function (k) { grouped[k] = []; });
     products.forEach(function (p) { if (grouped[p.cat]) grouped[p.cat].push(p); });
     var catCount = CAT_ORDER.filter(function (k) { return grouped[k].length; }).length;
 
@@ -348,6 +380,16 @@
     }).catch(function () {});
   }
 
+  // 카테고리를 Supabase에서 로드(전역). 없으면 기본 3개 유지.
+  function loadCategories() {
+    var c = sbClient();
+    if (!c) return Promise.resolve();
+    return c.from("categories").select("*").order("sort_order", { ascending: true }).then(function (res) {
+      if (res.error || !res.data || !res.data.length) return;
+      setCategories(res.data);
+    }).catch(function () {});
+  }
+
   function loadSupabase() {
     var c = sbClient();
     if (!c) return Promise.reject("no-supabase");
@@ -388,7 +430,7 @@
   document.getElementById("app").innerHTML =
     '<div class="notice">상품 정보를 불러오는 중…</div>';
 
-  loadVersion()
+  Promise.all([loadVersion(), loadCategories()])
     .then(function () { return loadSupabase(); })
     .catch(function (e) {
       if (e !== "no-supabase") console.warn("Supabase 로드 실패 → 다음 소스 시도:", e);
