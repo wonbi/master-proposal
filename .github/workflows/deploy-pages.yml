@@ -4,7 +4,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - claude/product-proposal-infographic-folder-jvk18z
       - main
   workflow_dispatch: {}
 
@@ -13,9 +12,10 @@ permissions:
   pages: write
   id-token: write
 
+# 동시 배포는 대기시키되, 진행 중인 배포를 취소하지 않음(취소 경합 방지)
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
