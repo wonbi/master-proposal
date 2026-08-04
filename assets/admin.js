@@ -215,6 +215,7 @@
     var html =
       '<div class="topbar"><span class="brand">🐟 상품 관리자</span>'+ verCtrl +
       '<span class="spacer"></span>'+
+      '<button class="btn-ghost" id="btn-sheet-link" title="상품명 자동완성을 구글 시트에서 실시간으로">🔗 시트연동'+(apiUrl()?' ✓':'')+'</button>'+
       '<a href="'+pubHref+'" target="_blank" rel="noopener">공개 사이트 보기 ↗</a>'+
       '<button class="btn-ghost" id="btn-logout">로그아웃</button></div>'+
       '<div class="wrap">'+
@@ -292,6 +293,7 @@
     // 추가폼 열기 / 저장 / 취소 / 삭제 / 로그아웃 / 확정저장
     root.addEventListener("click", function(e){
       if(e.target.id==="btn-logout"){ client.auth.signOut().then(function(){ items=[];deletedIds=[];dirty=false; addingCat=null;newItem=null; showLogin(); }); return; }
+      if(e.target.id==="btn-sheet-link"){ setApiUrl(); renderEditor(); return; }
       if(e.target.id==="btn-save"){ saveAll(); return; }
       if(e.target.closest && e.target.closest("#sp-toggle")){ settingsOpen=!settingsOpen; renderEditor(); return; }
       if(e.target.id==="btn-save-settings"){ saveSettings(e.target); return; }
@@ -355,9 +357,26 @@
     list.className="ac-list show";
   }
 
+  // 시트 연동 주소는 "이 브라우저에만" 저장(공개 코드에 비밀키가 안 들어가게)
+  function apiUrl(){
+    var v="";
+    try{ v=localStorage.getItem("catalogApiUrl")||""; }catch(e){}
+    return (v || CFG.catalogApiUrl || "").trim();
+  }
+  function setApiUrl(){
+    var cur=""; try{ cur=localStorage.getItem("catalogApiUrl")||""; }catch(e){}
+    var v=window.prompt("구글 시트 웹앱 주소를 붙여넣으세요 (?key= 까지 포함).\n※ 이 브라우저에만 저장됩니다(공개 코드엔 안 들어감).", cur);
+    if(v===null) return;
+    v=v.trim();
+    try{ if(v) localStorage.setItem("catalogApiUrl", v); else localStorage.removeItem("catalogApiUrl"); }catch(e){}
+    catalogCache=null; catalogLoading=false;
+    toast(v?"시트 연동 주소 저장됨 ✅":"시트 연동 해제됨");
+    if(v) loadCatalogFromApi();
+  }
+
   // 구글 시트 Apps Script 웹앱에서 전체 카탈로그를 JSONP로 받아옴(1회 캐시)
   function loadCatalogFromApi(){
-    var url=(CFG.catalogApiUrl||"").trim();
+    var url=apiUrl();
     if(!url || catalogLoading) return;
     catalogLoading=true;
     var cbName="__cat_cb_"+(new Date()).getTime();
@@ -380,7 +399,7 @@
   function runCatalog(q){
     var list=document.getElementById("ac-list"); if(!list) return;
     // (1) 시트 API 모드: 캐시에서 로컬 필터
-    if((CFG.catalogApiUrl||"").trim()){
+    if(apiUrl()){
       if(catalogCache===null){ loadCatalogFromApi(); list.className="ac-list show"; list.innerHTML='<div class="ac-empty">상품 목록 불러오는 중…</div>'; return; }
       var ql=String(q).toLowerCase();
       acResults=catalogCache.filter(function(r){ return String(r.name||"").toLowerCase().indexOf(ql)>-1; }).slice(0,8);
@@ -560,7 +579,7 @@
     client.auth.getUser().then(function(u){ window.__adminEmail=(u&&u.data&&u.data.user&&u.data.user.email)||""; });
     loadVersions().then(function(){
       return Promise.all([loadProducts(), loadAdminSettings()]);
-    }).then(function(){ dirty=false; renderEditor(); if((CFG.catalogApiUrl||"").trim()) loadCatalogFromApi(); })
+    }).then(function(){ dirty=false; renderEditor(); if(apiUrl()) loadCatalogFromApi(); })
       .catch(function(err){ toast("상품 로드 실패: "+(err.message||err), true); showLogin("데이터를 불러오지 못했습니다. DB 설정을 확인하세요."); });
   }
 
