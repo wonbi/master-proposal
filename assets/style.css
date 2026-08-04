@@ -23,7 +23,9 @@
 html { scroll-behavior: smooth; }
 html, body { margin: 0; }
 body {
-  background: var(--sand);
+  background: #DCE3DF;   /* 컨테이너 바깥: 바다 안개빛 모래톤 */
+  background-image: linear-gradient(180deg, #D6E0DE 0%, #E8DFCF 100%);
+  background-attachment: fixed;
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--navy);
   -webkit-font-smoothing: antialiased;
@@ -37,7 +39,11 @@ a:hover { color: var(--navy); }
   width: 1080px;
   max-width: 100%;
   margin: 0 auto;
-  background: var(--cream);
+  /* 크림 바탕 + 아주 옅은 물빛이 은은하게 도는 배경 */
+  background:
+    radial-gradient(80% 40% at 100% 12%, rgba(14,138,143,0.055) 0%, rgba(14,138,143,0) 60%),
+    radial-gradient(70% 35% at 0% 55%, rgba(14,138,143,0.045) 0%, rgba(14,138,143,0) 60%),
+    var(--cream);
   overflow: hidden;
 }
 .section { padding: 64px 72px 20px; }
@@ -45,15 +51,25 @@ a:hover { color: var(--navy); }
 /* ---------------- Hero ---------------- */
 .hero {
   position: relative;
-  padding: 70px 72px 90px;
-  background: radial-gradient(120% 120% at 85% -10%, #0E8A8F 0%, #08324B 60%);
+  padding: 70px 72px 130px;
+  background:
+    radial-gradient(60% 55% at 12% 88%, rgba(14,138,143,0.35) 0%, rgba(14,138,143,0) 70%),
+    radial-gradient(120% 120% at 85% -10%, #0E8A8F 0%, #08324B 60%);
   color: var(--cream);
   overflow: hidden;
 }
 .hero-circle { position: absolute; border-radius: 50%; }
 .hero-circle.c1 { right: -60px; top: -40px; width: 360px; height: 360px; background: rgba(255,176,32,0.14); }
 .hero-circle.c2 { right: 120px; bottom: -80px; width: 240px; height: 240px; background: rgba(255,91,57,0.16); }
-.hero > *:not(.hero-circle) { position: relative; }
+.hero > *:not(.hero-circle):not(.hero-wave) { position: relative; }
+
+/* 표지 아래 파도 곡선 */
+.hero .hero-wave {
+  position: absolute; left: 0; right: 0; bottom: -1px;
+  width: 100%; height: 92px; display: block; pointer-events: none;
+}
+.hero-wave .w-back { fill: var(--cream); opacity: 0.28; }
+.hero-wave .w-front { fill: var(--cream); }
 .eyebrow { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: 2px; font-size: 15px; color: var(--amber); }
 .eyebrow .bar { width: 34px; height: 4px; background: var(--amber); border-radius: 2px; }
 .hero h1 { font-size: 88px; line-height: 0.98; margin: 26px 0 0; letter-spacing: -1px; }

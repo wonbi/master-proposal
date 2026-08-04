@@ -273,6 +273,11 @@
             '<div class="sub">' + esc((CFG.team || "") + " · " + (CFG.managerName || "") + " " + (CFG.managerTitle || "")) + '</div>' +
           '</div>' +
         '</div>' +
+        // 표지 아래 파도 곡선 (바다 테마)
+        '<svg class="hero-wave" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
+          '<path class="w-back" d="M0,70 C220,116 430,26 700,54 C930,78 1180,120 1440,78 L1440,130 L0,130 Z"></path>' +
+          '<path class="w-front" d="M0,92 C260,132 470,58 740,82 C980,103 1200,132 1440,100 L1440,130 L0,130 Z"></path>' +
+        '</svg>' +
       '</section>';
   }
 
