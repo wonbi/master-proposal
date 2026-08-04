@@ -195,7 +195,8 @@
         '</div>' +
         '<div class="prod-body">' +
           '<h3>' + esc(p.name) + '</h3>' +
-          (p.spec ? '<div class="prod-spec">' + esc(p.spec) + '</div>' : '') +
+          // 설명이 없어도 자리를 유지해야 아래 공급가 위치가 어긋나지 않음
+          '<div class="prod-spec">' + esc(p.spec || "") + '</div>' +
           '<div class="price-row"><span class="lbl">공급가</span><span class="val display">' + money(p.supplyPrice) + '</span></div>' +
           '<div class="ship-row" style="background:' + c.rowBg + ';">' +
             (p.courier ? '<span class="pill" style="color:' + c.accent + ';background:' + c.pillBg + ';">' + esc(p.courier) + '</span>' : '') +

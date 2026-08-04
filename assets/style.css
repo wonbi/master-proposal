@@ -166,11 +166,22 @@ a:hover { color: var(--navy); }
   font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 999px;
 }
 .prod-body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; }
-.prod-body h3 { font-size: 18px; font-weight: 700; margin: 0; color: var(--navy); line-height: 1.35; }
-.prod-spec { font-size: 12px; color: var(--muted3); margin-top: 5px; }
+/* 상품명은 2줄 자리를 늘 확보 → 이름 길이가 달라도 아래 요소가 흔들리지 않음 */
+.prod-body h3 {
+  font-size: 18px; font-weight: 700; margin: 0; color: var(--navy); line-height: 1.35;
+  min-height: calc(18px * 1.35 * 2);
+}
+/* 설명은 최대 2줄까지만 (그 이상은 말줄임) — 카드 높이가 들쭉날쭉해지는 것 방지 */
+.prod-spec {
+  font-size: 12px; color: var(--muted3); margin-top: 5px; line-height: 1.45;
+  min-height: calc(12px * 1.45);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* 공급가·택배 블록은 카드 아래쪽에 고정 → 같은 줄 카드끼리 높이 일치 */
 .price-row {
   display: flex; justify-content: space-between; align-items: baseline;
-  margin-top: 14px; padding-top: 13px; border-top: 1px dashed var(--dashed);
+  margin-top: auto; padding-top: 13px; border-top: 1px dashed var(--dashed);
 }
 .price-row .lbl { font-size: 13px; font-weight: 700; color: var(--navy); }
 .price-row .val { font-size: 27px; color: var(--coral); }
