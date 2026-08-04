@@ -20,6 +20,9 @@
   var dirty = false;
   var addingCat = null;  // 현재 새 상품 추가 중인 카테고리
   var newItem = null;    // 입력 중인 새 상품
+  var acResults = [];    // 자동완성 검색결과(비공개 카탈로그)
+  var acTimer = null;
+  var _delegated = false; // root 이벤트는 한 번만 바인딩
 
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
   function imgUrl(v){
@@ -126,7 +129,7 @@
         '<div class="new-badge">＋ 새 상품 입력</div>'+
         '<div class="row r1">'+
           '<div><span class="mini">카테고리</span><select data-nf="category">'+catOpts+'</select></div>'+
-          '<div><span class="mini">상품명</span><input data-nf="name" value="'+esc(it.name)+'" placeholder="상품 이름"></div>'+
+          '<div class="ac-wrap"><span class="mini">상품명 <span class="ac-tip">타이핑하면 자동완성 ↓</span></span><input data-nf="name" value="'+esc(it.name)+'" placeholder="상품명 입력" autocomplete="off"><div class="ac-list" id="ac-list"></div></div>'+
           '<div><span class="mini">창고(배지)</span><input data-nf="warehouse" value="'+esc(it.warehouse)+'" placeholder="예: 동해"></div>'+
         '</div>'+
         '<div class="row r2">'+
@@ -178,10 +181,13 @@
   function findItem(key){ for(var i=0;i<items.length;i++) if(items[i]._key===key) return items[i]; return null; }
 
   function bindEditor(){
-    document.getElementById("btn-logout").addEventListener("click", function(){
-      client.auth.signOut().then(function(){ items=[];deletedIds=[];dirty=false; showLogin(); });
+    if(_delegated) return;   // root 이벤트는 최초 1회만 바인딩(중복 방지)
+    _delegated = true;
+
+    // 자동완성 목록 밖으로 포커스 이동 시 닫기
+    root.addEventListener("focusin", function(e){
+      if(!(e.target.closest && e.target.closest(".ac-wrap"))) hideAc();
     });
-    document.getElementById("btn-save").addEventListener("click", saveAll);
 
     // 필드 입력 (재렌더 없이 값만 반영 → 포커스 유지)
     root.addEventListener("input", function(e){
@@ -189,6 +195,7 @@
       if(nf && newItem){
         if(nf==="supply_price"||nf==="ship_fee"){ newItem[nf]=parseInt(e.target.value.replace(/[^0-9]/g,""),10)||0; }
         else { newItem[nf]=e.target.value; }
+        if(nf==="name") scheduleCatalog(e.target.value);
         return;
       }
       var f=e.target.getAttribute("data-f"); if(!f)return;
@@ -219,12 +226,22 @@
       var fk=e.target.getAttribute("data-file");
       if(fk && e.target.files && e.target.files[0]){ doUpload(fk, e.target.files[0], e.target); }
     });
-    // 추가폼 열기 / 저장 / 취소 / 삭제
+    // 추가폼 열기 / 저장 / 취소 / 삭제 / 로그아웃 / 확정저장
     root.addEventListener("click", function(e){
+      if(e.target.id==="btn-logout"){ client.auth.signOut().then(function(){ items=[];deletedIds=[];dirty=false; addingCat=null;newItem=null; showLogin(); }); return; }
+      if(e.target.id==="btn-save"){ saveAll(); return; }
       var addCat=e.target.getAttribute("data-add");
       if(addCat){
         addingCat=addCat;
         newItem={_key:"NEW",category:addCat,name:"",warehouse:"",spec:"",supply_price:0,courier:"",ship_fee:addCat==="living"?2500:4000,tax:addCat==="fish"?"면세":"과세",image:"",show:true};
+        renderEditor(); focusNewName(); return;
+      }
+      // 자동완성 후보 클릭 → 값 채우기
+      var acEl=e.target.closest && e.target.closest(".ac-item");
+      if(acEl && newItem){
+        var r=acResults[parseInt(acEl.getAttribute("data-ac"),10)];
+        if(r){ newItem.name=r.name; newItem.warehouse=r.warehouse||""; newItem.spec=r.spec||"";
+          newItem.supply_price=r.supply_price||0; newItem.courier=r.courier||""; newItem.ship_fee=r.ship_fee||0; newItem.tax=r.tax||"면세"; }
         renderEditor(); focusNewName(); return;
       }
       if(e.target.id==="btn-add-cancel"){ addingCat=null; newItem=null; renderEditor(); return; }
@@ -250,6 +267,31 @@
   }
 
   function focusNewName(){ var el=root.querySelector('.new-card input[data-nf="name"]'); if(el){ el.focus(); var v=el.value; el.value=""; el.value=v; } }
+
+  // 비공개 카탈로그 자동완성
+  function hideAc(){ var l=document.getElementById("ac-list"); if(l){ l.className="ac-list"; l.innerHTML=""; } }
+  function scheduleCatalog(q){
+    if(acTimer) clearTimeout(acTimer);
+    q=(q||"").trim();
+    if(q.length<1){ hideAc(); return; }
+    acTimer=setTimeout(function(){ runCatalog(q); }, 220);
+  }
+  function runCatalog(q){
+    if(!client) return;
+    client.from("catalog").select("*").ilike("name","%"+q+"%").order("status",{ascending:true}).limit(8).then(function(res){
+      var list=document.getElementById("ac-list"); if(!list) return;
+      if(res.error){ hideAc(); return; }              // 카탈로그 표 없음 등 → 조용히 무시
+      acResults=res.data||[];
+      if(!acResults.length){ list.className="ac-list show"; list.innerHTML='<div class="ac-empty">일치하는 상품이 없어요</div>'; return; }
+      list.innerHTML=acResults.map(function(r,i){
+        var price=r.supply_price?("₩"+Number(r.supply_price).toLocaleString()):"";
+        var out=r.status==="품절"?'<span class="ac-out">품절</span>':"";
+        return '<div class="ac-item" data-ac="'+i+'"><span class="ac-name">'+esc(r.name)+'</span>'+
+               '<span class="ac-meta">'+esc(r.warehouse||"")+(price?" · "+price:"")+" "+out+'</span></div>';
+      }).join("");
+      list.className="ac-list show";
+    }).catch(function(){ hideAc(); });
+  }
 
   function uploadNew(file){
     if(!newItem)return;

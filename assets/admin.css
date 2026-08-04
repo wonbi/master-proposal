@@ -80,6 +80,19 @@ input:focus,select:focus{outline:2px solid var(--teal);outline-offset:0;border-c
 .btn-addsave:hover{background:#0c7a7f;}
 .btn-addsave:disabled{background:#a9c9ca;cursor:default;}
 
+/* 상품명 자동완성 (비공개 카탈로그) */
+.ac-wrap{position:relative;}
+.ac-tip{font-weight:500;color:var(--teal);font-size:10px;}
+.ac-list{position:absolute;top:100%;left:0;right:0;z-index:40;background:#fff;border:1px solid var(--teal);border-top:none;border-radius:0 0 10px 10px;max-height:260px;overflow-y:auto;display:none;box-shadow:0 10px 24px rgba(8,50,75,0.14);}
+.ac-list.show{display:block;}
+.ac-item{padding:9px 12px;cursor:pointer;border-bottom:1px solid #eef1f0;display:flex;flex-direction:column;gap:2px;}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:hover{background:#f0f8f8;}
+.ac-name{font-size:14px;font-weight:700;color:var(--navy);}
+.ac-meta{font-size:12px;color:var(--muted);}
+.ac-out{color:var(--danger);font-weight:700;}
+.ac-empty{padding:10px 12px;color:var(--muted);font-size:13px;}
+
 /* ---------- 저장 바 ---------- */
 .savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(8,50,75,0.08);padding:12px 20px;display:flex;align-items:center;gap:14px;}
 .savebar .status{flex:1;font-size:13px;color:var(--muted);}
