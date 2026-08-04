@@ -1,0 +1,28 @@
+[
+  { "category": "수산물", "name": "대왕 선동 활 쭈꾸미 1kg", "warehouse": "동해", "spec": "동해 창고 · 냉동", "supplyPrice": 11500, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "면세", "image": "fish-1.webp", "show": true },
+  { "category": "수산물", "name": "국내산 통찜 오징어 1kg", "warehouse": "동해", "spec": "동해 창고 · 냉동", "supplyPrice": 11000, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "면세", "image": "fish-2.webp", "show": true },
+  { "category": "수산물", "name": "양미리 1kg", "warehouse": "동해", "spec": "동해 창고 · 냉동", "supplyPrice": 9500, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "면세", "image": "fish-3.webp", "show": true },
+  { "category": "수산물", "name": "전통방식 건갈치 1kg", "warehouse": "군산", "spec": "군산 창고 · 진공포장", "supplyPrice": 13000, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "면세", "image": "fish-4.webp", "show": true },
+  { "category": "수산물", "name": "반건조 갑오징어 특대 1미", "warehouse": "군산", "spec": "군산 창고 · 반건조", "supplyPrice": 11000, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "면세", "image": "fish-5.webp", "show": true },
+  { "category": "수산물", "name": "무염 특대 황금 알가자미 3미", "warehouse": "군산", "spec": "군산 창고 · 무염", "supplyPrice": 9500, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "면세", "image": "fish-6.webp", "show": true },
+  { "category": "수산물", "name": "연안 급냉 대숫게 1kg", "warehouse": "인천", "spec": "인천 창고 · 급냉", "supplyPrice": 10000, "courier": "우체국택배", "shipFee": 4000, "tax": "면세", "image": "fish-7.webp", "show": true },
+  { "category": "수산물", "name": "연안 생연어 300g", "warehouse": "인천", "spec": "인천 창고 · 냉장", "supplyPrice": 9400, "courier": "우체국택배", "shipFee": 4000, "tax": "면세", "image": "fish-8.webp", "show": true },
+  { "category": "수산물", "name": "연안 손질 꽃게 1kg", "warehouse": "인천", "spec": "인천 창고 · 급냉", "supplyPrice": 8800, "courier": "우체국택배", "shipFee": 4000, "tax": "면세", "image": "fish-9.webp", "show": true },
+
+  { "category": "간편식품", "name": "꼬소 새우치즈볼 600g", "warehouse": "하남", "spec": "하남 창고 · 냉동", "supplyPrice": 10000, "courier": "롯데택배", "shipFee": 4000, "tax": "과세", "image": "meal-1.webp", "show": true },
+  { "category": "간편식품", "name": "맛상 새우까스 20장", "warehouse": "하남", "spec": "하남 창고 · 냉동", "supplyPrice": 7500, "courier": "롯데택배", "shipFee": 4000, "tax": "과세", "image": "meal-2.webp", "show": true },
+  { "category": "간편식품", "name": "맛상 소떡소떡 1.3kg", "warehouse": "하남", "spec": "하남 창고 · 냉동", "supplyPrice": 7000, "courier": "롯데택배", "shipFee": 4000, "tax": "과세", "image": "meal-3.webp", "show": true },
+  { "category": "간편식품", "name": "찐 불향 쭈꾸미볶음 300g", "warehouse": "푸카", "spec": "푸카 창고 · 냉동 · 오후마감 12시", "supplyPrice": 7000, "courier": "로젠택배", "shipFee": 4000, "tax": "과세", "image": "meal-4.webp", "show": true },
+  { "category": "간편식품", "name": "양평해장국 600g", "warehouse": "하남", "spec": "하남 창고 · 간편국", "supplyPrice": 2800, "courier": "롯데택배", "shipFee": 4000, "tax": "면세", "image": "meal-5.webp", "show": true },
+  { "category": "간편식품", "name": "맛상 명품 오리주물럭 500g", "warehouse": "하남", "spec": "하남 창고 · 냉동", "supplyPrice": 6000, "courier": "롯데택배", "shipFee": 4000, "tax": "과세", "image": "meal-9.webp", "show": true },
+  { "category": "간편식품", "name": "따끈따끈 소곱창전골 1kg", "warehouse": "김포", "spec": "김포 창고 · 밀키트", "supplyPrice": 8000, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "과세", "image": "meal-6.webp", "show": true },
+  { "category": "간편식품", "name": "꽉찬 오징어까스 1kg", "warehouse": "김포", "spec": "김포 창고 · 냉동", "supplyPrice": 7500, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "과세", "image": "meal-7.webp", "show": true },
+  { "category": "간편식품", "name": "옛날 쑥개떡 12개입", "warehouse": "김포", "spec": "김포 창고 · 냉동", "supplyPrice": 7000, "courier": "씨제이대한통운", "shipFee": 4000, "tax": "과세", "image": "meal-8.webp", "show": true },
+
+  { "category": "생활용품", "name": "찐한국 숨결고체가글 24정", "warehouse": "찐한국", "spec": "찐한국 · 구강용품", "supplyPrice": 3800, "courier": "한진택배", "shipFee": 2500, "tax": "과세", "image": "living-1.webp", "show": true },
+  { "category": "생활용품", "name": "찐한국 그냥치약 100g", "warehouse": "찐한국", "spec": "찐한국 · 구강용품", "supplyPrice": 3400, "courier": "한진택배", "shipFee": 2500, "tax": "과세", "image": "living-2.webp", "show": true },
+  { "category": "생활용품", "name": "찐한국 손결 핸드워시 300ml", "warehouse": "찐한국", "spec": "찐한국 · 세정용품", "supplyPrice": 3300, "courier": "한진택배", "shipFee": 2500, "tax": "과세", "image": "living-3.webp", "show": true },
+  { "category": "생활용품", "name": "찐한국 주방세제 500ml", "warehouse": "찐한국", "spec": "찐한국 · 주방용품", "supplyPrice": 3100, "courier": "한진택배", "shipFee": 2500, "tax": "과세", "image": "living-4.webp", "show": true },
+  { "category": "생활용품", "name": "찐한국 고무장갑 그레이", "warehouse": "찐한국", "spec": "찐한국 · 주방용품", "supplyPrice": 3000, "courier": "한진택배", "shipFee": 2500, "tax": "과세", "image": "living-5.webp", "show": true },
+  { "category": "생활용품", "name": "찐한국 고무장갑 퍼플", "warehouse": "찐한국", "spec": "찐한국 · 주방용품", "supplyPrice": 3000, "courier": "한진택배", "shipFee": 2500, "tax": "과세", "image": "living-6.webp", "show": true }
+]
