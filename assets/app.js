@@ -291,7 +291,6 @@
   }
 
   function contactHTML() {
-    var mark = (CFG.managerName || "박").trim().charAt(0) || "박";
     var phone = CFG.phone || "", email = CFG.email || "", kakao = CFG.kakao || "";
     return '' +
       '<section class="contact" id="contact">' +
@@ -302,7 +301,6 @@
           '</div>' +
           '<div class="contact-card">' +
             '<div class="who">' +
-              '<div class="avatar display">' + esc(mark) + '</div>' +
               '<div>' +
                 '<div class="name">' + esc(CFG.managerName || "") + ' <small>' + esc((CFG.team || "") + " " + (CFG.managerTitle || "")) + '</small></div>' +
                 '<div class="org">' + esc(CFG.company || "") + '</div>' +
