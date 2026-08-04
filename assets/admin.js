@@ -23,8 +23,10 @@
   var acResults = [];    // 자동완성 검색결과(비공개 카탈로그)
   var acTimer = null;
   var _delegated = false; // root 이벤트는 한 번만 바인딩
-  var siteSettings = {};  // 상단·회사 문구 설정
+  var siteSettings = {};  // 상단·회사 문구 설정(현재 버전)
   var settingsOpen = false;
+  var versions = [];      // 제안서 버전 목록
+  var currentVersion = null; // 현재 편집 중인 버전
 
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
   function imgUrl(v){
@@ -150,14 +152,15 @@
       '</div></div>';
   }
   function saveSettings(btn){
+    if(!currentVersion){ toast("먼저 versions.sql 을 실행해 버전을 만들어주세요", true); return; }
     btn.disabled=true; btn.textContent="저장 중…";
     var keys=["hero_eyebrow","hero_title1","hero_title2","hero_title3","hero_lead","company","team","manager_name","manager_title","phone","email","kakao"];
-    var eff=settingsEffective();
-    var rows=keys.map(function(k){ return {key:k, value:(eff[k]!=null?String(eff[k]):"")}; });
-    client.from("settings").upsert(rows).then(chk).then(function(){
-      rows.forEach(function(r){ siteSettings[r.key]=r.value; });
+    var eff=settingsEffective(); var obj={};
+    keys.forEach(function(k){ obj[k]=(eff[k]!=null?String(eff[k]):""); });
+    client.from("versions").update({settings:obj}).eq("id",currentVersion.id).then(chk).then(function(){
+      currentVersion.settings=obj; siteSettings=Object.assign({},obj);
       btn.disabled=false; btn.textContent="문구 저장";
-      toast("문구가 저장됐어요 ✅ 공개 사이트에 반영됩니다");
+      toast("문구가 저장됐어요 ✅ 이 버전 공개 사이트에 반영됩니다");
     }).catch(function(err){ btn.disabled=false; btn.textContent="문구 저장"; toast("저장 실패: "+(err.message||err), true); });
   }
 
@@ -198,10 +201,19 @@
 
   function renderEditor(){
     var email = (client && client.auth && window.__adminEmail) || "";
+    var verCtrl = versions.length
+      ? '<select id="ver-select" class="ver-select" title="편집할 버전 선택">'+
+          versions.map(function(v){ return '<option value="'+v.id+'"'+(currentVersion&&v.id===currentVersion.id?' selected':'')+'>'+esc(v.name)+'</option>'; }).join("")+
+        '</select>'+
+        '<button class="btn-ghost" id="btn-ver-new">+ 새 버전</button>'+
+        '<button class="btn-ghost" id="btn-ver-rename">이름변경</button>'+
+        '<button class="btn-ghost" id="btn-ver-link">🔗 링크 복사</button>'
+      : '<span class="ver-note">⚠ 버전 기능: versions.sql 실행 필요</span>';
+    var pubHref = "index.html" + (currentVersion ? ("?v="+encodeURIComponent(currentVersion.slug)) : "");
     var html =
-      '<div class="topbar"><span class="brand">🐟 상품 관리자</span>'+
+      '<div class="topbar"><span class="brand">🐟 상품 관리자</span>'+ verCtrl +
       '<span class="spacer"></span>'+
-      '<a href="index.html" target="_blank" rel="noopener">공개 사이트 보기 ↗</a>'+
+      '<a href="'+pubHref+'" target="_blank" rel="noopener">공개 사이트 보기 ↗</a>'+
       '<button class="btn-ghost" id="btn-logout">로그아웃</button></div>'+
       '<div class="wrap">'+
       '<div class="hint">상품을 수정·추가·삭제한 뒤 아래 <b>[확정 저장]</b> 버튼을 누르면 공개 사이트에 반영됩니다. 사진은 각 상품의 <b>[사진 업로드]</b>로 바꿀 수 있어요.</div>'+
@@ -254,6 +266,7 @@
       setDirty(true);
     });
     root.addEventListener("change", function(e){
+      if(e.target.id==="ver-select"){ switchVersion(e.target.value); return; }
       // 새 상품 입력폼
       var nf=e.target.getAttribute("data-nf");
       if(nf && newItem){
@@ -280,6 +293,9 @@
       if(e.target.id==="btn-save"){ saveAll(); return; }
       if(e.target.closest && e.target.closest("#sp-toggle")){ settingsOpen=!settingsOpen; renderEditor(); return; }
       if(e.target.id==="btn-save-settings"){ saveSettings(e.target); return; }
+      if(e.target.id==="btn-ver-new"){ newVersion(); return; }
+      if(e.target.id==="btn-ver-rename"){ renameVersion(); return; }
+      if(e.target.id==="btn-ver-link"){ copyVersionLink(); return; }
       var addCat=e.target.getAttribute("data-add");
       if(addCat){
         addingCat=addCat;
@@ -385,6 +401,7 @@
       supply_price:parseInt(it.supply_price,10)||0, courier:(it.courier||"").trim(), ship_fee:parseInt(it.ship_fee,10)||0,
       tax:it.tax||"면세", image:(it.image||"").trim(), show:it.show!==false, sort_order:order, updated_at:new Date().toISOString() };
     if(it.id) r.id=it.id;
+    if(currentVersion) r.version_id=currentVersion.id;
     return r;
   }
 
@@ -413,8 +430,81 @@
   function chk(res){ if(res && res.error) throw res.error; return res; }
 
   /* ---------------- 로드 / 부팅 ---------------- */
+  function slugify(name){
+    var s=(name||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+    if(!s) s="v"+uid().slice(0,6);
+    var base=s, n=2;
+    while(versions.some(function(v){return v.slug===s;})){ s=base+"-"+n; n++; }
+    return s;
+  }
+  function switchVersion(id){
+    if(id===(currentVersion&&currentVersion.id)) return;
+    if(dirty && !window.confirm("저장 안 된 상품 변경사항이 있습니다.\n버전을 바꾸면 사라집니다. 계속할까요?")){ renderEditor(); return; }
+    var v=versions.filter(function(x){return x.id===id;})[0]; if(!v) return;
+    currentVersion=v; addingCat=null; newItem=null; dirty=false;
+    root.innerHTML='<div class="loading">버전 불러오는 중…</div>';
+    Promise.all([loadProducts(), loadAdminSettings()]).then(function(){ renderEditor(); })
+      .catch(function(err){ toast("불러오기 실패: "+(err.message||err), true); });
+  }
+  function renameVersion(){
+    if(!currentVersion) return;
+    var name=window.prompt("버전 이름 변경", currentVersion.name); if(!name||!name.trim()) return;
+    name=name.trim();
+    client.from("versions").update({name:name}).eq("id",currentVersion.id).then(chk).then(function(){
+      currentVersion.name=name;
+      var v=versions.filter(function(x){return x.id===currentVersion.id;})[0]; if(v)v.name=name;
+      renderEditor(); toast("이름을 바꿨어요");
+    }).catch(function(err){ toast("이름 변경 실패: "+(err.message||err), true); });
+  }
+  function copyVersionLink(){
+    if(!currentVersion) return;
+    var url=location.href.split("?")[0].replace(/admin\.html$/,"")+"?v="+encodeURIComponent(currentVersion.slug);
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ toast("링크 복사됨 ✅"); }, function(){ window.prompt("아래 링크를 복사하세요", url); });
+    } else { window.prompt("아래 링크를 복사하세요", url); }
+  }
+  function newVersion(){
+    var name=window.prompt("새 버전 이름 (예: 온라인 판매 셀러)"); if(!name||!name.trim()) return;
+    name=name.trim();
+    var copy = !!(currentVersion) && window.confirm("현재 버전('"+currentVersion.name+"')의 상품·문구를 복사해서 시작할까요?\n\n[확인] 복사하기   [취소] 빈 버전으로");
+    var srcVersion = currentVersion;
+    var slug=slugify(name);
+    var sort=(versions.length?Math.max.apply(null,versions.map(function(v){return v.sort_order||0;})):0)+1;
+    var settings=(copy && srcVersion)?Object.assign({},srcVersion.settings||{}):{};
+    client.from("versions").insert({slug:slug,name:name,sort_order:sort,settings:settings}).select().then(function(res){
+      if(res.error) throw res.error;
+      var nv=res.data[0];
+      var finish=function(){
+        return loadVersions().then(function(){
+          currentVersion=versions.filter(function(v){return v.id===nv.id;})[0]||nv;
+          return Promise.all([loadProducts(), loadAdminSettings()]);
+        }).then(function(){ dirty=false; renderEditor(); toast("새 버전 '"+name+"' 만들었어요 ✅"); });
+      };
+      if(copy && srcVersion){
+        return client.from("products").select("*").eq("version_id",srcVersion.id).then(function(pr){
+          var rows=(pr.data||[]).map(function(p){ return {category:p.category,name:p.name,warehouse:p.warehouse,spec:p.spec,supply_price:p.supply_price,courier:p.courier,ship_fee:p.ship_fee,tax:p.tax,image:p.image,show:p.show,sort_order:p.sort_order,version_id:nv.id}; });
+          if(!rows.length) return finish();
+          return client.from("products").insert(rows).then(chk).then(finish);
+        });
+      }
+      return finish();
+    }).catch(function(err){ toast("버전 생성 실패: "+(err.message||err), true); });
+  }
+
+  function loadVersions(){
+    return client.from("versions").select("*").order("sort_order",{ascending:true}).then(function(res){
+      if(res.error){ versions=[]; currentVersion=null; return; }
+      versions=res.data||[];
+      if(versions.length){
+        currentVersion = (currentVersion && versions.filter(function(v){return v.id===currentVersion.id;})[0]) || versions[0];
+      } else { currentVersion=null; }
+    }).catch(function(){ versions=[]; currentVersion=null; });
+  }
+
   function loadProducts(){
-    return client.from("products").select("*").order("sort_order",{ascending:true}).then(function(res){
+    var q=client.from("products").select("*").order("sort_order",{ascending:true});
+    if(currentVersion) q=q.eq("version_id", currentVersion.id);
+    return q.then(function(res){
       if(res.error) throw res.error;
       items=(res.data||[]).map(function(r){ return {
         _key:uid(), id:r.id, category:r.category||"fish", name:r.name||"", warehouse:r.warehouse||"", spec:r.spec||"",
@@ -424,16 +514,16 @@
   }
 
   function loadAdminSettings(){
-    return client.from("settings").select("*").then(function(res){
-      siteSettings={};
-      if(!res.error && res.data){ res.data.forEach(function(r){ siteSettings[r.key]=r.value; }); }
-    }).catch(function(){ siteSettings={}; });
+    siteSettings = (currentVersion && currentVersion.settings) ? Object.assign({}, currentVersion.settings) : {};
+    return Promise.resolve();
   }
 
   function boot(){
-    root.innerHTML='<div class="loading">상품을 불러오는 중…</div>';
+    root.innerHTML='<div class="loading">불러오는 중…</div>';
     client.auth.getUser().then(function(u){ window.__adminEmail=(u&&u.data&&u.data.user&&u.data.user.email)||""; });
-    Promise.all([loadProducts(), loadAdminSettings()]).then(function(){ dirty=false; renderEditor(); })
+    loadVersions().then(function(){
+      return Promise.all([loadProducts(), loadAdminSettings()]);
+    }).then(function(){ dirty=false; renderEditor(); })
       .catch(function(err){ toast("상품 로드 실패: "+(err.message||err), true); showLogin("데이터를 불러오지 못했습니다. DB 설정을 확인하세요."); });
   }
 

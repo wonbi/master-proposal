@@ -308,46 +308,63 @@
       .then(function (r) { return r.json(); });
   }
 
-  function loadSettings() {
-    var sb = CFG.supabase || {};
-    if (!sb.url || !sb.anonKey || !window.supabase) return Promise.resolve();
-    var c = window.supabase.createClient(sb.url, sb.anonKey);
-    return c.from("settings").select("*").then(function (res) {
-      if (res.error || !res.data) return;
-      var m = {};
-      res.data.forEach(function (r) { m[r.key] = r.value; });
-      if (m.hero_eyebrow != null) CFG.heroEyebrow = m.hero_eyebrow;
-      if (m.hero_lead != null) CFG.heroLead = m.hero_lead;
-      if (m.hero_title1 != null || m.hero_title2 != null || m.hero_title3 != null) {
-        CFG.heroTitleLines = [
-          m.hero_title1 != null ? m.hero_title1 : (CFG.heroTitleLines || [])[0] || "",
-          m.hero_title2 != null ? m.hero_title2 : (CFG.heroTitleLines || [])[1] || "",
-          m.hero_title3 != null ? m.hero_title3 : (CFG.heroTitleLines || [])[2] || ""
-        ];
-      }
-      ["company","team","kakao","phone","email"].forEach(function(k){ if(m[k]!=null) CFG[k]=m[k]; });
-      if (m.manager_name != null) CFG.managerName = m.manager_name;
-      if (m.manager_title != null) CFG.managerTitle = m.manager_title;
+  var _sbClient = null;
+  function sbClient() {
+    if (_sbClient) return _sbClient;
+    var s = CFG.supabase || {};
+    if (!s.url || !s.anonKey || !window.supabase) return null;
+    _sbClient = window.supabase.createClient(s.url, s.anonKey);
+    return _sbClient;
+  }
+
+  var CURRENT_VERSION = null;
+
+  function applySettings(m) {
+    if (!m) return;
+    if (m.hero_eyebrow != null) CFG.heroEyebrow = m.hero_eyebrow;
+    if (m.hero_lead != null) CFG.heroLead = m.hero_lead;
+    if (m.hero_title1 != null || m.hero_title2 != null || m.hero_title3 != null) {
+      CFG.heroTitleLines = [
+        m.hero_title1 != null ? m.hero_title1 : (CFG.heroTitleLines || [])[0] || "",
+        m.hero_title2 != null ? m.hero_title2 : (CFG.heroTitleLines || [])[1] || "",
+        m.hero_title3 != null ? m.hero_title3 : (CFG.heroTitleLines || [])[2] || ""
+      ];
+    }
+    ["company","team","kakao","phone","email"].forEach(function(k){ if(m[k]!=null) CFG[k]=m[k]; });
+    if (m.manager_name != null) CFG.managerName = m.manager_name;
+    if (m.manager_title != null) CFG.managerTitle = m.manager_title;
+  }
+
+  // ?v=슬러그 로 버전 선택 (없으면 첫 버전). 버전 테이블 없으면 무시.
+  function loadVersion() {
+    var c = sbClient();
+    if (!c) return Promise.resolve();
+    var slug = (new URLSearchParams(location.search)).get("v");
+    return c.from("versions").select("*").order("sort_order", { ascending: true }).then(function (res) {
+      if (res.error || !res.data || !res.data.length) return;
+      var match = slug ? res.data.filter(function (v) { return v.slug === slug; })[0] : null;
+      CURRENT_VERSION = match || res.data[0];
+      applySettings(CURRENT_VERSION.settings || {});
     }).catch(function () {});
   }
 
   function loadSupabase() {
-    var sb = CFG.supabase || {};
-    if (!sb.url || !sb.anonKey || !window.supabase) return Promise.reject("no-supabase");
-    var client = window.supabase.createClient(sb.url, sb.anonKey);
-    return client.from("products").select("*").order("sort_order", { ascending: true })
-      .then(function (res) {
-        if (res.error) throw res.error;
-        var rows = res.data || [];
-        if (!rows.length) throw new Error("supabase empty");
-        return rows.map(function (r) {
-          return {
-            category: r.category, name: r.name, warehouse: r.warehouse, spec: r.spec,
-            supplyPrice: r.supply_price, courier: r.courier, shipFee: r.ship_fee,
-            tax: r.tax, image: r.image, show: r.show
-          };
-        });
+    var c = sbClient();
+    if (!c) return Promise.reject("no-supabase");
+    var q = c.from("products").select("*").order("sort_order", { ascending: true });
+    if (CURRENT_VERSION) q = q.eq("version_id", CURRENT_VERSION.id);
+    return q.then(function (res) {
+      if (res.error) throw res.error;
+      var rows = res.data || [];
+      if (!rows.length) { if (CURRENT_VERSION) return []; throw new Error("supabase empty"); }
+      return rows.map(function (r) {
+        return {
+          category: r.category, name: r.name, warehouse: r.warehouse, spec: r.spec,
+          supplyPrice: r.supply_price, courier: r.courier, shipFee: r.ship_fee,
+          tax: r.tax, image: r.image, show: r.show
+        };
       });
+    });
   }
 
   function loadSheet() {
@@ -371,7 +388,8 @@
   document.getElementById("app").innerHTML =
     '<div class="notice">상품 정보를 불러오는 중…</div>';
 
-  loadSupabase()
+  loadVersion()
+    .then(function () { return loadSupabase(); })
     .catch(function (e) {
       if (e !== "no-supabase") console.warn("Supabase 로드 실패 → 다음 소스 시도:", e);
       return loadSheet();
@@ -380,7 +398,7 @@
       if (e !== "no-sheet") console.warn("구글 시트 로드 실패 → 기본 데이터 사용:", e);
       return loadFallback();
     })
-    .then(function (list) { return loadSettings().then(function () { render(normalize(list)); }); })
+    .then(function (list) { render(normalize(list)); })
     .catch(function (e) {
       console.error(e);
       document.getElementById("app").innerHTML =
