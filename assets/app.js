@@ -40,6 +40,7 @@
     CAT = {}; CAT_ORDER = [];
     (rows && rows.length ? rows : DEFAULT_CATS).forEach(function (row) {
       if (!row.key) return;
+      if (row.show === false) return;   // 숨긴 카테고리는 공개 사이트에서 제외
       CAT[row.key] = buildCat(row);
       CAT_ORDER.push(row.key);
     });

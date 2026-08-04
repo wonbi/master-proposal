@@ -14,8 +14,12 @@ create table if not exists public.categories (
   meta       text default '',        -- 섹션 헤더 오른쪽 작은 글씨
   accent     text default '#0E8A8F', -- 대표 색 (연한 배경은 자동 계산)
   fit        text default 'cover',   -- 사진 맞춤: cover(꽉 채움) / contain(여백)
+  show       boolean default true,   -- 공개 사이트 표시 여부 (숨기기)
   sort_order integer default 0
 );
+
+-- 이미 categories 표를 만든 경우에도 표시 컬럼 추가
+alter table public.categories add column if not exists show boolean default true;
 
 alter table public.categories enable row level security;
 drop policy if exists "categories read"   on public.categories;

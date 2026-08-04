@@ -130,7 +130,7 @@
     return client.from("categories").select("*").order("sort_order",{ascending:true}).then(function(res){
       if(res.error || !res.data || !res.data.length){ CATS=DEFAULT_CATS.slice(); return; }
       CATS=res.data.map(function(r){ return { id:r.id, key:r.key, name:r.name||"", mark:r.mark||"", eyebrow:r.eyebrow||"",
-        descr:r.descr||"", meta:r.meta||"", accent:r.accent||"#0E8A8F", fit:r.fit||"cover", sort_order:r.sort_order||0 }; });
+        descr:r.descr||"", meta:r.meta||"", accent:r.accent||"#0E8A8F", fit:r.fit||"cover", show:r.show!==false, sort_order:r.sort_order||0 }; });
     }).catch(function(){ CATS=DEFAULT_CATS.slice(); });
   }
 
@@ -148,6 +148,7 @@
         '<div><span class="mini">사진 맞춤</span><select data-cf="fit"><option value="cover"'+(c.fit!=="contain"?" selected":"")+'>꽉채움</option><option value="contain"'+(c.fit==="contain"?" selected":"")+'>여백(포장)</option></select></div>'+
       '</div>'+
       '<div class="card-foot" style="padding-top:8px;">'+
+        '<label class="toggle"><input type="checkbox" data-cf="show"'+(c.show!==false?' checked':'')+'> 사이트에 표시</label>'+
         '<span class="mini" style="margin:0;">상품 '+items.filter(function(i){return i.category===c.key;}).length+'개</span>'+
         '<button class="btn-saveone" data-catsave="'+esc(c.key)+'">저장</button>'+
         '<button class="btn-del" data-catdel="'+esc(c.key)+'">삭제</button>'+
@@ -169,7 +170,7 @@
     var c=catByKey(key); if(!c) return;
     if(!(c.name||"").trim()){ toast("카테고리 이름을 입력하세요", true); return; }
     if(btn){ btn.disabled=true; btn.textContent="저장중…"; }
-    var row={ key:c.key, name:(c.name||"").trim(), mark:c.mark||"", eyebrow:c.eyebrow||"", descr:c.descr||"", meta:c.meta||"", accent:c.accent||"#0E8A8F", fit:c.fit||"cover", sort_order:c.sort_order||0 };
+    var row={ key:c.key, name:(c.name||"").trim(), mark:c.mark||"", eyebrow:c.eyebrow||"", descr:c.descr||"", meta:c.meta||"", accent:c.accent||"#0E8A8F", fit:c.fit||"cover", show:c.show!==false, sort_order:c.sort_order||0 };
     var q = c.id ? client.from("categories").update(row).eq("id",c.id) : client.from("categories").insert(row).select();
     q.then(function(res){
       if(res && res.error) throw res.error;
@@ -182,7 +183,7 @@
     var name=window.prompt("새 카테고리 이름 (예: 신선 정육)"); if(!name||!name.trim()) return; name=name.trim();
     var key="cat"+uid().replace(/[^a-z0-9]/gi,"").slice(0,8).toLowerCase();
     var sort=(CATS.length?Math.max.apply(null,CATS.map(function(c){return c.sort_order||0;})):0)+10;
-    var c={ key:key, name:name, mark:(name.charAt(0)||""), eyebrow:"", descr:"", meta:"", accent:"#0E8A8F", fit:"cover", sort_order:sort };
+    var c={ key:key, name:name, mark:(name.charAt(0)||""), eyebrow:"", descr:"", meta:"", accent:"#0E8A8F", fit:"cover", show:true, sort_order:sort };
     client.from("categories").insert(c).select().then(function(res){
       if(res.error) throw res.error;
       if(res.data && res.data[0]) c.id=res.data[0].id;
@@ -302,7 +303,8 @@
 
     CATS.forEach(function(c){
       var list=items.filter(function(i){return i.category===c.key;});
-      html+='<div class="cat-block"><div class="cat-title"><span class="dot" style="background:'+c.accent+'"></span>'+esc(c.name)+' <span class="count">'+list.length+'개</span></div>';
+      var hiddenMark = c.show===false ? ' <span style="color:#e0483d;font-weight:800;">· 숨김(사이트에 안 보임)</span>' : '';
+      html+='<div class="cat-block'+(c.show===false?' cat-hidden':'')+'"><div class="cat-title"><span class="dot" style="background:'+c.accent+'"></span>'+esc(c.name)+' <span class="count">'+list.length+'개</span>'+hiddenMark+'</div>';
       html+=list.map(cardHTML).join("");
       if(addingCat===c.key){ html+=addFormHTML(); }
       else { html+='<div class="add-row"><button class="btn-add" data-add="'+c.key+'">+ '+esc(c.name)+' 상품 1개 추가</button></div>'; }
@@ -351,7 +353,8 @@
     root.addEventListener("change", function(e){
       if(e.target.id==="ver-select"){ switchVersion(e.target.value); return; }
       var cf=e.target.getAttribute("data-cf");
-      if(cf){ var cw=e.target.closest(".cat-edit"); var cc=cw&&catByKey(cw.getAttribute("data-catkey")); if(cc) cc[cf]=e.target.value; return; }
+      if(cf){ var cw=e.target.closest(".cat-edit"); var cc=cw&&catByKey(cw.getAttribute("data-catkey"));
+        if(cc){ if(cf==="show"){ cc.show=e.target.checked; saveCategory(cc.key); } else { cc[cf]=e.target.value; } } return; }
       // 새 상품 입력폼
       var nf=e.target.getAttribute("data-nf");
       if(nf && newItem){
