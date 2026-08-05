@@ -370,8 +370,10 @@
           versions.map(function(v){ return '<option value="'+v.id+'"'+(currentVersion&&v.id===currentVersion.id?' selected':'')+'>'+esc(v.name)+'</option>'; }).join("")+
         '</select>'+
         '<button class="btn-ghost" id="btn-ver-new">+ 새 버전</button>'+
-        '<button class="btn-ghost" id="btn-ver-rename">이름변경</button>'+
-        '<button class="btn-ghost" id="btn-ver-link">🔗 링크 복사</button>'
+        '<button class="btn-ghost" id="btn-ver-copy" title="현재 버전의 상품·문구를 그대로 복사해 새 버전 만들기">⧉ 복제</button>'+
+        '<button class="btn-ghost" id="btn-ver-rename" title="이름과 공개 주소(?v=) 변경">✏ 이름·주소</button>'+
+        '<button class="btn-ghost" id="btn-ver-link">🔗 링크 복사</button>'+
+        '<button class="btn-ghost danger" id="btn-ver-del" title="이 버전과 소속 상품 삭제">🗑 삭제</button>'
       : '<span class="ver-note">⚠ 버전 기능: versions.sql 실행 필요</span>';
     // nt=1 → 관리자 미리보기는 조회수에 집계되지 않음
     var pubHref = "index.html?nt=1" + (currentVersion ? ("&v="+encodeURIComponent(currentVersion.slug)) : "");
@@ -503,8 +505,10 @@
         renderEditor(); return;
       }
       if(e.target.id==="btn-ver-new"){ newVersion(); return; }
+      if(e.target.id==="btn-ver-copy"){ duplicateVersion(); return; }
       if(e.target.id==="btn-ver-rename"){ renameVersion(); return; }
       if(e.target.id==="btn-ver-link"){ copyVersionLink(); return; }
+      if(e.target.id==="btn-ver-del"){ deleteVersion(); return; }
       var addCat=e.target.getAttribute("data-add");
       if(addCat){
         addingCat=addCat; expandedCats[addCat]=true;
@@ -770,32 +774,76 @@
       navigator.clipboard.writeText(url).then(function(){ toast("링크 복사됨 ✅"); }, function(){ window.prompt("아래 링크를 복사하세요", url); });
     } else { window.prompt("아래 링크를 복사하세요", url); }
   }
-  function newVersion(){
-    var name=window.prompt("새 버전 이름 (예: 온라인 판매 셀러)"); if(!name||!name.trim()) return;
-    name=name.trim();
-    var copy = !!(currentVersion) && window.confirm("현재 버전('"+currentVersion.name+"')의 상품·문구를 복사해서 시작할까요?\n\n[확인] 복사하기   [취소] 빈 버전으로");
-    var srcVersion = currentVersion;
+  // 버전 생성 공통 — src 가 있으면 그 버전의 상품·문구를 복사
+  function createVersion(name, src){
+    name=(name||"").trim(); if(!name) return;
     var slug=slugify(name);
     var sort=(versions.length?Math.max.apply(null,versions.map(function(v){return v.sort_order||0;})):0)+1;
-    var settings=(copy && srcVersion)?Object.assign({},srcVersion.settings||{}):{};
+    var settings=src?Object.assign({},src.settings||{}):{};
     client.from("versions").insert({slug:slug,name:name,sort_order:sort,settings:settings}).select().then(function(res){
       if(res.error) throw res.error;
       var nv=res.data[0];
-      var finish=function(){
+      var finish=function(copied){
         return loadVersions().then(function(){
           currentVersion=versions.filter(function(v){return v.id===nv.id;})[0]||nv;
+          addingCat=null; newItem=null; expandedCats={};
           return Promise.all([loadProducts(), loadAdminSettings()]);
-        }).then(function(){ dirty=false; renderEditor(); toast("새 버전 '"+name+"' 만들었어요 ✅"); });
+        }).then(function(){
+          dirty=false; renderEditor();
+          toast("'"+name+"' 만들었어요 ✅"+(copied?(" (상품 "+copied+"개 복사)"):"")+" · 주소 ?v="+slug);
+        });
       };
-      if(copy && srcVersion){
-        return client.from("products").select("*").eq("version_id",srcVersion.id).then(function(pr){
+      if(src){
+        return client.from("products").select("*").eq("version_id",src.id).then(function(pr){
           var rows=(pr.data||[]).map(function(p){ return {category:p.category,name:p.name,warehouse:p.warehouse,spec:p.spec,supply_price:p.supply_price,courier:p.courier,ship_fee:p.ship_fee,tax:p.tax,image:p.image,show:p.show,sort_order:p.sort_order,version_id:nv.id}; });
-          if(!rows.length) return finish();
-          return client.from("products").insert(rows).then(chk).then(finish);
+          if(!rows.length) return finish(0);
+          return client.from("products").insert(rows).then(chk).then(function(){ return finish(rows.length); });
         });
       }
-      return finish();
+      return finish(0);
     }).catch(function(err){ toast("버전 생성 실패: "+(err.message||err), true); });
+  }
+
+  function newVersion(){
+    var name=window.prompt("새 버전 이름 (빈 상태로 시작합니다)\n예: 급식 거래처용");
+    if(name===null||!name.trim()) return;
+    createVersion(name, null);
+  }
+
+  function duplicateVersion(){
+    if(!currentVersion){ toast("복제할 버전이 없습니다", true); return; }
+    if(dirty && !window.confirm("저장 안 된 변경사항은 복제본에 반영되지 않습니다.\n계속할까요?")) return;
+    var cnt=items.length;
+    var name=window.prompt(
+      "'"+currentVersion.name+"' 을(를) 복제합니다.\n상품 "+cnt+"개와 문구 설정이 그대로 복사됩니다.\n\n새 버전 이름을 입력하세요.",
+      currentVersion.name+" 복사본");
+    if(name===null||!name.trim()) return;
+    createVersion(name, currentVersion);
+  }
+
+  function deleteVersion(){
+    if(!currentVersion){ return; }
+    if(versions.length<=1){ toast("마지막 버전은 삭제할 수 없습니다", true); return; }
+    var v=currentVersion, cnt=items.length;
+    if(!window.confirm(
+      "[" + v.name + "] 버전을 삭제합니다.\n\n"+
+      "· 이 버전의 상품 " + cnt + "개가 함께 삭제됩니다\n"+
+      "· 공유한 링크(?v=" + v.slug + ")는 더 이상 열리지 않습니다\n"+
+      "· 되돌릴 수 없습니다\n\n계속할까요?")) return;
+    var typed=window.prompt("확인을 위해 버전 이름을 그대로 입력하세요:\n"+v.name);
+    if(typed===null) return;
+    if(typed.trim()!==v.name.trim()){ toast("이름이 일치하지 않아 취소했습니다", true); return; }
+
+    client.from("products").delete().eq("version_id",v.id).then(chk).then(function(){
+      return client.from("versions").delete().eq("id",v.id).then(chk);
+    }).then(function(){
+      currentVersion=null; addingCat=null; newItem=null; expandedCats={}; dirty=false;
+      root.innerHTML='<div class="loading">삭제 중…</div>';
+      return loadVersions().then(function(){
+        return Promise.all([loadProducts(), loadAdminSettings()]);
+      });
+    }).then(function(){ renderEditor(); toast("'"+v.name+"' 버전을 삭제했어요"); })
+      .catch(function(err){ toast("삭제 실패: "+(err.message||err), true); renderEditor(); });
   }
 
   function loadVersions(){
