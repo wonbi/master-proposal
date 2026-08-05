@@ -245,10 +245,21 @@
     var v=versions.filter(function(x){return x.slug===slug;})[0];
     return v?v.name:slug;
   }
+  // 상단바용 — 현재 버전의 조회수 요약
+  function statsChipHTML(){
+    if(!currentVersion) return '';
+    if(statsRows===null) return '<button class="stat-chip" id="btn-stats" title="조회수 보기">👁 조회 …</button>';
+    var b=statsSummary().filter(function(x){return x.slug===currentVersion.slug;})[0];
+    if(!b) return '<button class="stat-chip" id="btn-stats" title="아직 조회 없음">👁 조회 0</button>';
+    return '<button class="stat-chip" id="btn-stats" title="클릭하면 버전별 상세 조회수">'+
+      '👁 조회 <b>'+b.total+'</b>'+
+      '<span class="sc-sep"></span>방문 <b>'+b.uniqCount+'</b>'+
+      (b.today?'<span class="sc-today">오늘 '+b.today+'</span>':'')+
+      '</button>';
+  }
+
   function statsPanelHTML(){
-    if(!statsOpen){
-      return '<div class="settings-panel"><div class="sp-head" id="st-toggle"><span>📊 조회수 — 거래처가 열어봤는지 확인</span><span class="sp-caret">펼치기 ▾</span></div></div>';
-    }
+    if(!statsOpen) return '';
     var body;
     if(statsRows===null){ body='<div class="st-empty">불러오는 중…</div>'; }
     else if(statsErr){ body='<div class="st-empty">'+esc(statsErr)+'</div>'; }
@@ -270,10 +281,16 @@
         '<div class="st-note">· <b>총 조회</b>는 열어본 횟수, <b>방문자</b>는 서로 다른 사람 수(같은 사람이 여러 번 봐도 1)입니다.<br>'+
         '· 관리자에서 [공개 사이트 보기]로 연 것은 집계되지 않습니다.</div>';
     }
-    return '<div class="settings-panel open">'+
-      '<div class="sp-head" id="st-toggle"><span>📊 조회수 — 거래처가 열어봤는지 확인</span>'+
-      '<span><button class="btn-ghost2" id="btn-st-refresh">새로고침</button> <span class="sp-caret">접기 ▴</span></span></div>'+
-      '<div class="sp-body">'+body+'</div></div>';
+    // 편집 영역이 아니라 화면 위에 뜨는 팝업
+    return '<div class="modal-back" id="st-close-back">'+
+      '<div class="modal" role="dialog" aria-label="조회수">'+
+        '<div class="modal-head">'+
+          '<span>📊 조회수 — 버전별 열람 현황</span>'+
+          '<span><button class="btn-ghost2" id="btn-st-refresh">새로고침</button>'+
+          '<button class="modal-x" id="btn-st-close" aria-label="닫기">✕</button></span>'+
+        '</div>'+
+        '<div class="modal-body">'+body+'</div>'+
+      '</div></div>';
   }
 
   function settingsEffective(){
@@ -379,13 +396,13 @@
     var pubHref = "index.html?nt=1" + (currentVersion ? ("&v="+encodeURIComponent(currentVersion.slug)) : "");
     var html =
       '<div class="topbar"><span class="brand">🐟 상품 관리자</span>'+ verCtrl +
+      statsChipHTML()+
       '<span class="spacer"></span>'+
       '<button class="btn-ghost" id="btn-sheet-link" title="상품명 자동완성을 구글 시트에서 실시간으로">🔗 시트연동'+(apiUrl()?' ✓':'')+'</button>'+
       '<a href="'+pubHref+'" target="_blank" rel="noopener">공개 사이트 보기 ↗</a>'+
       '<button class="btn-ghost" id="btn-logout">로그아웃</button></div>'+
       '<div class="wrap">'+
       '<div class="hint">상품을 고친 뒤 그 상품의 <b>[저장]</b> 버튼을 누르면 바로 공개 사이트에 반영됩니다. 사진은 <b>[사진 업로드]</b>, 삭제는 <b>[삭제]</b>로 즉시 처리돼요. (아래 <b>[전체 저장]</b>은 여러 개를 한 번에 저장할 때만 쓰세요.)</div>'+
-      statsPanelHTML()+
       settingsPanelHTML()+
       catPanelHTML();
 
@@ -410,7 +427,8 @@
 
     html+='</div>'+
       '<div class="savebar"><span class="status" id="save-status">각 상품의 [저장] 버튼으로 저장하세요</span>'+
-      '<button class="btn-save" id="btn-save" disabled>전체 저장</button></div>';
+      '<button class="btn-save" id="btn-save" disabled>전체 저장</button></div>'+
+      statsPanelHTML();   // 조회수 팝업(열려 있을 때만)
     root.innerHTML=html;
     setDirty(dirty);
     bindEditor();
@@ -486,11 +504,13 @@
       if(e.target.closest && e.target.closest("#sp-toggle")){ settingsOpen=!settingsOpen; renderEditor(); return; }
       if(e.target.id==="btn-save-settings"){ saveSettings(e.target); return; }
       if(e.target.id==="btn-st-refresh"){ statsRows=null; renderEditor(); loadStats().then(renderEditor); return; }
-      if(e.target.closest && e.target.closest("#st-toggle")){
-        statsOpen=!statsOpen; renderEditor();
-        if(statsOpen && statsRows===null) loadStats().then(renderEditor);
+      if(e.target.closest && e.target.closest("#btn-stats")){
+        statsOpen=true; renderEditor();
+        if(statsRows===null) loadStats().then(renderEditor);
         return;
       }
+      // 팝업 닫기 (X 버튼 또는 바깥 배경 클릭)
+      if(e.target.id==="btn-st-close" || e.target.id==="st-close-back"){ statsOpen=false; renderEditor(); return; }
       if(e.target.closest && e.target.closest("#cat-toggle")){ catsOpen=!catsOpen; renderEditor(); return; }
       if(e.target.id==="btn-cat-new"){ newCategory(); return; }
       var catSaveKey=e.target.getAttribute("data-catsave");
@@ -878,7 +898,11 @@
     client.auth.getUser().then(function(u){ window.__adminEmail=(u&&u.data&&u.data.user&&u.data.user.email)||""; });
     loadVersions().then(function(){
       return Promise.all([loadProducts(), loadAdminSettings(), loadCategoriesAdmin()]);
-    }).then(function(){ dirty=false; renderEditor(); if(apiUrl()) loadCatalogFromApi(); })
+    }).then(function(){
+      dirty=false; renderEditor();
+      if(apiUrl()) loadCatalogFromApi();
+      loadStats().then(renderEditor);   // 상단바 조회수 표시용
+    })
       .catch(function(err){ toast("상품 로드 실패: "+(err.message||err), true); showLogin("데이터를 불러오지 못했습니다. DB 설정을 확인하세요."); });
   }
 

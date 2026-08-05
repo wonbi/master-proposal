@@ -67,6 +67,27 @@ textarea:focus{outline:2px solid var(--teal);border-color:var(--teal);}
 .hide-price b{color:var(--navy);}
 .hp-note{color:var(--muted);font-size:12px;}
 
+/* 상단바 조회수 칩 */
+.stat-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(14,138,143,.30);
+  color:var(--cream);font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;
+  border:1px solid rgba(126,230,224,.35);}
+.stat-chip:hover{background:rgba(14,138,143,.5);}
+.stat-chip b{color:#7FE6E0;font-size:15px;font-variant-numeric:tabular-nums;}
+.sc-sep{width:1px;height:12px;background:rgba(255,246,234,.3);}
+.sc-today{margin-left:4px;background:var(--coral);color:#fff;font-size:11px;padding:2px 7px;border-radius:999px;}
+
+/* 팝업 */
+.modal-back{position:fixed;inset:0;z-index:60;background:rgba(6,26,36,.55);
+  display:flex;align-items:flex-start;justify-content:center;padding:70px 16px 20px;overflow-y:auto;}
+.modal{background:var(--card);border-radius:16px;width:100%;max-width:820px;
+  box-shadow:0 24px 60px rgba(8,50,75,.28);overflow:hidden;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:15px 18px;background:#fffaf0;border-bottom:1px solid var(--line);font-weight:800;color:var(--navy);}
+.modal-head > span:last-child{display:flex;align-items:center;gap:8px;}
+.modal-x{background:#eee7d6;color:var(--navy);font-size:14px;padding:6px 11px;border-radius:8px;}
+.modal-x:hover{background:#e0d6bd;}
+.modal-body{padding:18px;}
+
 /* 조회수 통계 */
 .st-empty{color:var(--muted);font-size:14px;padding:10px 2px;}
 .st-table{width:100%;border-collapse:collapse;font-size:14px;}
