@@ -56,6 +56,15 @@ textarea:focus{outline:2px solid var(--teal);border-color:var(--teal);}
 .sp-sec{font-size:12px;font-weight:800;color:var(--teal);letter-spacing:1px;margin-top:6px;}
 .sp-foot{display:flex;align-items:center;gap:14px;margin-top:8px;padding-top:12px;border-top:1px dashed var(--line);}
 .sp-note{flex:1;font-size:12px;color:var(--muted);}
+/* 공급가 숨기기 토글 */
+.hide-price{display:flex;gap:11px;align-items:flex-start;padding:13px 15px;border-radius:10px;
+  border:1px solid var(--line);background:#fbfbf9;cursor:pointer;font-size:13.5px;line-height:1.6;}
+.hide-price:hover{background:#f5f7f6;}
+.hide-price.on{border-color:var(--coral);background:rgba(255,91,57,.07);}
+.hide-price input{width:auto;margin-top:3px;flex-shrink:0;}
+.hide-price b{color:var(--navy);}
+.hp-note{color:var(--muted);font-size:12px;}
+
 /* 조회수 통계 */
 .st-empty{color:var(--muted);font-size:14px;padding:10px 2px;}
 .st-table{width:100%;border-collapse:collapse;font-size:14px;}

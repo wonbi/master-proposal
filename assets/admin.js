@@ -286,6 +286,7 @@
     for(var k in siteSettings){ if(siteSettings[k]!=null) d[k]=siteSettings[k]; }
     return d;
   }
+  function isHidePrice(s){ var v=s.hide_price; return v===true||v==="1"||v==="true"; }
   function settingsPanelHTML(){
     var s=settingsEffective();
     function ti(k,label,ph){ return '<div><span class="mini">'+label+'</span><input data-sf="'+k+'" value="'+esc(s[k])+'" placeholder="'+(ph||"")+'"></div>'; }
@@ -304,6 +305,12 @@
         '<div class="row r2">'+ti("manager_name","담당자명")+ti("manager_title","직함")+'</div>'+
         '<div class="sp-sec">연락처</div>'+
         '<div class="row r3">'+ti("phone","전화")+ti("email","이메일")+ti("kakao","카카오톡 ID")+'<div></div></div>'+
+        '<div class="sp-sec">공개 범위</div>'+
+        '<label class="hide-price'+(isHidePrice(s)?' on':'')+'">'+
+          '<input type="checkbox" data-sf="hide_price"'+(isHidePrice(s)?' checked':'')+'>'+
+          '<span><b>공급가 숨기기</b> — 가격 대신 <b>[공급가 문의하기]</b> 버튼이 표시되고, 누르면 아래 연락처로 이동합니다.'+
+          '<br><span class="hp-note">오픈카톡방·단체방처럼 불특정 다수가 보는 링크에 사용하세요.</span></span>'+
+        '</label>'+
         '<div class="sp-foot"><span class="sp-note">저장하면 공개 사이트 상단·문의에 바로 반영됩니다.</span><button class="btn-addsave" id="btn-save-settings">문구 저장</button></div>'+
       '</div></div>';
   }
@@ -313,6 +320,7 @@
     var keys=["hero_eyebrow","hero_title1","hero_title2","hero_title3","hero_lead","company","team","manager_name","manager_title","phone","email","kakao"];
     var eff=settingsEffective(); var obj={};
     keys.forEach(function(k){ obj[k]=(eff[k]!=null?String(eff[k]):""); });
+    obj.hide_price = isHidePrice(eff) ? "1" : "";   // 공급가 숨김 여부
     client.from("versions").update({settings:obj}).eq("id",currentVersion.id).then(chk).then(function(){
       currentVersion.settings=obj; siteSettings=Object.assign({},obj);
       btn.disabled=false; btn.textContent="문구 저장";
@@ -439,6 +447,12 @@
     });
     root.addEventListener("change", function(e){
       if(e.target.id==="ver-select"){ switchVersion(e.target.value); return; }
+      // 설정 체크박스(공급가 숨기기)
+      if(e.target.getAttribute("data-sf")==="hide_price"){
+        siteSettings.hide_price = e.target.checked ? "1" : "";
+        var lab=e.target.closest(".hide-price"); if(lab) lab.classList.toggle("on", e.target.checked);
+        return;
+      }
       var cf=e.target.getAttribute("data-cf");
       if(cf){ var cw=e.target.closest(".cat-edit"); var cc=cw&&catByKey(cw.getAttribute("data-catkey"));
         if(cc){ if(cf==="show"){ cc.show=e.target.checked; saveCategory(cc.key); } else { cc[cf]=e.target.value; } } return; }

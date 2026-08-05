@@ -185,6 +185,14 @@ a:hover { color: var(--navy); }
 }
 .price-row .lbl { font-size: 13px; font-weight: 700; color: var(--navy); }
 .price-row .val { font-size: 27px; color: var(--coral); }
+/* 공급가 숨김 모드 — 가격 대신 문의 버튼 */
+.val-ask {
+  display: block; width: 100%; text-align: center;
+  background: var(--navy); color: var(--amber);
+  font-size: 14px; font-weight: 700; padding: 11px 12px; border-radius: 10px;
+  text-decoration: none; transition: background .15s;
+}
+.val-ask:hover { background: #0a4059; color: var(--amber); }
 .ship-row {
   display: flex; align-items: center; gap: 8px; margin-top: 13px;
   border-radius: 10px; padding: 9px 12px;
