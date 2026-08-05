@@ -339,7 +339,11 @@
     });
     html += calloutHTML() + contactHTML();
 
+    html += '<button class="pdf-btn" id="pdf-btn" title="PDF로 저장하거나 인쇄합니다">🖨 PDF 저장</button>';
+
     document.getElementById("app").innerHTML = html;
+    var pb = document.getElementById("pdf-btn");
+    if (pb) pb.addEventListener("click", function () { window.print(); });
     document.title = (CFG.company || "상품") + " 상품 제안서";
   }
 
