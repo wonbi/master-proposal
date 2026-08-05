@@ -30,6 +30,9 @@
   var siteSettings = {};  // 상단·회사 문구 설정(현재 버전)
   var settingsOpen = false;
   var catsOpen = false;   // 카테고리 관리 패널 펼침
+  var statsOpen = false;  // 조회수 패널 펼침
+  var statsRows = null;   // 조회 기록 (null=아직 안 불러옴, []=없음)
+  var statsErr = "";
   var expandedCats = {};  // 상품목록에서 펼쳐진 카테고리 (기본 접힘)
   var versions = [];      // 제안서 버전 목록
   var currentVersion = null; // 현재 편집 중인 버전
@@ -201,6 +204,78 @@
     else done();
   }
 
+  /* ---------------- 조회수 통계 ---------------- */
+  function loadStats(){
+    return client.from("page_views").select("version_slug,visitor,viewed_at,referrer")
+      .order("viewed_at",{ascending:false}).limit(5000).then(function(res){
+        if(res.error){ statsRows=[]; statsErr="views.sql 을 실행해야 조회수가 기록됩니다."; return; }
+        statsRows=res.data||[]; statsErr="";
+      }).catch(function(err){ statsRows=[]; statsErr=String(err&&err.message||err); });
+  }
+  function statsSummary(){
+    var now=new Date();
+    var d0=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+    var d7=d0-6*86400000, d30=d0-29*86400000;
+    var by={};
+    (statsRows||[]).forEach(function(r){
+      var k=r.version_slug||"(미지정)";
+      var b=by[k]||(by[k]={slug:k,total:0,uniq:{},today:0,week:0,month:0,last:null,refs:{}});
+      var t=new Date(r.viewed_at).getTime();
+      b.total++; if(r.visitor) b.uniq[r.visitor]=1;
+      if(t>=d0)b.today++; if(t>=d7)b.week++; if(t>=d30)b.month++;
+      if(!b.last||t>b.last) b.last=t;
+      var ref=(r.referrer||"").trim();
+      if(ref){ var host=ref.replace(/^https?:\/\//,"").split("/")[0]; b.refs[host]=(b.refs[host]||0)+1; }
+    });
+    return Object.keys(by).map(function(k){ var b=by[k];
+      b.uniqCount=Object.keys(b.uniq).length;
+      b.topRef=Object.keys(b.refs).sort(function(a,c){return b.refs[c]-b.refs[a];})[0]||"";
+      return b; }).sort(function(a,c){return c.total-a.total;});
+  }
+  function fmtWhen(t){
+    if(!t) return "-";
+    var diff=Date.now()-t, m=Math.floor(diff/60000);
+    if(m<1) return "방금";
+    if(m<60) return m+"분 전";
+    var h=Math.floor(m/60); if(h<24) return h+"시간 전";
+    var d=Math.floor(h/24); if(d<30) return d+"일 전";
+    var dt=new Date(t); return (dt.getMonth()+1)+"/"+dt.getDate();
+  }
+  function verName(slug){
+    var v=versions.filter(function(x){return x.slug===slug;})[0];
+    return v?v.name:slug;
+  }
+  function statsPanelHTML(){
+    if(!statsOpen){
+      return '<div class="settings-panel"><div class="sp-head" id="st-toggle"><span>📊 조회수 — 거래처가 열어봤는지 확인</span><span class="sp-caret">펼치기 ▾</span></div></div>';
+    }
+    var body;
+    if(statsRows===null){ body='<div class="st-empty">불러오는 중…</div>'; }
+    else if(statsErr){ body='<div class="st-empty">'+esc(statsErr)+'</div>'; }
+    else if(!statsRows.length){ body='<div class="st-empty">아직 조회 기록이 없습니다. 거래처가 링크를 열면 여기에 쌓입니다.</div>'; }
+    else {
+      body='<table class="st-table"><thead><tr>'+
+        '<th>버전</th><th>총 조회</th><th>방문자</th><th>오늘</th><th>7일</th><th>30일</th><th>마지막 조회</th><th>유입</th>'+
+        '</tr></thead><tbody>'+
+        statsSummary().map(function(b){
+          return '<tr><td class="st-ver">'+esc(verName(b.slug))+' <span class="st-slug">'+esc(b.slug)+'</span></td>'+
+            '<td class="st-num big">'+b.total+'</td>'+
+            '<td class="st-num">'+b.uniqCount+'</td>'+
+            '<td class="st-num'+(b.today?' hot':'')+'">'+b.today+'</td>'+
+            '<td class="st-num">'+b.week+'</td>'+
+            '<td class="st-num">'+b.month+'</td>'+
+            '<td class="st-when">'+fmtWhen(b.last)+'</td>'+
+            '<td class="st-ref">'+esc(b.topRef||"-")+'</td></tr>';
+        }).join("")+'</tbody></table>'+
+        '<div class="st-note">· <b>총 조회</b>는 열어본 횟수, <b>방문자</b>는 서로 다른 사람 수(같은 사람이 여러 번 봐도 1)입니다.<br>'+
+        '· 관리자에서 [공개 사이트 보기]로 연 것은 집계되지 않습니다.</div>';
+    }
+    return '<div class="settings-panel open">'+
+      '<div class="sp-head" id="st-toggle"><span>📊 조회수 — 거래처가 열어봤는지 확인</span>'+
+      '<span><button class="btn-ghost2" id="btn-st-refresh">새로고침</button> <span class="sp-caret">접기 ▴</span></span></div>'+
+      '<div class="sp-body">'+body+'</div></div>';
+  }
+
   function settingsEffective(){
     var d = {
       hero_eyebrow: CFG.heroEyebrow||"", hero_lead: CFG.heroLead||"",
@@ -290,7 +365,8 @@
         '<button class="btn-ghost" id="btn-ver-rename">이름변경</button>'+
         '<button class="btn-ghost" id="btn-ver-link">🔗 링크 복사</button>'
       : '<span class="ver-note">⚠ 버전 기능: versions.sql 실행 필요</span>';
-    var pubHref = "index.html" + (currentVersion ? ("?v="+encodeURIComponent(currentVersion.slug)) : "");
+    // nt=1 → 관리자 미리보기는 조회수에 집계되지 않음
+    var pubHref = "index.html?nt=1" + (currentVersion ? ("&v="+encodeURIComponent(currentVersion.slug)) : "");
     var html =
       '<div class="topbar"><span class="brand">🐟 상품 관리자</span>'+ verCtrl +
       '<span class="spacer"></span>'+
@@ -299,6 +375,7 @@
       '<button class="btn-ghost" id="btn-logout">로그아웃</button></div>'+
       '<div class="wrap">'+
       '<div class="hint">상품을 고친 뒤 그 상품의 <b>[저장]</b> 버튼을 누르면 바로 공개 사이트에 반영됩니다. 사진은 <b>[사진 업로드]</b>, 삭제는 <b>[삭제]</b>로 즉시 처리돼요. (아래 <b>[전체 저장]</b>은 여러 개를 한 번에 저장할 때만 쓰세요.)</div>'+
+      statsPanelHTML()+
       settingsPanelHTML()+
       catPanelHTML();
 
@@ -392,6 +469,12 @@
       if(e.target.id==="btn-save"){ saveAll(); return; }
       if(e.target.closest && e.target.closest("#sp-toggle")){ settingsOpen=!settingsOpen; renderEditor(); return; }
       if(e.target.id==="btn-save-settings"){ saveSettings(e.target); return; }
+      if(e.target.id==="btn-st-refresh"){ statsRows=null; renderEditor(); loadStats().then(renderEditor); return; }
+      if(e.target.closest && e.target.closest("#st-toggle")){
+        statsOpen=!statsOpen; renderEditor();
+        if(statsOpen && statsRows===null) loadStats().then(renderEditor);
+        return;
+      }
       if(e.target.closest && e.target.closest("#cat-toggle")){ catsOpen=!catsOpen; renderEditor(); return; }
       if(e.target.id==="btn-cat-new"){ newCategory(); return; }
       var catSaveKey=e.target.getAttribute("data-catsave");

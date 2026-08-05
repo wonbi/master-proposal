@@ -385,6 +385,30 @@
     }).catch(function () {});
   }
 
+  // 조회 기록 (관리자 페이지에서 통계로 확인). 실패해도 화면엔 영향 없음.
+  function trackView() {
+    try {
+      var c = sbClient();
+      if (!c) return;
+      var qs = new URLSearchParams(location.search);
+      if (qs.get("nt") === "1") return;            // 관리자 미리보기는 집계 제외
+      var vis = "";
+      try {
+        vis = localStorage.getItem("pv_visitor") || "";
+        if (!vis) {
+          vis = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+              : ("v" + Math.random().toString(36).slice(2) + Date.now());
+          localStorage.setItem("pv_visitor", vis);
+        }
+      } catch (e) { vis = "unknown"; }
+      c.from("page_views").insert({
+        version_slug: (CURRENT_VERSION && CURRENT_VERSION.slug) || qs.get("v") || "",
+        visitor: vis,
+        referrer: (document.referrer || "").slice(0, 300)
+      }).then(function () {}, function () {});
+    } catch (e) { /* 집계 실패는 무시 */ }
+  }
+
   // 카테고리를 Supabase에서 로드(전역). 없으면 기본 3개 유지.
   function loadCategories() {
     var c = sbClient();
@@ -445,7 +469,7 @@
       if (e !== "no-sheet") console.warn("구글 시트 로드 실패 → 기본 데이터 사용:", e);
       return loadFallback();
     })
-    .then(function (list) { render(normalize(list)); })
+    .then(function (list) { render(normalize(list)); trackView(); })
     .catch(function (e) {
       console.error(e);
       document.getElementById("app").innerHTML =
