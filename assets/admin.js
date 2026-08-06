@@ -36,6 +36,8 @@
   var expandedCats = {};  // 상품목록에서 펼쳐진 카테고리 (기본 접힘)
   var versions = [];      // 제안서 버전 목록
   var currentVersion = null; // 현재 편집 중인 버전
+  var myUid = null;       // 로그인한 계정 id (계정별 독립 작업공간)
+  var multiUser = false;  // owner_id 컬럼 사용 가능 여부
 
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
   function imgUrl(v){
@@ -131,7 +133,7 @@
   }
 
   function loadCategoriesAdmin(){
-    return client.from("categories").select("*").order("sort_order",{ascending:true}).then(function(res){
+    return mine(client.from("categories").select("*")).order("sort_order",{ascending:true}).then(function(res){
       if(res.error || !res.data || !res.data.length){ CATS=DEFAULT_CATS.slice(); return; }
       CATS=res.data.map(function(r){ return { id:r.id, key:r.key, name:r.name||"", mark:r.mark||"", eyebrow:r.eyebrow||"",
         descr:r.descr||"", meta:r.meta||"", accent:r.accent||"#0E8A8F", fit:r.fit||"cover", show:r.show!==false, sort_order:r.sort_order||0 }; });
@@ -175,7 +177,7 @@
     if(!(c.name||"").trim()){ toast("카테고리 이름을 입력하세요", true); return; }
     if(btn){ btn.disabled=true; btn.textContent="저장중…"; }
     var row={ key:c.key, name:(c.name||"").trim(), mark:c.mark||"", eyebrow:c.eyebrow||"", descr:c.descr||"", meta:c.meta||"", accent:c.accent||"#0E8A8F", fit:c.fit||"cover", show:c.show!==false, sort_order:c.sort_order||0 };
-    var q = c.id ? client.from("categories").update(row).eq("id",c.id) : client.from("categories").insert(row).select();
+    var q = c.id ? client.from("categories").update(row).eq("id",c.id) : client.from("categories").insert(withOwner(row)).select();
     q.then(function(res){
       if(res && res.error) throw res.error;
       if(!c.id && res && res.data && res.data[0]) c.id=res.data[0].id;
@@ -188,7 +190,7 @@
     var key="cat"+uid().replace(/[^a-z0-9]/gi,"").slice(0,8).toLowerCase();
     var sort=(CATS.length?Math.max.apply(null,CATS.map(function(c){return c.sort_order||0;})):0)+10;
     var c={ key:key, name:name, mark:(name.charAt(0)||""), eyebrow:"", descr:"", meta:"", accent:"#0E8A8F", fit:"cover", show:true, sort_order:sort };
-    client.from("categories").insert(c).select().then(function(res){
+    client.from("categories").insert(withOwner(c)).select().then(function(res){
       if(res.error) throw res.error;
       if(res.data && res.data[0]) c.id=res.data[0].id;
       CATS.push(c); catsOpen=true; renderEditor(); toast("카테고리 '"+name+"' 추가됨 ✅ 아이콘·색상을 정한 뒤 저장하세요");
@@ -213,12 +215,18 @@
       }).catch(function(err){ statsRows=[]; statsErr=String(err&&err.message||err); });
   }
   function statsSummary(){
+    // 계정별 분리 모드에서는 내 버전의 조회수만 집계
+    var mySlugs = null;
+    if(multiUser && myUid && versions.length){
+      mySlugs={}; versions.forEach(function(v){ mySlugs[v.slug]=1; });
+    }
     var now=new Date();
     var d0=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
     var d7=d0-6*86400000, d30=d0-29*86400000;
     var by={};
     (statsRows||[]).forEach(function(r){
       var k=r.version_slug||"(미지정)";
+      if(mySlugs && !mySlugs[k]) return;   // 남의 버전 조회수는 제외
       var b=by[k]||(by[k]={slug:k,total:0,uniq:{},today:0,week:0,month:0,last:null,refs:{}});
       var t=new Date(r.viewed_at).getTime();
       b.total++; if(r.visitor) b.uniq[r.visitor]=1;
@@ -667,7 +675,7 @@
     btn.disabled=true; btn.textContent="추가 중…";
     var maxSort=0; items.forEach(function(i){ if((i.sort_order||0)>maxSort)maxSort=i.sort_order; });
     var row=dbRow(newItem, maxSort+10);
-    client.from("products").insert(row).select().then(function(res){
+    client.from("products").insert(withOwner(row)).select().then(function(res){
       if(res.error) throw res.error;
       var r=(res.data && res.data[0]) || null;
       if(r){
@@ -689,7 +697,7 @@
     if(!(it.name||"").trim()){ toast("상품명을 입력하세요", true); return; }
     if(btn){ btn.disabled=true; btn.textContent="저장중…"; }
     var r=dbRow(it, (typeof it.sort_order==="number"?it.sort_order:0));
-    var q = it.id ? client.from("products").update(r).eq("id",it.id) : client.from("products").insert(r).select();
+    var q = it.id ? client.from("products").update(r).eq("id",it.id) : client.from("products").insert(withOwner(r)).select();
     q.then(function(res){
       if(res && res.error) throw res.error;
       if(!it.id && res && res.data && res.data[0]) it.id=res.data[0].id;
@@ -729,7 +737,7 @@
     var chain=Promise.resolve();
     if(deletedIds.length) chain=chain.then(function(){ return client.from("products").delete().in("id",deletedIds).then(chk); });
     if(updates.length)    chain=chain.then(function(){ return client.from("products").upsert(updates).then(chk); });
-    if(inserts.length)    chain=chain.then(function(){ return client.from("products").insert(inserts).then(chk); });
+    if(inserts.length)    chain=chain.then(function(){ return client.from("products").insert(inserts.map(withOwner)).then(chk); });
 
     chain.then(function(){
       deletedIds=[]; dirty=false;
@@ -800,8 +808,19 @@
     var slug=slugify(name);
     var sort=(versions.length?Math.max.apply(null,versions.map(function(v){return v.sort_order||0;})):0)+1;
     var settings=src?Object.assign({},src.settings||{}):{};
-    client.from("versions").insert({slug:slug,name:name,sort_order:sort,settings:settings}).select().then(function(res){
+    var attempt=function(sl, tries){
+      return client.from("versions").insert(withOwner({slug:sl,name:name,sort_order:sort,settings:settings})).select()
+        .then(function(res){
+          // 다른 계정이 이미 쓰는 주소면 번호를 붙여 재시도
+          if(res.error && /duplicate|unique/i.test(res.error.message||"") && tries<5){
+            return attempt(sl+"-"+(tries+2), tries+1);
+          }
+          return res;
+        });
+    };
+    attempt(slug,0).then(function(res){
       if(res.error) throw res.error;
+      slug=res.data[0].slug;
       var nv=res.data[0];
       var finish=function(copied){
         return loadVersions().then(function(){
@@ -817,7 +836,7 @@
         return client.from("products").select("*").eq("version_id",src.id).then(function(pr){
           var rows=(pr.data||[]).map(function(p){ return {category:p.category,name:p.name,warehouse:p.warehouse,spec:p.spec,supply_price:p.supply_price,courier:p.courier,ship_fee:p.ship_fee,tax:p.tax,image:p.image,show:p.show,sort_order:p.sort_order,version_id:nv.id}; });
           if(!rows.length) return finish(0);
-          return client.from("products").insert(rows).then(chk).then(function(){ return finish(rows.length); });
+          return client.from("products").insert(rows.map(withOwner)).then(chk).then(function(){ return finish(rows.length); });
         });
       }
       return finish(0);
@@ -866,14 +885,43 @@
       .catch(function(err){ toast("삭제 실패: "+(err.message||err), true); renderEditor(); });
   }
 
+  // owner_id 컬럼이 있으면 본인 것만, 없으면 전체(기존 방식)
+  function mine(q){ return (multiUser && myUid) ? q.eq("owner_id", myUid) : q; }
+  function withOwner(row){ if(multiUser && myUid) row.owner_id = myUid; return row; }
+
   function loadVersions(){
-    return client.from("versions").select("*").order("sort_order",{ascending:true}).then(function(res){
+    return mine(client.from("versions").select("*")).order("sort_order",{ascending:true}).then(function(res){
       if(res.error){ versions=[]; currentVersion=null; return; }
       versions=res.data||[];
       if(versions.length){
         currentVersion = (currentVersion && versions.filter(function(v){return v.id===currentVersion.id;})[0]) || versions[0];
       } else { currentVersion=null; }
     }).catch(function(){ versions=[]; currentVersion=null; });
+  }
+
+  // 새 계정(내 버전이 하나도 없음) → 기본 버전 + 기본 카테고리 자동 생성
+  function bootstrapWorkspace(){
+    if(!multiUser || !myUid) return Promise.resolve();
+    if(versions.length) return Promise.resolve();          // 이미 쓰던 계정
+    var base="내 제안서";
+    var slug="ws"+String(myUid).replace(/[^a-z0-9]/gi,"").slice(0,8).toLowerCase();
+    return client.from("versions").insert(withOwner({
+      slug:slug, name:base, sort_order:1,
+      settings:{ hero_eyebrow:"상품 제안서", hero_title1:"바다에서", hero_title2:"식탁까지,", hero_title3:"한 번에 채우다",
+                 hero_lead:"취급 품목을 공급가와 택배 조건으로 정리했습니다.",
+                 company:"", team:"", manager_name:"", manager_title:"", phone:"", email:"", kakao:"", hide_price:"" }
+    })).select().then(function(res){
+      if(res.error) throw res.error;
+      // 카테고리도 내 것이 없으면 기본 3개 생성
+      return client.from("categories").select("id").eq("owner_id",myUid).limit(1).then(function(cr){
+        if(!cr.error && cr.data && cr.data.length) return null;
+        return client.from("categories").insert(DEFAULT_CATS.map(function(c){
+          return withOwner({key:c.key+"-"+String(myUid).slice(0,6), name:c.name, mark:c.mark, eyebrow:c.eyebrow,
+            descr:c.descr, meta:c.meta, accent:c.accent, fit:c.fit, show:true, sort_order:c.sort_order});
+        }));
+      });
+    }).then(function(){ return loadVersions(); })
+      .catch(function(err){ console.warn("작업공간 생성 실패:", err); });
   }
 
   function loadProducts(){
@@ -895,8 +943,19 @@
 
   function boot(){
     root.innerHTML='<div class="loading">불러오는 중…</div>';
-    client.auth.getUser().then(function(u){ window.__adminEmail=(u&&u.data&&u.data.user&&u.data.user.email)||""; });
-    loadVersions().then(function(){
+    // 로그인한 계정 확인 + owner_id(계정별 분리) 지원 여부 확인
+    client.auth.getUser().then(function(u){
+      var user=(u&&u.data&&u.data.user)||null;
+      window.__adminEmail=(user&&user.email)||"";
+      myUid=(user&&user.id)||null;
+      return client.from("versions").select("owner_id").limit(1).then(function(r){
+        multiUser = !r.error;   // 컬럼이 없으면 기존(공용) 방식으로 동작
+      }).catch(function(){ multiUser=false; });
+    }).then(function(){
+      return loadVersions();
+    }).then(function(){
+      return bootstrapWorkspace();   // 새 계정이면 기본 버전·카테고리 자동 생성
+    }).then(function(){
       return Promise.all([loadProducts(), loadAdminSettings(), loadCategoriesAdmin()]);
     }).then(function(){
       dirty=false; renderEditor();

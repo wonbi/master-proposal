@@ -419,11 +419,13 @@
     } catch (e) { /* 집계 실패는 무시 */ }
   }
 
-  // 카테고리를 Supabase에서 로드(전역). 없으면 기본 3개 유지.
+  // 카테고리 로드. 계정별 분리(owner_id)가 켜져 있으면 해당 버전 소유자의 것만.
   function loadCategories() {
     var c = sbClient();
     if (!c) return Promise.resolve();
-    return c.from("categories").select("*").order("sort_order", { ascending: true }).then(function (res) {
+    var q = c.from("categories").select("*");
+    if (CURRENT_VERSION && CURRENT_VERSION.owner_id) q = q.eq("owner_id", CURRENT_VERSION.owner_id);
+    return q.order("sort_order", { ascending: true }).then(function (res) {
       if (res.error || !res.data || !res.data.length) return;
       setCategories(res.data);
     }).catch(function () {});
@@ -469,7 +471,9 @@
   document.getElementById("app").innerHTML =
     '<div class="notice">상품 정보를 불러오는 중…</div>';
 
-  Promise.all([loadVersion(), loadCategories()])
+  // 버전을 먼저 확인해야 그 소유자의 카테고리를 고를 수 있음
+  loadVersion()
+    .then(function () { return loadCategories(); })
     .then(function () { return loadSupabase(); })
     .catch(function (e) {
       if (e !== "no-supabase") console.warn("Supabase 로드 실패 → 다음 소스 시도:", e);
