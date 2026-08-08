@@ -2,7 +2,7 @@
  {
   "category": "수산물",
   "name": "통통 생물 오징어 1kg",
-  "warehouse": "충무",
+  "warehouse": "당일생물",
   "spec": "충무 공급",
   "supplyPrice": 10500,
   "courier": "씨제이대한통운/롯데택배",
@@ -14,7 +14,7 @@
  {
   "category": "수산물",
   "name": "손질 생물 갈치 2kg",
-  "warehouse": "군산",
+  "warehouse": "당일생물",
   "spec": "군산 공급",
   "supplyPrice": 14000,
   "courier": "롯데택배",
@@ -26,7 +26,7 @@
  {
   "category": "수산물",
   "name": "숙성 민어회 300g",
-  "warehouse": "야수",
+  "warehouse": "당일생물",
   "spec": "야수 공급",
   "supplyPrice": 23000,
   "courier": "로젠택배",
@@ -38,7 +38,7 @@
  {
   "category": "수산물",
   "name": "싱싱 뿔소라 1kg",
-  "warehouse": "싱싱",
+  "warehouse": "당일생물",
   "spec": "싱싱 공급",
   "supplyPrice": 8500,
   "courier": "씨제이대한통운",
@@ -50,7 +50,7 @@
  {
   "category": "수산물",
   "name": "통통 손질 갈치 2kg",
-  "warehouse": "충무",
+  "warehouse": "당일생물",
   "spec": "충무 공급",
   "supplyPrice": 15000,
   "courier": "씨제이대한통운/롯데택배",
@@ -62,7 +62,7 @@
  {
   "category": "수산물",
   "name": "통통 돌문어 1kg",
-  "warehouse": "충무",
+  "warehouse": "당일생물",
   "spec": "충무 공급",
   "supplyPrice": 15000,
   "courier": "씨제이대한통운/롯데택배",
@@ -74,7 +74,7 @@
  {
   "category": "수산물",
   "name": "손질 노랑새조개 200g",
-  "warehouse": "벌교",
+  "warehouse": "당일생물",
   "spec": "벌교 공급",
   "supplyPrice": 13500,
   "courier": "롯데택배",
@@ -84,9 +84,9 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "수산물",
   "name": "연안 끝판왕 담치 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 9500,
   "courier": "우체국택배",
@@ -98,7 +98,7 @@
  {
   "category": "수산물",
   "name": "활 새우 500g",
-  "warehouse": "이성",
+  "warehouse": "당일생물",
   "spec": "이성 공급",
   "supplyPrice": 11500,
   "courier": "씨제이대한통운",
@@ -110,7 +110,7 @@
  {
   "category": "수산물",
   "name": "연안 활 전어 500g",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 4500,
   "courier": "우체국택배",
@@ -122,7 +122,7 @@
  {
   "category": "수산물",
   "name": "통통 활 전어 500g",
-  "warehouse": "충무",
+  "warehouse": "당일생물",
   "spec": "충무 공급",
   "supplyPrice": 4500,
   "courier": "씨제이대한통운/롯데택배",
@@ -134,7 +134,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "통통 전어 필렛 250g",
-  "warehouse": "충무",
+  "warehouse": "당일생물",
   "spec": "충무 공급",
   "supplyPrice": 12000,
   "courier": "씨제이대한통운/롯데택배",
@@ -146,7 +146,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "통통 전어 세꼬시 300g",
-  "warehouse": "충무",
+  "warehouse": "당일생물",
   "spec": "충무 공급",
   "supplyPrice": 11000,
   "courier": "씨제이대한통운/롯데택배",
@@ -158,7 +158,7 @@
  {
   "category": "수산물",
   "name": "통통 민물장어 1kg",
-  "warehouse": "충무",
+  "warehouse": "당일생물",
   "spec": "충무 공급",
   "supplyPrice": 19000,
   "courier": "씨제이대한통운/롯데택배",
@@ -170,7 +170,7 @@
  {
   "category": "수산물",
   "name": "탱탱 생물 오징어 1kg",
-  "warehouse": "진수",
+  "warehouse": "당일생물",
   "spec": "진수 공급",
   "supplyPrice": 10000,
   "courier": "씨제이대한통운",
@@ -182,7 +182,7 @@
  {
   "category": "수산물",
   "name": "생물 오징어 1kg",
-  "warehouse": "알가",
+  "warehouse": "당일생물",
   "spec": "알가 공급",
   "supplyPrice": 11500,
   "courier": "씨제이대한통운",
@@ -194,7 +194,7 @@
  {
   "category": "수산물",
   "name": "국내산 생물 오징어 1kg",
-  "warehouse": "동해",
+  "warehouse": "당일생물",
   "spec": "동해 공급",
   "supplyPrice": 10500,
   "courier": "씨제이대한통운",
@@ -206,7 +206,7 @@
  {
   "category": "수산물",
   "name": "마가단 박달대게 한마리",
-  "warehouse": "동해",
+  "warehouse": "당일생물",
   "spec": "동해 공급",
   "supplyPrice": 25000,
   "courier": "씨제이대한통운",
@@ -218,7 +218,7 @@
  {
   "category": "수산물",
   "name": "S급 러시아 박달대게 3kg",
-  "warehouse": "디디",
+  "warehouse": "당일생물",
   "spec": "디디 공급",
   "supplyPrice": 75000,
   "courier": "씨제이대한통운",
@@ -230,7 +230,7 @@
  {
   "category": "수산물",
   "name": "연안 주먹참소라 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 7700,
   "courier": "우체국택배",
@@ -242,7 +242,7 @@
  {
   "category": "수산물",
   "name": "연안 연평참소라 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 5000,
   "courier": "우체국택배",
@@ -254,7 +254,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "자연산 횟감 생합 500g",
-  "warehouse": "군산",
+  "warehouse": "당일생물",
   "spec": "군산 공급",
   "supplyPrice": 3500,
   "courier": "롯데택배",
@@ -266,7 +266,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "1등급 한상모듬 1kg",
-  "warehouse": "북구",
+  "warehouse": "당일생물",
   "spec": "북구 공급",
   "supplyPrice": 51000,
   "courier": "씨제이대한통운",
@@ -278,7 +278,7 @@
  {
   "category": "수산물",
   "name": "국내산 랜덤 돌문어 1kg",
-  "warehouse": "여수",
+  "warehouse": "당일생물",
   "spec": "여수 공급",
   "supplyPrice": 15000,
   "courier": "씨제이대한통운",
@@ -290,7 +290,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "연안 국내산 생합 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 5500,
   "courier": "우체국택배",
@@ -300,9 +300,9 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "수산물",
   "name": "동해 살고동 소짜 1kg",
-  "warehouse": "원수",
+  "warehouse": "당일생물",
   "spec": "원수 공급",
   "supplyPrice": 5000,
   "courier": "우체국택배",
@@ -312,9 +312,9 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "수산물",
   "name": "동해 살고동 대짜 1kg",
-  "warehouse": "원수",
+  "warehouse": "당일생물",
   "spec": "원수 공급",
   "supplyPrice": 9000,
   "courier": "우체국택배",
@@ -326,7 +326,7 @@
  {
   "category": "수산물",
   "name": "연안 도시락문어 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 28000,
   "courier": "우체국택배",
@@ -338,7 +338,7 @@
  {
   "category": "수산물",
   "name": "연안 2미중문어 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 28000,
   "courier": "우체국택배",
@@ -350,7 +350,7 @@
  {
   "category": "수산물",
   "name": "연안 1미대문어 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 28000,
   "courier": "우체국택배",
@@ -362,7 +362,7 @@
  {
   "category": "수산물",
   "name": "연안 특대문어 1.5kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 37000,
   "courier": "우체국택배",
@@ -374,7 +374,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "캐비어 칼루가 10g",
-  "warehouse": "캐비",
+  "warehouse": "당일생물",
   "spec": "캐비 공급",
   "supplyPrice": 21000,
   "courier": "우체국택배",
@@ -386,7 +386,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "캐비어 칼루가 5g",
-  "warehouse": "캐비",
+  "warehouse": "당일생물",
   "spec": "캐비 공급",
   "supplyPrice": 12000,
   "courier": "우체국택배",
@@ -398,7 +398,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "연안 명주조개 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 4500,
   "courier": "우체국택배",
@@ -408,9 +408,9 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "수산물",
   "name": "연안 중대담치 2kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 11000,
   "courier": "우체국택배",
@@ -422,7 +422,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "이벤트 한상모듬 1kg",
-  "warehouse": "북구",
+  "warehouse": "당일생물",
   "spec": "북구 공급",
   "supplyPrice": 51000,
   "courier": "씨제이대한통운",
@@ -434,7 +434,7 @@
  {
   "category": "수산물",
   "name": "생물 갑오징어 1kg",
-  "warehouse": "알가",
+  "warehouse": "당일생물",
   "spec": "알가 공급",
   "supplyPrice": 11000,
   "courier": "씨제이대한통운",
@@ -446,7 +446,7 @@
  {
   "category": "수산물",
   "name": "동해 활 골뱅이 1kg",
-  "warehouse": "동해",
+  "warehouse": "당일생물",
   "spec": "동해 공급",
   "supplyPrice": 4500,
   "courier": "씨제이대한통운",
@@ -458,7 +458,7 @@
  {
   "category": "수산물",
   "name": "연안 꼬마 참소라 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 5000,
   "courier": "우체국택배",
@@ -470,7 +470,7 @@
  {
   "category": "수산물",
   "name": "연안 오육미전복 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 23000,
   "courier": "우체국택배",
@@ -482,7 +482,7 @@
  {
   "category": "수산물",
   "name": "생물 고등어 3kg",
-  "warehouse": "군산",
+  "warehouse": "당일생물",
   "spec": "군산 공급",
   "supplyPrice": 20000,
   "courier": "씨제이대한통운",
@@ -494,7 +494,7 @@
  {
   "category": "수산물",
   "name": "국내산 생물 병어 1kg",
-  "warehouse": "여수",
+  "warehouse": "당일생물",
   "spec": "여수 공급",
   "supplyPrice": 5500,
   "courier": "씨제이대한통운",
@@ -506,7 +506,7 @@
  {
   "category": "수산물",
   "name": "북해도 대게 3.5kg",
-  "warehouse": "디디",
+  "warehouse": "당일생물",
   "spec": "디디 공급",
   "supplyPrice": 46000,
   "courier": "씨제이대한통운",
@@ -518,7 +518,7 @@
  {
   "category": "수산물",
   "name": "큼직 바지락 1kg",
-  "warehouse": "여수2",
+  "warehouse": "당일생물",
   "spec": "여수2 공급",
   "supplyPrice": 4500,
   "courier": "씨제이대한통운",
@@ -530,7 +530,7 @@
  {
   "category": "수산물",
   "name": "연안 생물 참조기 1kg",
-  "warehouse": "인천",
+  "warehouse": "당일생물",
   "spec": "인천 공급",
   "supplyPrice": 6500,
   "courier": "우체국택배",
@@ -542,7 +542,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "통통 보라성게알 100g",
-  "warehouse": "충무",
+  "warehouse": "당일생물",
   "spec": "충무 공급",
   "supplyPrice": 12500,
   "courier": "씨제이대한통운/롯데택배",
@@ -554,7 +554,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "올바른 남해 맛조개 500g",
-  "warehouse": "여수",
+  "warehouse": "당일생물",
   "spec": "여수 공급",
   "supplyPrice": 8500,
   "courier": "씨제이대한통운",
@@ -566,7 +566,7 @@
  {
   "category": "수산물",
   "name": "생물 꼼장어 1kg",
-  "warehouse": "부산",
+  "warehouse": "당일생물",
   "spec": "부산 공급",
   "supplyPrice": 26400,
   "courier": "씨제이대한통운",
@@ -578,7 +578,7 @@
  {
   "category": "수산물",
   "name": "통통 삼배체 굴 1kg",
-  "warehouse": "쫄깃",
+  "warehouse": "당일생물",
   "spec": "쫄깃 공급",
   "supplyPrice": 5500,
   "courier": "씨제이대한통운/롯데택배",
@@ -590,7 +590,7 @@
  {
   "category": "수산물",
   "name": "참치 오마카세 한판",
-  "warehouse": "인지",
+  "warehouse": "당일생물",
   "spec": "인지 공급",
   "supplyPrice": 44000,
   "courier": "로젠택배",
@@ -602,7 +602,7 @@
  {
   "category": "수산물",
   "name": "만능 활 전복 1kg",
-  "warehouse": "여수",
+  "warehouse": "당일생물",
   "spec": "여수 공급",
   "supplyPrice": 15500,
   "courier": "씨제이대한통운",
@@ -614,7 +614,7 @@
  {
   "category": "수산물",
   "name": "자이언트 전복 1kg",
-  "warehouse": "여수",
+  "warehouse": "당일생물",
   "spec": "여수 공급",
   "supplyPrice": 22000,
   "courier": "씨제이대한통운",
@@ -626,7 +626,7 @@
  {
   "category": "수산물",
   "name": "활 흰다리새우 500g",
-  "warehouse": "진수",
+  "warehouse": "당일생물",
   "spec": "진수 공급",
   "supplyPrice": 14000,
   "courier": "씨제이대한통운",
@@ -872,7 +872,7 @@
   "courier": "롯데택배",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "fish-4.webp",
   "show": true
  },
  {
@@ -908,7 +908,7 @@
   "courier": "롯데택배",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "fish-6.webp",
   "show": true
  },
  {
@@ -1188,7 +1188,7 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "수산물",
   "name": "맛있게 구운 쥐포채 300g",
   "warehouse": "군산",
   "spec": "군산 공급",
@@ -1200,7 +1200,7 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "수산물",
   "name": "참쥐포 10장+1장",
   "warehouse": "군산",
   "spec": "군산 공급",
@@ -1316,7 +1316,7 @@
   "courier": "우체국택배",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "fish-8.webp",
   "show": true
  },
  {
@@ -1344,7 +1344,7 @@
   "show": true
  },
  {
-  "category": "축산물",
+  "category": "수산물",
   "name": "연안 메로목살 200g",
   "warehouse": "인천",
   "spec": "인천 공급",
@@ -1356,7 +1356,7 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "수산물",
   "name": "연안 메로 스테이크 200g",
   "warehouse": "인천",
   "spec": "인천 공급",
@@ -1520,7 +1520,7 @@
   "courier": "우체국택배",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "fish-7.webp",
   "show": true
  },
  {
@@ -1556,7 +1556,7 @@
   "courier": "우체국택배",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "fish-9.webp",
   "show": true
  },
  {
@@ -1976,7 +1976,7 @@
   "courier": "씨제이대한통운",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "fish-1.webp",
   "show": true
  },
  {
@@ -2144,7 +2144,7 @@
   "courier": "씨제이대한통운",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "fish-2.webp",
   "show": true
  },
  {
@@ -2264,7 +2264,7 @@
   "courier": "씨제이대한통운",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "fish-3.webp",
   "show": true
  },
  {
@@ -2552,7 +2552,7 @@
   "courier": "한진택배",
   "shipFee": 2500,
   "tax": "과세",
-  "image": "",
+  "image": "living-1.webp",
   "show": true
  },
  {
@@ -2564,7 +2564,7 @@
   "courier": "한진택배",
   "shipFee": 2500,
   "tax": "과세",
-  "image": "",
+  "image": "living-2.webp",
   "show": true
  },
  {
@@ -2576,7 +2576,7 @@
   "courier": "한진택배",
   "shipFee": 2500,
   "tax": "과세",
-  "image": "",
+  "image": "living-3.webp",
   "show": true
  },
  {
@@ -2588,7 +2588,7 @@
   "courier": "한진택배",
   "shipFee": 2500,
   "tax": "과세",
-  "image": "",
+  "image": "living-4.webp",
   "show": true
  },
  {
@@ -2600,7 +2600,7 @@
   "courier": "한진택배",
   "shipFee": 2500,
   "tax": "과세",
-  "image": "",
+  "image": "living-5.webp",
   "show": true
  },
  {
@@ -2612,7 +2612,7 @@
   "courier": "한진택배",
   "shipFee": 2500,
   "tax": "과세",
-  "image": "",
+  "image": "living-6.webp",
   "show": true
  },
  {
@@ -2672,7 +2672,7 @@
   "courier": "롯데택배",
   "shipFee": 4000,
   "tax": "과세",
-  "image": "",
+  "image": "meal-3.webp",
   "show": true
  },
  {
@@ -2700,7 +2700,7 @@
   "show": true
  },
  {
-  "category": "수산물",
+  "category": "농산물·과일",
   "name": "폭탄 스틱 감자튀김 2kg",
   "warehouse": "하남",
   "spec": "하남 공급",
@@ -2732,7 +2732,7 @@
   "courier": "롯데택배",
   "shipFee": 4000,
   "tax": "과세",
-  "image": "",
+  "image": "meal-1.webp",
   "show": true
  },
  {
@@ -2936,7 +2936,7 @@
   "courier": "롯데택배",
   "shipFee": 4000,
   "tax": "과세",
-  "image": "",
+  "image": "meal-2.webp",
   "show": true
  },
  {
@@ -3008,7 +3008,7 @@
   "courier": "롯데택배",
   "shipFee": 4000,
   "tax": "면세",
-  "image": "",
+  "image": "meal-5.webp",
   "show": true
  },
  {
@@ -3104,7 +3104,7 @@
   "courier": "롯데택배",
   "shipFee": 4000,
   "tax": "과세",
-  "image": "",
+  "image": "meal-9.webp",
   "show": true
  },
  {
@@ -3428,7 +3428,7 @@
   "courier": "씨제이대한통운",
   "shipFee": 4000,
   "tax": "과세",
-  "image": "",
+  "image": "meal-6.webp",
   "show": true
  },
  {
@@ -3452,7 +3452,7 @@
   "courier": "씨제이대한통운",
   "shipFee": 4000,
   "tax": "과세",
-  "image": "",
+  "image": "meal-7.webp",
   "show": true
  },
  {
@@ -3512,7 +3512,7 @@
   "courier": "씨제이대한통운",
   "shipFee": 4000,
   "tax": "과세",
-  "image": "",
+  "image": "meal-8.webp",
   "show": true
  },
  {
@@ -4610,7 +4610,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "찐 불향 오돌뼈볶음 300g",
-  "warehouse": "푸카",
+  "warehouse": "단독(유)",
   "spec": "푸카 공급",
   "supplyPrice": 4000,
   "courier": "로젠택배",
@@ -4620,9 +4620,21 @@
   "show": true
  },
  {
+  "category": "축산물",
+  "name": "한돈 냉장 삼겹살500g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 12500,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
   "category": "수산물",
   "name": "활 홍가리비 1kg",
-  "warehouse": "이성",
+  "warehouse": "단독(유)",
   "spec": "이성 공급",
   "supplyPrice": 6000,
   "courier": "씨제이대한통운",
@@ -4634,7 +4646,7 @@
  {
   "category": "축산물",
   "name": "생오리 슬라이스 500g",
-  "warehouse": "주오",
+  "warehouse": "단독(유)",
   "spec": "주오 공급",
   "supplyPrice": 6800,
   "courier": "한진택배",
@@ -4646,7 +4658,7 @@
  {
   "category": "수산물",
   "name": "국내산 순살갈치 250g",
-  "warehouse": "여수",
+  "warehouse": "단독(유)",
   "spec": "여수 공급",
   "supplyPrice": 4100,
   "courier": "씨제이대한통운",
@@ -4658,7 +4670,7 @@
  {
   "category": "수산물",
   "name": "동해안 피문어 1kg",
-  "warehouse": "성수",
+  "warehouse": "단독(유)",
   "spec": "성수 공급",
   "supplyPrice": 44000,
   "courier": "로젠택배",
@@ -4670,7 +4682,7 @@
  {
   "category": "수산물",
   "name": "찐 불향 쭈꾸미볶음 순한맛 300g",
-  "warehouse": "푸카",
+  "warehouse": "단독(유)",
   "spec": "푸카 공급",
   "supplyPrice": 7000,
   "courier": "로젠택배",
@@ -4682,7 +4694,7 @@
  {
   "category": "수산물",
   "name": "찐 불향 쭈꾸미볶음 매운맛 300g",
-  "warehouse": "푸카",
+  "warehouse": "단독(유)",
   "spec": "푸카 공급",
   "supplyPrice": 7000,
   "courier": "로젠택배",
@@ -4694,7 +4706,7 @@
  {
   "category": "김치·반찬",
   "name": "열무김치 2kg",
-  "warehouse": "김치",
+  "warehouse": "단독(유)",
   "spec": "김치 공급",
   "supplyPrice": 8600,
   "courier": "씨제이대한통운",
@@ -4706,7 +4718,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "연평도 순살게장 200g",
-  "warehouse": "제프",
+  "warehouse": "단독(유)",
   "spec": "제프 공급",
   "supplyPrice": 8600,
   "courier": "롯데택배",
@@ -4718,7 +4730,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "연평도 순살 양념게장 200g",
-  "warehouse": "제프",
+  "warehouse": "단독(유)",
   "spec": "제프 공급",
   "supplyPrice": 8300,
   "courier": "롯데택배",
@@ -4730,7 +4742,7 @@
  {
   "category": "수산물",
   "name": "비만 바다장어 1kg",
-  "warehouse": "이성",
+  "warehouse": "단독(유)",
   "spec": "이성 공급",
   "supplyPrice": 13500,
   "courier": "씨제이대한통운",
@@ -4742,7 +4754,7 @@
  {
   "category": "수산물",
   "name": "왕 바지락 1kg",
-  "warehouse": "이성",
+  "warehouse": "단독(유)",
   "spec": "이성 공급",
   "supplyPrice": 5000,
   "courier": "씨제이대한통운",
@@ -4754,7 +4766,7 @@
  {
   "category": "수산물",
   "name": "깐 바지락 500g",
-  "warehouse": "이성",
+  "warehouse": "단독(유)",
   "spec": "이성 공급",
   "supplyPrice": 9000,
   "courier": "씨제이대한통운",
@@ -4766,19 +4778,19 @@
  {
   "category": "수산물",
   "name": "찐 불향 쭈꾸미볶음 300g",
-  "warehouse": "푸카",
+  "warehouse": "단독(유)",
   "spec": "푸카 공급",
   "supplyPrice": 7000,
   "courier": "로젠택배",
   "shipFee": 4000,
   "tax": "과세",
-  "image": "",
+  "image": "meal-4.webp",
   "show": true
  },
  {
   "category": "계란·유제품",
   "name": "구운계란 한판",
-  "warehouse": "계란",
+  "warehouse": "단독(유)",
   "spec": "계란 공급",
   "supplyPrice": 9600,
   "courier": "씨제이대한통운",
@@ -4790,7 +4802,7 @@
  {
   "category": "축산물",
   "name": "한우곱창모듬 1kg",
-  "warehouse": "고령",
+  "warehouse": "단독(유)",
   "spec": "고령 공급",
   "supplyPrice": 24500,
   "courier": "씨제이대한통운",
@@ -4802,7 +4814,7 @@
  {
   "category": "수산물",
   "name": "국내산 급냉 오징어 1팩",
-  "warehouse": "알가",
+  "warehouse": "단독(유)",
   "spec": "알가 공급",
   "supplyPrice": 13000,
   "courier": "씨제이대한통운",
@@ -4814,7 +4826,7 @@
  {
   "category": "수산물",
   "name": "정품 반건조 오징어 350g급",
-  "warehouse": "원수",
+  "warehouse": "단독(유)",
   "spec": "원수 공급",
   "supplyPrice": 7800,
   "courier": "우체국택배",
@@ -4826,7 +4838,7 @@
  {
   "category": "수산물",
   "name": "정품 반건조 오징어 450g급",
-  "warehouse": "원수",
+  "warehouse": "단독(유)",
   "spec": "원수 공급",
   "supplyPrice": 9800,
   "courier": "우체국택배",
@@ -4838,7 +4850,7 @@
  {
   "category": "수산물",
   "name": "정품 반건조 오징어 550g급",
-  "warehouse": "원수",
+  "warehouse": "단독(유)",
   "spec": "원수 공급",
   "supplyPrice": 12500,
   "courier": "우체국택배",
@@ -4850,7 +4862,7 @@
  {
   "category": "수산물",
   "name": "정품 반건조 오징어 650g급",
-  "warehouse": "원수",
+  "warehouse": "단독(유)",
   "spec": "원수 공급",
   "supplyPrice": 14500,
   "courier": "우체국택배",
@@ -4862,7 +4874,7 @@
  {
   "category": "수산물",
   "name": "정품 반건조 오징어 1kg급",
-  "warehouse": "원수",
+  "warehouse": "단독(유)",
   "spec": "원수 공급",
   "supplyPrice": 22000,
   "courier": "우체국택배",
@@ -4874,7 +4886,7 @@
  {
   "category": "수산물",
   "name": "정품 반건조 오징어 1.2kg급",
-  "warehouse": "원수",
+  "warehouse": "단독(유)",
   "spec": "원수 공급",
   "supplyPrice": 26000,
   "courier": "우체국택배",
@@ -4886,7 +4898,7 @@
  {
   "category": "축산물",
   "name": "깔끔 투쁠 국거리 1kg",
-  "warehouse": "팡유",
+  "warehouse": "단독(유)",
   "spec": "팡유 공급",
   "supplyPrice": 21400,
   "courier": "한진택배",
@@ -4898,7 +4910,7 @@
  {
   "category": "축산물",
   "name": "한우 소머리스지 전골 1.7kg",
-  "warehouse": "우리",
+  "warehouse": "단독(유)",
   "spec": "우리 공급",
   "supplyPrice": 21000,
   "courier": "로젠택배",
@@ -4910,7 +4922,7 @@
  {
   "category": "축산물",
   "name": "뒷고기모듬 500g",
-  "warehouse": "대구",
+  "warehouse": "단독(유)",
   "spec": "대구 공급",
   "supplyPrice": 10200,
   "courier": "롯데택배",
@@ -4922,7 +4934,7 @@
  {
   "category": "수산물",
   "name": "가성비 임연수 10미",
-  "warehouse": "강씨",
+  "warehouse": "단독(유)",
   "spec": "강씨 공급",
   "supplyPrice": 8000,
   "courier": "씨제이대한통운",
@@ -4934,7 +4946,7 @@
  {
   "category": "수산물",
   "name": "반건조 임연수 5미 400g급",
-  "warehouse": "강씨",
+  "warehouse": "단독(유)",
   "spec": "강씨 공급",
   "supplyPrice": 5500,
   "courier": "씨제이대한통운",
@@ -4946,7 +4958,7 @@
  {
   "category": "축산물",
   "name": "한우 곱창 200g",
-  "warehouse": "고령",
+  "warehouse": "단독(유)",
   "spec": "고령 공급",
   "supplyPrice": 8500,
   "courier": "씨제이대한통운",
@@ -4958,7 +4970,7 @@
  {
   "category": "축산물",
   "name": "한우 대창 200g",
-  "warehouse": "고령",
+  "warehouse": "단독(유)",
   "spec": "고령 공급",
   "supplyPrice": 8500,
   "courier": "씨제이대한통운",
@@ -4970,7 +4982,7 @@
  {
   "category": "축산물",
   "name": "한우 염통 200g",
-  "warehouse": "고령",
+  "warehouse": "단독(유)",
   "spec": "고령 공급",
   "supplyPrice": 5000,
   "courier": "씨제이대한통운",
@@ -4982,7 +4994,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "대도리탕 밀키트 1kg",
-  "warehouse": "고령",
+  "warehouse": "단독(유)",
   "spec": "고령 공급",
   "supplyPrice": 17000,
   "courier": "씨제이대한통운",
@@ -4994,7 +5006,7 @@
  {
   "category": "축산물",
   "name": "한우캠핑세트 1.6kg",
-  "warehouse": "고령",
+  "warehouse": "단독(유)",
   "spec": "고령 공급",
   "supplyPrice": 32800,
   "courier": "씨제이대한통운",
@@ -5006,7 +5018,7 @@
  {
   "category": "김치·반찬",
   "name": "여수 갓김치 2kg",
-  "warehouse": "김치",
+  "warehouse": "단독(유)",
   "spec": "김치 공급",
   "supplyPrice": 9000,
   "courier": "씨제이대한통운",
@@ -5018,7 +5030,7 @@
  {
   "category": "김치·반찬",
   "name": "알타리 총각김치 5kg",
-  "warehouse": "김치",
+  "warehouse": "단독(유)",
   "spec": "김치 공급",
   "supplyPrice": 23000,
   "courier": "씨제이대한통운",
@@ -5030,7 +5042,7 @@
  {
   "category": "김치·반찬",
   "name": "알타리 총각김치 10kg",
-  "warehouse": "김치",
+  "warehouse": "단독(유)",
   "spec": "김치 공급",
   "supplyPrice": 41500,
   "courier": "씨제이대한통운",
@@ -5042,7 +5054,7 @@
  {
   "category": "김치·반찬",
   "name": "알타리 총각김치 2kg",
-  "warehouse": "김치",
+  "warehouse": "단독(유)",
   "spec": "김치 공급",
   "supplyPrice": 10000,
   "courier": "씨제이대한통운",
@@ -5054,7 +5066,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "녹돈 후지슬라이스 500g",
-  "warehouse": "녹돈",
+  "warehouse": "단독(유)",
   "spec": "녹돈 공급",
   "supplyPrice": 5800,
   "courier": "씨제이대한통운",
@@ -5066,7 +5078,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "녹돈 전지슬라이스 500g",
-  "warehouse": "녹돈",
+  "warehouse": "단독(유)",
   "spec": "녹돈 공급",
   "supplyPrice": 8500,
   "courier": "씨제이대한통운",
@@ -5078,7 +5090,7 @@
  {
   "category": "축산물",
   "name": "녹돈 찌개용 뒷다리살 500g",
-  "warehouse": "녹돈",
+  "warehouse": "단독(유)",
   "spec": "녹돈 공급",
   "supplyPrice": 5800,
   "courier": "씨제이대한통운",
@@ -5090,7 +5102,7 @@
  {
   "category": "축산물",
   "name": "녹돈 삼겹살500g",
-  "warehouse": "녹돈",
+  "warehouse": "단독(유)",
   "spec": "녹돈 공급",
   "supplyPrice": 13500,
   "courier": "씨제이대한통운",
@@ -5102,7 +5114,7 @@
  {
   "category": "축산물",
   "name": "녹돈 육즙 목살 500g",
-  "warehouse": "녹돈",
+  "warehouse": "단독(유)",
   "spec": "녹돈 공급",
   "supplyPrice": 13500,
   "courier": "씨제이대한통운",
@@ -5114,7 +5126,7 @@
  {
   "category": "축산물",
   "name": "녹돈 담백 가브리살 500g",
-  "warehouse": "녹돈",
+  "warehouse": "단독(유)",
   "spec": "녹돈 공급",
   "supplyPrice": 20000,
   "courier": "씨제이대한통운",
@@ -5126,7 +5138,7 @@
  {
   "category": "축산물",
   "name": "녹돈 삼겹수육 500g",
-  "warehouse": "녹돈",
+  "warehouse": "단독(유)",
   "spec": "녹돈 공급",
   "supplyPrice": 13500,
   "courier": "씨제이대한통운",
@@ -5138,7 +5150,7 @@
  {
   "category": "농산물·과일",
   "name": "노지 흙쪽파 1kg",
-  "warehouse": "농원",
+  "warehouse": "단독(유)",
   "spec": "농원 공급",
   "supplyPrice": 6000,
   "courier": "로젠택배",
@@ -5150,7 +5162,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "햇 약단밤 1kg",
-  "warehouse": "햇밤",
+  "warehouse": "단독(유)",
   "spec": "햇밤 공급",
   "supplyPrice": 9000,
   "courier": "롯데택배",
@@ -5162,7 +5174,7 @@
  {
   "category": "수산물",
   "name": "반건조 박대 5미",
-  "warehouse": "반건",
+  "warehouse": "단독(유)",
   "spec": "반건 공급",
   "supplyPrice": 8000,
   "courier": "씨제이대한통운",
@@ -5174,7 +5186,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "깔끔 깐대하 500g",
-  "warehouse": "킹대",
+  "warehouse": "단독(유)",
   "spec": "킹대 공급",
   "supplyPrice": 16000,
   "courier": "롯데택배",
@@ -5186,7 +5198,7 @@
  {
   "category": "김치·반찬",
   "name": "여수 갓김치 1kg",
-  "warehouse": "여수",
+  "warehouse": "단독(유)",
   "spec": "여수 공급",
   "supplyPrice": 4500,
   "courier": "씨제이대한통운",
@@ -5198,7 +5210,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "오독오독 오소리 300g",
-  "warehouse": "대구",
+  "warehouse": "단독(유)",
   "spec": "대구 공급",
   "supplyPrice": 4700,
   "courier": "롯데택배",
@@ -5210,7 +5222,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "돈뽈항정 500g",
-  "warehouse": "대구",
+  "warehouse": "단독(유)",
   "spec": "대구 공급",
   "supplyPrice": 10000,
   "courier": "롯데택배",
@@ -5222,7 +5234,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "도래창 500g",
-  "warehouse": "대구",
+  "warehouse": "단독(유)",
   "spec": "대구 공급",
   "supplyPrice": 4200,
   "courier": "롯데택배",
@@ -5234,7 +5246,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "뽈살 500g",
-  "warehouse": "대구",
+  "warehouse": "단독(유)",
   "spec": "대구 공급",
   "supplyPrice": 10000,
   "courier": "롯데택배",
@@ -5246,7 +5258,7 @@
  {
   "category": "축산물",
   "name": "차돌뒷고기 500g",
-  "warehouse": "대구",
+  "warehouse": "단독(유)",
   "spec": "대구 공급",
   "supplyPrice": 11000,
   "courier": "롯데택배",
@@ -5258,7 +5270,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "뒷마카세 1kg",
-  "warehouse": "대구",
+  "warehouse": "단독(유)",
   "spec": "대구 공급",
   "supplyPrice": 12500,
   "courier": "롯데택배",
@@ -5270,7 +5282,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "제주 흑돼지 오겹살 500g",
-  "warehouse": "대비",
+  "warehouse": "단독(유)",
   "spec": "대비 공급",
   "supplyPrice": 21000,
   "courier": "씨제이대한통운/한진택배",
@@ -5282,7 +5294,7 @@
  {
   "category": "축산물",
   "name": "제주 흑돼지 항정살 300g",
-  "warehouse": "대비",
+  "warehouse": "단독(유)",
   "spec": "대비 공급",
   "supplyPrice": 18000,
   "courier": "씨제이대한통운/한진택배",
@@ -5294,7 +5306,7 @@
  {
   "category": "축산물",
   "name": "제주 흑돼지 갈매기살 300g",
-  "warehouse": "대비",
+  "warehouse": "단독(유)",
   "spec": "대비 공급",
   "supplyPrice": 13000,
   "courier": "씨제이대한통운/한진택배",
@@ -5306,7 +5318,7 @@
  {
   "category": "수산물",
   "name": "한방 암꽃게장 2kg",
-  "warehouse": "디디",
+  "warehouse": "단독(유)",
   "spec": "디디 공급",
   "supplyPrice": 7600,
   "courier": "씨제이대한통운",
@@ -5318,7 +5330,7 @@
  {
   "category": "수산물",
   "name": "갓성비 저염 명란젓 400g",
-  "warehouse": "디디유",
+  "warehouse": "단독(유)",
   "spec": "디디유 공급",
   "supplyPrice": 7500,
   "courier": "씨제이대한통운",
@@ -5330,7 +5342,7 @@
  {
   "category": "수산물",
   "name": "양념 새꼬막무침 400g",
-  "warehouse": "디디유",
+  "warehouse": "단독(유)",
   "spec": "디디유 공급",
   "supplyPrice": 6500,
   "courier": "씨제이대한통운",
@@ -5342,7 +5354,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "저염 명란 젓갈 400g",
-  "warehouse": "디즈",
+  "warehouse": "단독(유)",
   "spec": "디즈 공급",
   "supplyPrice": 8400,
   "courier": "롯데택배",
@@ -5354,7 +5366,7 @@
  {
   "category": "수산물",
   "name": "흰다리새우회 175g",
-  "warehouse": "딱새",
+  "warehouse": "단독(유)",
   "spec": "딱새 공급",
   "supplyPrice": 12000,
   "courier": "씨제이대한통운",
@@ -5366,7 +5378,7 @@
  {
   "category": "축산물",
   "name": "대창 닭갈비 750g",
-  "warehouse": "리고",
+  "warehouse": "단독(유)",
   "spec": "리고 공급",
   "supplyPrice": 7500,
   "courier": "롯데택배",
@@ -5378,7 +5390,7 @@
  {
   "category": "수산물",
   "name": "프리미엄 민물장어 2kg",
-  "warehouse": "민장",
+  "warehouse": "단독(유)",
   "spec": "민장 공급",
   "supplyPrice": 39000,
   "courier": "로젠택배/씨제이대한통운",
@@ -5390,7 +5402,7 @@
  {
   "category": "수산물",
   "name": "특왕 민물장어 1kg",
-  "warehouse": "민장",
+  "warehouse": "단독(유)",
   "spec": "민장 공급",
   "supplyPrice": 20000,
   "courier": "로젠택배/씨제이대한통운",
@@ -5402,7 +5414,7 @@
  {
   "category": "수산물",
   "name": "통실 민물장어 1kg",
-  "warehouse": "민장",
+  "warehouse": "단독(유)",
   "spec": "민장 공급",
   "supplyPrice": 19000,
   "courier": "로젠택배/씨제이대한통운",
@@ -5414,7 +5426,7 @@
  {
   "category": "수산물",
   "name": "갓성비 민물장어 1kg",
-  "warehouse": "민장",
+  "warehouse": "단독(유)",
   "spec": "민장 공급",
   "supplyPrice": 17500,
   "courier": "로젠택배/씨제이대한통운",
@@ -5426,7 +5438,7 @@
  {
   "category": "수산물",
   "name": "민물장어 1kg",
-  "warehouse": "민장",
+  "warehouse": "단독(유)",
   "spec": "민장 공급",
   "supplyPrice": 18500,
   "courier": "로젠택배/씨제이대한통운",
@@ -5438,7 +5450,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "밥도둑 오이지 500g",
-  "warehouse": "반찬",
+  "warehouse": "단독(유)",
   "spec": "반찬 공급",
   "supplyPrice": 9500,
   "courier": "씨제이대한통운",
@@ -5450,7 +5462,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "아삭 오이소박이 1kg",
-  "warehouse": "반찬",
+  "warehouse": "단독(유)",
   "spec": "반찬 공급",
   "supplyPrice": 9000,
   "courier": "씨제이대한통운",
@@ -5462,7 +5474,7 @@
  {
   "category": "축산물",
   "name": "한돈 등심돈까스 130g",
-  "warehouse": "밥상",
+  "warehouse": "단독(유)",
   "spec": "밥상 공급",
   "supplyPrice": 2500,
   "courier": "우체국택배",
@@ -5474,7 +5486,7 @@
  {
   "category": "축산물",
   "name": "한돈 치즈돈까스 130g",
-  "warehouse": "밥상",
+  "warehouse": "단독(유)",
   "spec": "밥상 공급",
   "supplyPrice": 2800,
   "courier": "우체국택배",
@@ -5486,7 +5498,7 @@
  {
   "category": "떡·간식",
   "name": "서산6쪽마늘 떡갈비 1팩",
-  "warehouse": "밥상",
+  "warehouse": "단독(유)",
   "spec": "밥상 공급",
   "supplyPrice": 2600,
   "courier": "우체국택배",
@@ -5498,7 +5510,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "버터 피데기 750g급",
-  "warehouse": "버피",
+  "warehouse": "단독(유)",
   "spec": "버피 공급",
   "supplyPrice": 16100,
   "courier": "로젠택배",
@@ -5510,7 +5522,7 @@
  {
   "category": "수산물",
   "name": "총알한치 500g",
-  "warehouse": "버피",
+  "warehouse": "단독(유)",
   "spec": "버피 공급",
   "supplyPrice": 4200,
   "courier": "로젠택배",
@@ -5522,7 +5534,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "버터 피데기 1kg급",
-  "warehouse": "버피",
+  "warehouse": "단독(유)",
   "spec": "버피 공급",
   "supplyPrice": 21000,
   "courier": "로젠택배",
@@ -5534,7 +5546,7 @@
  {
   "category": "수산물",
   "name": "멸치수제비 6인분",
-  "warehouse": "삼푸",
+  "warehouse": "단독(유)",
   "spec": "삼푸 공급",
   "supplyPrice": 4600,
   "courier": "씨제이대한통운",
@@ -5546,7 +5558,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "짜장면 5인분",
-  "warehouse": "삼푸",
+  "warehouse": "단독(유)",
   "spec": "삼푸 공급",
   "supplyPrice": 5300,
   "courier": "씨제이대한통운",
@@ -5558,7 +5570,7 @@
  {
   "category": "수산물",
   "name": "멸치칼국수 6인분",
-  "warehouse": "삼푸",
+  "warehouse": "단독(유)",
   "spec": "삼푸 공급",
   "supplyPrice": 4600,
   "courier": "씨제이대한통운",
@@ -5570,7 +5582,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "장칼국수 6인분",
-  "warehouse": "삼푸",
+  "warehouse": "단독(유)",
   "spec": "삼푸 공급",
   "supplyPrice": 4900,
   "courier": "씨제이대한통운",
@@ -5582,7 +5594,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "장수제비 6인분",
-  "warehouse": "삼푸",
+  "warehouse": "단독(유)",
   "spec": "삼푸 공급",
   "supplyPrice": 4900,
   "courier": "씨제이대한통운",
@@ -5594,7 +5606,7 @@
  {
   "category": "축산물",
   "name": "초이스 양념 LA꽃갈비 1kg",
-  "warehouse": "스키",
+  "warehouse": "단독(유)",
   "spec": "스키 공급",
   "supplyPrice": 22500,
   "courier": "씨제이대한통운",
@@ -5606,7 +5618,7 @@
  {
   "category": "축산물",
   "name": "초이스 양념 LA갈비 1kg",
-  "warehouse": "스키",
+  "warehouse": "단독(유)",
   "spec": "스키 공급",
   "supplyPrice": 23000,
   "courier": "씨제이대한통운",
@@ -5618,7 +5630,7 @@
  {
   "category": "수산물",
   "name": "기력회복 추어탕 500g",
-  "warehouse": "아드",
+  "warehouse": "단독(유)",
   "spec": "아드 공급",
   "supplyPrice": 2700,
   "courier": "롯데택배",
@@ -5630,7 +5642,7 @@
  {
   "category": "수산물",
   "name": "새꼬막 무침 300g 2통",
-  "warehouse": "여수",
+  "warehouse": "단독(유)",
   "spec": "여수 공급",
   "supplyPrice": 12300,
   "courier": "씨제이대한통운",
@@ -5642,7 +5654,7 @@
  {
   "category": "수산물",
   "name": "국내산 반건조 민어 4미",
-  "warehouse": "여수",
+  "warehouse": "단독(유)",
   "spec": "여수 공급",
   "supplyPrice": 18000,
   "courier": "씨제이대한통운",
@@ -5654,7 +5666,7 @@
  {
   "category": "수산물",
   "name": "조기굴비 1kg",
-  "warehouse": "영광유",
+  "warehouse": "단독(유)",
   "spec": "영광유 공급",
   "supplyPrice": 16000,
   "courier": "씨제이대한통운",
@@ -5666,7 +5678,7 @@
  {
   "category": "축산물",
   "name": "지리산 흑돼지 뒷고기 200g",
-  "warehouse": "오농",
+  "warehouse": "단독(유)",
   "spec": "오농 공급",
   "supplyPrice": 2800,
   "courier": "씨제이대한통운",
@@ -5678,7 +5690,7 @@
  {
   "category": "축산물",
   "name": "지리산 흑돼지 우대갈비 600g",
-  "warehouse": "오농",
+  "warehouse": "단독(유)",
   "spec": "오농 공급",
   "supplyPrice": 10300,
   "courier": "씨제이대한통운",
@@ -5690,7 +5702,7 @@
  {
   "category": "축산물",
   "name": "지리산 흑돼지 목살 200g",
-  "warehouse": "오농",
+  "warehouse": "단독(유)",
   "spec": "오농 공급",
   "supplyPrice": 7200,
   "courier": "씨제이대한통운",
@@ -5702,7 +5714,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "볶음용 흑돼지 전지 200g",
-  "warehouse": "오농",
+  "warehouse": "단독(유)",
   "spec": "오농 공급",
   "supplyPrice": 4500,
   "courier": "씨제이대한통운",
@@ -5714,7 +5726,7 @@
  {
   "category": "축산물",
   "name": "흑돼지 뒷고기 모듬 500g",
-  "warehouse": "오농",
+  "warehouse": "단독(유)",
   "spec": "오농 공급",
   "supplyPrice": 5500,
   "courier": "씨제이대한통운",
@@ -5726,7 +5738,7 @@
  {
   "category": "수산물",
   "name": "건오징어 5미 250g",
-  "warehouse": "오징",
+  "warehouse": "단독(유)",
   "spec": "오징 공급",
   "supplyPrice": 17000,
   "courier": "씨제이대한통운",
@@ -5738,7 +5750,7 @@
  {
   "category": "축산물",
   "name": "한우 곱내장 전골 1.2kg",
-  "warehouse": "우리",
+  "warehouse": "단독(유)",
   "spec": "우리 공급",
   "supplyPrice": 16500,
   "courier": "로젠택배",
@@ -5750,7 +5762,7 @@
  {
   "category": "수산물",
   "name": "참치 세미도로 필렛 500g",
-  "warehouse": "우푸",
+  "warehouse": "단독(유)",
   "spec": "우푸 공급",
   "supplyPrice": 45000,
   "courier": "씨제이대한통운",
@@ -5762,7 +5774,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "참다랑어 뱃살 100g",
-  "warehouse": "우푸",
+  "warehouse": "단독(유)",
   "spec": "우푸 공급",
   "supplyPrice": 10300,
   "courier": "씨제이대한통운",
@@ -5774,7 +5786,7 @@
  {
   "category": "수산물",
   "name": "토막 은갈치 특대 450g급",
-  "warehouse": "제수",
+  "warehouse": "단독(유)",
   "spec": "제수 공급",
   "supplyPrice": 27000,
   "courier": "롯데택배",
@@ -5786,7 +5798,7 @@
  {
   "category": "수산물",
   "name": "토막 은갈치 대짜 350g급",
-  "warehouse": "제수",
+  "warehouse": "단독(유)",
   "spec": "제수 공급",
   "supplyPrice": 16600,
   "courier": "롯데택배",
@@ -5798,7 +5810,7 @@
  {
   "category": "수산물",
   "name": "반건조 참가자미 4미",
-  "warehouse": "제수",
+  "warehouse": "단독(유)",
   "spec": "제수 공급",
   "supplyPrice": 9700,
   "courier": "롯데택배",
@@ -5810,7 +5822,7 @@
  {
   "category": "수산물",
   "name": "반건조 박대 특대 4미",
-  "warehouse": "제수",
+  "warehouse": "단독(유)",
   "spec": "제수 공급",
   "supplyPrice": 13300,
   "courier": "롯데택배",
@@ -5822,7 +5834,7 @@
  {
   "category": "수산물",
   "name": "탱글 소라장 350g",
-  "warehouse": "제프",
+  "warehouse": "단독(유)",
   "spec": "제프 공급",
   "supplyPrice": 7900,
   "courier": "롯데택배",
@@ -5834,7 +5846,7 @@
  {
   "category": "축산물",
   "name": "앞다리 순살족발 450g급",
-  "warehouse": "족발",
+  "warehouse": "단독(유)",
   "spec": "족발 공급",
   "supplyPrice": 9000,
   "courier": "한진택배",
@@ -5846,7 +5858,7 @@
  {
   "category": "축산물",
   "name": "앞다리 통족발 750g급",
-  "warehouse": "족발",
+  "warehouse": "단독(유)",
   "spec": "족발 공급",
   "supplyPrice": 9000,
   "courier": "한진택배",
@@ -5858,7 +5870,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "윤기좔좔 통삼겹보쌈 430g급",
-  "warehouse": "족발",
+  "warehouse": "단독(유)",
   "spec": "족발 공급",
   "supplyPrice": 11000,
   "courier": "한진택배",
@@ -5870,7 +5882,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "겉바속촉 슈바인학센 900g급",
-  "warehouse": "족발",
+  "warehouse": "단독(유)",
   "spec": "족발 공급",
   "supplyPrice": 13500,
   "courier": "한진택배",
@@ -5882,7 +5894,7 @@
  {
   "category": "수산물",
   "name": "통통 숏다리 오징어 200g",
-  "warehouse": "쫄깃",
+  "warehouse": "단독(유)",
   "spec": "쫄깃 공급",
   "supplyPrice": 8000,
   "courier": "씨제이대한통운 / 롯데택배",
@@ -5894,7 +5906,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "통통 백진미 500g",
-  "warehouse": "쫄깃",
+  "warehouse": "단독(유)",
   "spec": "쫄깃 공급",
   "supplyPrice": 20500,
   "courier": "씨제이대한통운 / 롯데택배",
@@ -5906,7 +5918,7 @@
  {
   "category": "수산물",
   "name": "통통 쫄쫄이 오징어 300g",
-  "warehouse": "쫄깃",
+  "warehouse": "단독(유)",
   "spec": "쫄깃 공급",
   "supplyPrice": 24300,
   "courier": "씨제이대한통운 / 롯데택배",
@@ -5918,7 +5930,7 @@
  {
   "category": "수산물",
   "name": "통통 쫄쫄이 오징어 400g",
-  "warehouse": "쫄깃",
+  "warehouse": "단독(유)",
   "spec": "쫄깃 공급",
   "supplyPrice": 29500,
   "courier": "씨제이대한통운 / 롯데택배",
@@ -5930,7 +5942,7 @@
  {
   "category": "수산물",
   "name": "통통 쫄쫄이 오징어 500g",
-  "warehouse": "쫄깃",
+  "warehouse": "단독(유)",
   "spec": "쫄깃 공급",
   "supplyPrice": 34500,
   "courier": "씨제이대한통운 / 롯데택배",
@@ -5942,7 +5954,7 @@
  {
   "category": "수산물",
   "name": "통통 쫄쫄이 오징어 600g",
-  "warehouse": "쫄깃",
+  "warehouse": "단독(유)",
   "spec": "쫄깃 공급",
   "supplyPrice": 39500,
   "courier": "씨제이대한통운 / 롯데택배",
@@ -5954,7 +5966,7 @@
  {
   "category": "수산물",
   "name": "통통 쫄쫄이 오징어 650g",
-  "warehouse": "쫄깃",
+  "warehouse": "단독(유)",
   "spec": "쫄깃 공급",
   "supplyPrice": 42000,
   "courier": "씨제이대한통운 / 롯데택배",
@@ -5964,9 +5976,153 @@
   "show": true
  },
  {
+  "category": "간편식품·밀키트",
+  "name": "도란도란 세트 1kg",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 23500,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "육향가득 소고기 세트 1kg",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 24500,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "원뿔 한우 꽃등심 200g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 18000,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "수원식 구름갈비 600g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 24000,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "야들야들 우삼겹 200g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 3800,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "국내산 돈차돌 500g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 9000,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "초이스 살치살 200g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 7900,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "쫄깃 부채살 200g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 5900,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "깔끔 등심 200g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 6000,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "특상 소고기모듬 600g",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 16500,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "탑초이스 LA꽃갈비 1kg",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 37000,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
+  "category": "축산물",
+  "name": "초이스 양념 갈비살 1kg",
+  "warehouse": "단독(유)",
+  "spec": "창원 공급",
+  "supplyPrice": 23000,
+  "courier": "롯데택배",
+  "shipFee": 4000,
+  "tax": "과세",
+  "image": "",
+  "show": true
+ },
+ {
   "category": "축산물",
   "name": "꽉찬 소곱창 160g",
-  "warehouse": "푸모",
+  "warehouse": "단독(유)",
   "spec": "푸모 공급",
   "supplyPrice": 3700,
   "courier": "씨제이대한통운",
@@ -5978,7 +6134,7 @@
  {
   "category": "축산물",
   "name": "한우 곱내장 전골 1.2kg",
-  "warehouse": "푸모",
+  "warehouse": "단독(유)",
   "spec": "푸모 공급",
   "supplyPrice": 16500,
   "courier": "씨제이대한통운",
@@ -5990,7 +6146,7 @@
  {
   "category": "축산물",
   "name": "한돈 찜갈비 1kg",
-  "warehouse": "한돈",
+  "warehouse": "단독(유)",
   "spec": "한돈 공급",
   "supplyPrice": 11500,
   "courier": "씨제이대한통운",
@@ -6002,7 +6158,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "버터 피데기 650g급",
-  "warehouse": "버피",
+  "warehouse": "단독(유)",
   "spec": "버피 공급",
   "supplyPrice": 13700,
   "courier": "로젠택배",
@@ -6012,9 +6168,21 @@
   "show": true
  },
  {
+  "category": "수산물",
+  "name": "참치 오마카세 한판",
+  "warehouse": "단독(무)",
+  "spec": "인지 공급",
+  "supplyPrice": 42000,
+  "courier": "로젠택배",
+  "shipFee": 0,
+  "tax": "면세",
+  "image": "",
+  "show": true
+ },
+ {
   "category": "농산물·과일",
   "name": "가정용 참송이버섯 500g",
-  "warehouse": "참송",
+  "warehouse": "단독(무)",
   "spec": "참송 공급",
   "supplyPrice": 12500,
   "courier": "한진택배",
@@ -6026,7 +6194,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "흑산도 전통 홍어 500g",
-  "warehouse": "홍어",
+  "warehouse": "단독(무)",
   "spec": "홍어 공급",
   "supplyPrice": 30500,
   "courier": "우체국택배",
@@ -6038,7 +6206,7 @@
  {
   "category": "농산물·과일",
   "name": "딱딱이 복숭아 2kg 로얄과",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 13000,
   "courier": "롯데택배",
@@ -6050,7 +6218,7 @@
  {
   "category": "계란·유제품",
   "name": "1+등급 특란 20구",
-  "warehouse": "난각",
+  "warehouse": "단독(무)",
   "spec": "난각 공급",
   "supplyPrice": 10100,
   "courier": "씨제이대한통운",
@@ -6062,7 +6230,7 @@
  {
   "category": "계란·유제품",
   "name": "1+등급 특란 40구",
-  "warehouse": "난각",
+  "warehouse": "단독(무)",
   "spec": "난각 공급",
   "supplyPrice": 17200,
   "courier": "씨제이대한통운",
@@ -6074,7 +6242,7 @@
  {
   "category": "계란·유제품",
   "name": "1+등급 특란 60구",
-  "warehouse": "난각",
+  "warehouse": "단독(무)",
   "spec": "난각 공급",
   "supplyPrice": 23000,
   "courier": "씨제이대한통운",
@@ -6086,7 +6254,7 @@
  {
   "category": "수산물",
   "name": "건중하새우포 1박스",
-  "warehouse": "군컬",
+  "warehouse": "단독(무)",
   "spec": "군컬 공급",
   "supplyPrice": 13000,
   "courier": "롯데택배",
@@ -6098,7 +6266,7 @@
  {
   "category": "수산물",
   "name": "프리미엄 햇고바멸치 1박스",
-  "warehouse": "군컬",
+  "warehouse": "단독(무)",
   "spec": "군컬 공급",
   "supplyPrice": 13500,
   "courier": "롯데택배",
@@ -6110,7 +6278,7 @@
  {
   "category": "농산물·과일",
   "name": "딱딱이 복숭아 4kg 로얄과",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 22500,
   "courier": "롯데택배",
@@ -6122,7 +6290,7 @@
  {
   "category": "수산물",
   "name": "제주 은갈치 20팩 중",
-  "warehouse": "제이",
+  "warehouse": "단독(무)",
   "spec": "제이 공급",
   "supplyPrice": 21100,
   "courier": "한진택배",
@@ -6134,7 +6302,7 @@
  {
   "category": "수산물",
   "name": "제주 은갈치 40팩 중",
-  "warehouse": "제이",
+  "warehouse": "단독(무)",
   "spec": "제이 공급",
   "supplyPrice": 36300,
   "courier": "한진택배",
@@ -6146,7 +6314,7 @@
  {
   "category": "수산물",
   "name": "제주 순살갈치 5마리",
-  "warehouse": "제이",
+  "warehouse": "단독(무)",
   "spec": "제이 공급",
   "supplyPrice": 18000,
   "courier": "한진택배",
@@ -6158,7 +6326,7 @@
  {
   "category": "수산물",
   "name": "제주 순살갈치 10마리",
-  "warehouse": "제이",
+  "warehouse": "단독(무)",
   "spec": "제이 공급",
   "supplyPrice": 28000,
   "courier": "한진택배",
@@ -6170,7 +6338,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "케일 1kg",
-  "warehouse": "래음",
+  "warehouse": "단독(무)",
   "spec": "래음 공급",
   "supplyPrice": 10000,
   "courier": "로젠택배",
@@ -6182,7 +6350,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "케일 2kg",
-  "warehouse": "래음",
+  "warehouse": "단독(무)",
   "spec": "래음 공급",
   "supplyPrice": 16500,
   "courier": "로젠택배",
@@ -6194,7 +6362,7 @@
  {
   "category": "수산물",
   "name": "특대 9-10미 전복 1kg",
-  "warehouse": "완전",
+  "warehouse": "단독(무)",
   "spec": "완전 공급",
   "supplyPrice": 22000,
   "courier": "로젠택배/우체국택배",
@@ -6206,7 +6374,7 @@
  {
   "category": "수산물",
   "name": "특대 9-10미 전복 2kg",
-  "warehouse": "완전",
+  "warehouse": "단독(무)",
   "spec": "완전 공급",
   "supplyPrice": 42000,
   "courier": "로젠택배/우체국택배",
@@ -6218,7 +6386,7 @@
  {
   "category": "수산물",
   "name": "초특대 7-8미 전복 1kg",
-  "warehouse": "완전",
+  "warehouse": "단독(무)",
   "spec": "완전 공급",
   "supplyPrice": 23500,
   "courier": "로젠택배/우체국택배",
@@ -6230,7 +6398,7 @@
  {
   "category": "수산물",
   "name": "초특대 7-8미 전복 2kg",
-  "warehouse": "완전",
+  "warehouse": "단독(무)",
   "spec": "완전 공급",
   "supplyPrice": 44000,
   "courier": "로젠택배/우체국택배",
@@ -6242,7 +6410,7 @@
  {
   "category": "수산물",
   "name": "임금님 5-6미 전복 1kg",
-  "warehouse": "완전",
+  "warehouse": "단독(무)",
   "spec": "완전 공급",
   "supplyPrice": 25500,
   "courier": "로젠택배/우체국택배",
@@ -6254,7 +6422,7 @@
  {
   "category": "수산물",
   "name": "임금님 5-6미 전복 2kg",
-  "warehouse": "완전",
+  "warehouse": "단독(무)",
   "spec": "완전 공급",
   "supplyPrice": 46500,
   "courier": "로젠택배/우체국택배",
@@ -6266,7 +6434,7 @@
  {
   "category": "수산물",
   "name": "여름보양 반건조 세트",
-  "warehouse": "군컬",
+  "warehouse": "단독(무)",
   "spec": "군컬 공급",
   "supplyPrice": 33000,
   "courier": "롯데택배",
@@ -6278,7 +6446,7 @@
  {
   "category": "농산물·과일",
   "name": "못난이 생표고버섯 3kg",
-  "warehouse": "표도",
+  "warehouse": "단독(무)",
   "spec": "표도 공급",
   "supplyPrice": 21900,
   "courier": "씨제이대한통운/우체국택배",
@@ -6290,7 +6458,7 @@
  {
   "category": "농산물·과일",
   "name": "못난이 생표고버섯 2kg",
-  "warehouse": "표도",
+  "warehouse": "단독(무)",
   "spec": "표도 공급",
   "supplyPrice": 15600,
   "courier": "씨제이대한통운/우체국택배",
@@ -6302,7 +6470,7 @@
  {
   "category": "농산물·과일",
   "name": "못난이 생표고버섯 1kg",
-  "warehouse": "표도",
+  "warehouse": "단독(무)",
   "spec": "표도 공급",
   "supplyPrice": 9600,
   "courier": "씨제이대한통운/우체국택배",
@@ -6314,7 +6482,7 @@
  {
   "category": "수산물",
   "name": "손질 절단꽃게 1.6kg",
-  "warehouse": "주첸",
+  "warehouse": "단독(무)",
   "spec": "주첸 공급",
   "supplyPrice": 24500,
   "courier": "씨제이대한통운",
@@ -6326,7 +6494,7 @@
  {
   "category": "수산물",
   "name": "손질 절단꽃게 800g",
-  "warehouse": "주첸",
+  "warehouse": "단독(무)",
   "spec": "주첸 공급",
   "supplyPrice": 15000,
   "courier": "씨제이대한통운",
@@ -6338,7 +6506,7 @@
  {
   "category": "농산물·과일",
   "name": "잎 제거 고구마순 3kg",
-  "warehouse": "래음",
+  "warehouse": "단독(무)",
   "spec": "래음 공급",
   "supplyPrice": 20000,
   "courier": "로젠택배",
@@ -6350,7 +6518,7 @@
  {
   "category": "농산물·과일",
   "name": "잎 제거 고구마순 2kg",
-  "warehouse": "래음",
+  "warehouse": "단독(무)",
   "spec": "래음 공급",
   "supplyPrice": 15000,
   "courier": "로젠택배",
@@ -6362,7 +6530,7 @@
  {
   "category": "농산물·과일",
   "name": "잎 제거 고구마순 1kg",
-  "warehouse": "래음",
+  "warehouse": "단독(무)",
   "spec": "래음 공급",
   "supplyPrice": 9500,
   "courier": "로젠택배",
@@ -6374,7 +6542,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "일품 순살 돼지왕구이 1+1",
-  "warehouse": "구이",
+  "warehouse": "단독(무)",
   "spec": "구이 공급",
   "supplyPrice": 29000,
   "courier": "롯데택배",
@@ -6386,7 +6554,7 @@
  {
   "category": "농산물·과일",
   "name": "유기농 수미감자 10kg",
-  "warehouse": "영합",
+  "warehouse": "단독(무)",
   "spec": "영합 공급",
   "supplyPrice": 38000,
   "courier": "우체국택배/한진택배",
@@ -6398,7 +6566,7 @@
  {
   "category": "농산물·과일",
   "name": "유기농 수미감자 5kg",
-  "warehouse": "영합",
+  "warehouse": "단독(무)",
   "spec": "영합 공급",
   "supplyPrice": 20000,
   "courier": "우체국택배/한진택배",
@@ -6410,7 +6578,7 @@
  {
   "category": "농산물·과일",
   "name": "유기농 수미감자 3kg",
-  "warehouse": "영합",
+  "warehouse": "단독(무)",
   "spec": "영합 공급",
   "supplyPrice": 16000,
   "courier": "우체국택배/한진택배",
@@ -6422,7 +6590,7 @@
  {
   "category": "농산물·과일",
   "name": "유기농 수미감자 2kg",
-  "warehouse": "영합",
+  "warehouse": "단독(무)",
   "spec": "영합 공급",
   "supplyPrice": 12000,
   "courier": "우체국택배/한진택배",
@@ -6434,7 +6602,7 @@
  {
   "category": "농산물·과일",
   "name": "유기농 수미감자 1kg",
-  "warehouse": "영합",
+  "warehouse": "단독(무)",
   "spec": "영합 공급",
   "supplyPrice": 9500,
   "courier": "우체국택배/한진택배",
@@ -6446,7 +6614,7 @@
  {
   "category": "수산물",
   "name": "벌교 새꼬막 3kg",
-  "warehouse": "벌교",
+  "warehouse": "단독(무)",
   "spec": "벌교 공급",
   "supplyPrice": 9500,
   "courier": "롯데택배",
@@ -6458,7 +6626,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "두근두근 세트 1.2kg",
-  "warehouse": "창원",
+  "warehouse": "단독(무)",
   "spec": "창원 공급",
   "supplyPrice": 32200,
   "courier": "롯데택배",
@@ -6470,7 +6638,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "푸짐 홈파티 세트",
-  "warehouse": "창원",
+  "warehouse": "단독(무)",
   "spec": "창원 공급",
   "supplyPrice": 30200,
   "courier": "롯데택배",
@@ -6482,7 +6650,7 @@
  {
   "category": "수산물",
   "name": "국내산 특왕 반건조 민어 5마리",
-  "warehouse": "마진",
+  "warehouse": "단독(무)",
   "spec": "마진 공급",
   "supplyPrice": 35000,
   "courier": "씨제이대한통운",
@@ -6494,7 +6662,7 @@
  {
   "category": "수산물",
   "name": "연안 급냉 소암게 4kg",
-  "warehouse": "인지",
+  "warehouse": "단독(무)",
   "spec": "인지 공급",
   "supplyPrice": 60000,
   "courier": "우체국택배",
@@ -6506,7 +6674,7 @@
  {
   "category": "수산물",
   "name": "연안 급냉 소숫게 4kg",
-  "warehouse": "인지",
+  "warehouse": "단독(무)",
   "spec": "인지 공급",
   "supplyPrice": 37000,
   "courier": "우체국택배",
@@ -6518,7 +6686,7 @@
  {
   "category": "축산물",
   "name": "1등급 한우 사골세트",
-  "warehouse": "창원",
+  "warehouse": "단독(무)",
   "spec": "창원 공급",
   "supplyPrice": 21000,
   "courier": "씨제이대한통운",
@@ -6530,7 +6698,7 @@
  {
   "category": "농산물·과일",
   "name": "천도복숭아 특대 3kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 25000,
   "courier": "롯데택배",
@@ -6542,7 +6710,7 @@
  {
   "category": "농산물·과일",
   "name": "천도복숭아 특대 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 18000,
   "courier": "롯데택배",
@@ -6554,7 +6722,7 @@
  {
   "category": "농산물·과일",
   "name": "천도복숭아 대과 3kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 20500,
   "courier": "롯데택배",
@@ -6566,7 +6734,7 @@
  {
   "category": "농산물·과일",
   "name": "천도복숭아 대과 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 14500,
   "courier": "롯데택배",
@@ -6578,7 +6746,7 @@
  {
   "category": "농산물·과일",
   "name": "천도복숭아 대과 1kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 9300,
   "courier": "롯데택배",
@@ -6590,7 +6758,7 @@
  {
   "category": "농산물·과일",
   "name": "못난이 참외 혼합과 4kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 29900,
   "courier": "롯데택배",
@@ -6602,7 +6770,7 @@
  {
   "category": "농산물·과일",
   "name": "못난이 참외 혼합과 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 16800,
   "courier": "롯데택배",
@@ -6614,7 +6782,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 참외 대과 4kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 38500,
   "courier": "롯데택배",
@@ -6626,7 +6794,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 참외 대과 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 21100,
   "courier": "롯데택배",
@@ -6638,7 +6806,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 참외 중과 4kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 36100,
   "courier": "롯데택배",
@@ -6650,7 +6818,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 참외 중과 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 19900,
   "courier": "롯데택배",
@@ -6662,7 +6830,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 소과 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 16800,
   "courier": "롯데택배",
@@ -6674,7 +6842,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 소과 3kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 23200,
   "courier": "롯데택배",
@@ -6686,7 +6854,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 소과 5kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 34500,
   "courier": "롯데택배",
@@ -6698,7 +6866,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 중과 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 18500,
   "courier": "롯데택배",
@@ -6710,7 +6878,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 중과 3kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 25900,
   "courier": "롯데택배",
@@ -6722,7 +6890,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 중과 5kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 39100,
   "courier": "롯데택배",
@@ -6734,7 +6902,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 대과 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 20200,
   "courier": "롯데택배",
@@ -6746,7 +6914,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 대과 3kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 28300,
   "courier": "롯데택배",
@@ -6758,7 +6926,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사사과 대과 5kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 43100,
   "courier": "롯데택배",
@@ -6770,7 +6938,7 @@
  {
   "category": "농산물·과일",
   "name": "가정용 부사사과 소과 3kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 18400,
   "courier": "롯데택배",
@@ -6782,7 +6950,7 @@
  {
   "category": "농산물·과일",
   "name": "가정용 부사사과 소과 5kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 26600,
   "courier": "롯데택배",
@@ -6794,7 +6962,7 @@
  {
   "category": "농산물·과일",
   "name": "가정용 부사사과 중과 3kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 20200,
   "courier": "롯데택배",
@@ -6806,7 +6974,7 @@
  {
   "category": "농산물·과일",
   "name": "가정용 부사사과 중과 5kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 29500,
   "courier": "롯데택배",
@@ -6818,7 +6986,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사 한입사과 2kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 11700,
   "courier": "롯데택배",
@@ -6830,7 +6998,7 @@
  {
   "category": "농산물·과일",
   "name": "정품 부사 한입사과 4kg",
-  "warehouse": "과일",
+  "warehouse": "단독(무)",
   "spec": "과일 공급",
   "supplyPrice": 19000,
   "courier": "롯데택배",
@@ -6842,7 +7010,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "건중하포 1박스",
-  "warehouse": "군컬",
+  "warehouse": "단독(무)",
   "spec": "군컬 공급",
   "supplyPrice": 12000,
   "courier": "롯데택배",
@@ -6854,7 +7022,7 @@
  {
   "category": "수산물",
   "name": "무더기 선동 암꽃게 5kg",
-  "warehouse": "군컬",
+  "warehouse": "단독(무)",
   "spec": "군컬 공급",
   "supplyPrice": 48000,
   "courier": "롯데택배",
@@ -6866,7 +7034,7 @@
  {
   "category": "수산물",
   "name": "서해안 고주바 멸치 1.5kg",
-  "warehouse": "군컬",
+  "warehouse": "단독(무)",
   "spec": "군컬 공급",
   "supplyPrice": 18500,
   "courier": "롯데택배",
@@ -6876,9 +7044,9 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "김치·반찬",
   "name": "국내산 동치미 5kg",
-  "warehouse": "김치",
+  "warehouse": "단독(무)",
   "spec": "김치 공급",
   "supplyPrice": 10000,
   "courier": "씨제이대한통운",
@@ -6890,7 +7058,7 @@
  {
   "category": "계란·유제품",
   "name": "동물복지 난각 2번 유정란 60구",
-  "warehouse": "난각",
+  "warehouse": "단독(무)",
   "spec": "난각 공급",
   "supplyPrice": 27500,
   "courier": "씨제이대한통운",
@@ -6902,7 +7070,7 @@
  {
   "category": "계란·유제품",
   "name": "동물복지 난각 2번 유정란 40구",
-  "warehouse": "난각",
+  "warehouse": "단독(무)",
   "spec": "난각 공급",
   "supplyPrice": 20000,
   "courier": "씨제이대한통운",
@@ -6914,7 +7082,7 @@
  {
   "category": "계란·유제품",
   "name": "동물복지 난각 2번 유정란 20구",
-  "warehouse": "난각",
+  "warehouse": "단독(무)",
   "spec": "난각 공급",
   "supplyPrice": 11400,
   "courier": "씨제이대한통운",
@@ -6926,7 +7094,7 @@
  {
   "category": "농산물·과일",
   "name": "삶아가는 홍찰옥수수 10개",
-  "warehouse": "농작",
+  "warehouse": "단독(무)",
   "spec": "농작 공급",
   "supplyPrice": 10200,
   "courier": "씨제이대한통운",
@@ -6938,7 +7106,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "추억의 시래기 된장볼 4팩",
-  "warehouse": "된장",
+  "warehouse": "단독(무)",
   "spec": "된장 공급",
   "supplyPrice": 12500,
   "courier": "씨제이대한통운",
@@ -6950,7 +7118,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "든든 우족사골세트 6kg급",
-  "warehouse": "디디",
+  "warehouse": "단독(무)",
   "spec": "디디 공급",
   "supplyPrice": 21000,
   "courier": "씨제이대한통운",
@@ -6962,7 +7130,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "든든 우족사골세트 12kg급",
-  "warehouse": "디디",
+  "warehouse": "단독(무)",
   "spec": "디디 공급",
   "supplyPrice": 37000,
   "courier": "씨제이대한통운",
@@ -6974,7 +7142,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "든든 우족사골세트 18kg급",
-  "warehouse": "디디",
+  "warehouse": "단독(무)",
   "spec": "디디 공급",
   "supplyPrice": 57000,
   "courier": "씨제이대한통운",
@@ -6986,7 +7154,7 @@
  {
   "category": "수산물",
   "name": "자숙대게 3.5kg",
-  "warehouse": "디디",
+  "warehouse": "단독(무)",
   "spec": "디디 공급",
   "supplyPrice": 51000,
   "courier": "씨제이대한통운",
@@ -6998,7 +7166,7 @@
  {
   "category": "농산물·과일",
   "name": "꼬마 부사사과 3kg",
-  "warehouse": "마진",
+  "warehouse": "단독(무)",
   "spec": "마진 공급",
   "supplyPrice": 9000,
   "courier": "씨제이대한통운",
@@ -7010,7 +7178,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "개별 설탕 바나나 6kg",
-  "warehouse": "마진",
+  "warehouse": "단독(무)",
   "spec": "마진 공급",
   "supplyPrice": 14000,
   "courier": "씨제이대한통운",
@@ -7022,7 +7190,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "개별 설탕 바나나 3kg",
-  "warehouse": "마진",
+  "warehouse": "단독(무)",
   "spec": "마진 공급",
   "supplyPrice": 9000,
   "courier": "씨제이대한통운",
@@ -7034,7 +7202,7 @@
  {
   "category": "수산물",
   "name": "특왕 보리굴비 5마리",
-  "warehouse": "마진",
+  "warehouse": "단독(무)",
   "spec": "마진 공급",
   "supplyPrice": 46500,
   "courier": "씨제이대한통운",
@@ -7046,7 +7214,7 @@
  {
   "category": "수산물",
   "name": "제주 반건조 옥돔 5마리",
-  "warehouse": "마진",
+  "warehouse": "단독(무)",
   "spec": "마진 공급",
   "supplyPrice": 34500,
   "courier": "씨제이대한통운",
@@ -7058,7 +7226,7 @@
  {
   "category": "김치·반찬",
   "name": "대쪽 이원욱 포기김치 5kg",
-  "warehouse": "맛김",
+  "warehouse": "단독(무)",
   "spec": "맛김 공급",
   "supplyPrice": 22000,
   "courier": "롯데택배",
@@ -7070,7 +7238,7 @@
  {
   "category": "김치·반찬",
   "name": "대쪽 이원욱 포기김치 10kg",
-  "warehouse": "맛김",
+  "warehouse": "단독(무)",
   "spec": "맛김 공급",
   "supplyPrice": 40000,
   "courier": "롯데택배",
@@ -7082,7 +7250,7 @@
  {
   "category": "축산물",
   "name": "투뿔 도가니 사골세트 5.8kg",
-  "warehouse": "생고",
+  "warehouse": "단독(무)",
   "spec": "생고 공급",
   "supplyPrice": 31000,
   "courier": "로젠택배",
@@ -7094,7 +7262,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "맛상 솔잎돼지왕구이 3.8kg",
-  "warehouse": "솔잎",
+  "warehouse": "단독(무)",
   "spec": "솔잎 공급",
   "supplyPrice": 32000,
   "courier": "롯데택배",
@@ -7106,7 +7274,7 @@
  {
   "category": "수산물",
   "name": "제주 은갈치 40미",
-  "warehouse": "수갈",
+  "warehouse": "단독(무)",
   "spec": "수갈 공급",
   "supplyPrice": 59000,
   "courier": "씨제이대한통운",
@@ -7118,7 +7286,7 @@
  {
   "category": "수산물",
   "name": "제주 은갈치 20미",
-  "warehouse": "수갈",
+  "warehouse": "단독(무)",
   "spec": "수갈 공급",
   "supplyPrice": 39000,
   "courier": "씨제이대한통운",
@@ -7130,7 +7298,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "평양냉면 10인분",
-  "warehouse": "식음",
+  "warehouse": "단독(무)",
   "spec": "식음 공급",
   "supplyPrice": 16000,
   "courier": "씨제이대한통운",
@@ -7142,7 +7310,7 @@
  {
   "category": "간편식품·밀키트",
   "name": "칡냉면 10인분",
-  "warehouse": "식음",
+  "warehouse": "단독(무)",
   "spec": "식음 공급",
   "supplyPrice": 16000,
   "courier": "씨제이대한통운",
@@ -7154,7 +7322,7 @@
  {
   "category": "수산물",
   "name": "삼점 암꽃게장 1통",
-  "warehouse": "여수",
+  "warehouse": "단독(무)",
   "spec": "여수 공급",
   "supplyPrice": 14500,
   "courier": "씨제이대한통운",
@@ -7166,7 +7334,7 @@
  {
   "category": "수산물",
   "name": "삼점 암꽃게장 1+1",
-  "warehouse": "여수",
+  "warehouse": "단독(무)",
   "spec": "여수 공급",
   "supplyPrice": 24000,
   "courier": "씨제이대한통운",
@@ -7176,9 +7344,9 @@
   "show": true
  },
  {
-  "category": "간편식품·밀키트",
+  "category": "김치·반찬",
   "name": "동치미 5kg",
-  "warehouse": "여수",
+  "warehouse": "단독(무)",
   "spec": "여수 공급",
   "supplyPrice": 10000,
   "courier": "씨제이대한통운",
@@ -7190,7 +7358,7 @@
  {
   "category": "축산물",
   "name": "한우 우족사골세트 12kg급",
-  "warehouse": "우사",
+  "warehouse": "단독(무)",
   "spec": "우사 공급",
   "supplyPrice": 38000,
   "courier": "씨제이대한통운",
@@ -7202,7 +7370,7 @@
  {
   "category": "축산물",
   "name": "한우 우족사골세트 6kg급",
-  "warehouse": "우사",
+  "warehouse": "단독(무)",
   "spec": "우사 공급",
   "supplyPrice": 21500,
   "courier": "씨제이대한통운",
@@ -7214,7 +7382,7 @@
  {
   "category": "수산물",
   "name": "랜덤지리멸치밥새우 1박스",
-  "warehouse": "자원",
+  "warehouse": "단독(무)",
   "spec": "자원 공급",
   "supplyPrice": 13000,
   "courier": "씨제이대한통운",
@@ -7226,7 +7394,7 @@
  {
   "category": "김치·반찬",
   "name": "전라도식 총각김치 10kg",
-  "warehouse": "전라",
+  "warehouse": "단독(무)",
   "spec": "전라 공급",
   "supplyPrice": 39000,
   "courier": "로젠택배",
@@ -7238,7 +7406,7 @@
  {
   "category": "김치·반찬",
   "name": "전라도식 총각김치 5kg",
-  "warehouse": "전라",
+  "warehouse": "단독(무)",
   "spec": "전라 공급",
   "supplyPrice": 21000,
   "courier": "로젠택배",
@@ -7250,7 +7418,7 @@
  {
   "category": "수산물",
   "name": "제주 은갈치 40팩 대",
-  "warehouse": "제이",
+  "warehouse": "단독(무)",
   "spec": "제이 공급",
   "supplyPrice": 64000,
   "courier": "한진택배",
@@ -7262,7 +7430,7 @@
  {
   "category": "수산물",
   "name": "제주 은갈치 20팩 대",
-  "warehouse": "제이",
+  "warehouse": "단독(무)",
   "spec": "제이 공급",
   "supplyPrice": 37500,
   "courier": "한진택배",
@@ -7274,7 +7442,7 @@
  {
   "category": "수산물",
   "name": "제주 은갈치 15팩 소",
-  "warehouse": "제이",
+  "warehouse": "단독(무)",
   "spec": "제이 공급",
   "supplyPrice": 14100,
   "courier": "한진택배",
@@ -7286,7 +7454,7 @@
  {
   "category": "수산물",
   "name": "제주 은갈치 30팩 소",
-  "warehouse": "제이",
+  "warehouse": "단독(무)",
   "spec": "제이 공급",
   "supplyPrice": 19300,
   "courier": "한진택배",
@@ -7298,7 +7466,7 @@
  {
   "category": "수산물",
   "name": "통통 다듬이 홍합 4kg",
-  "warehouse": "쫄깃",
+  "warehouse": "단독(무)",
   "spec": "쫄깃 공급",
   "supplyPrice": 7700,
   "courier": "씨제이대한통운/롯데택배",
@@ -7310,7 +7478,7 @@
  {
   "category": "농산물·과일",
   "name": "무농약 흑타리버섯 2kg",
-  "warehouse": "키움",
+  "warehouse": "단독(무)",
   "spec": "키움 공급",
   "supplyPrice": 9500,
   "courier": "롯데택배",
@@ -7322,7 +7490,7 @@
  {
   "category": "농산물·과일",
   "name": "절임배추 20kg",
-  "warehouse": "화산",
+  "warehouse": "단독(무)",
   "spec": "화산 공급",
   "supplyPrice": 37500,
   "courier": "씨제이대한통운",
@@ -7334,7 +7502,7 @@
  {
   "category": "선물세트",
   "name": "한우 투쁠 가족 선물세트",
-  "warehouse": "한우",
+  "warehouse": "선물세트",
   "spec": "한우 공급",
   "supplyPrice": 52000,
   "courier": "로젠택배",
@@ -7346,7 +7514,7 @@
  {
   "category": "선물세트",
   "name": "한우 투쁠 알찬 가족 선물세트",
-  "warehouse": "한우",
+  "warehouse": "선물세트",
   "spec": "한우 공급",
   "supplyPrice": 79000,
   "courier": "로젠택배",
@@ -7358,7 +7526,7 @@
  {
   "category": "선물세트",
   "name": "한우 꽃등심 선물세트",
-  "warehouse": "한우",
+  "warehouse": "선물세트",
   "spec": "한우 공급",
   "supplyPrice": 99000,
   "courier": "로젠택배",
@@ -7370,7 +7538,7 @@
  {
   "category": "선물세트",
   "name": "한우 투쁠 꽃등심 선물세트",
-  "warehouse": "한우",
+  "warehouse": "선물세트",
   "spec": "한우 공급",
   "supplyPrice": 145000,
   "courier": "로젠택배",
@@ -7382,7 +7550,7 @@
  {
   "category": "선물세트",
   "name": "한우 투쁠 명작 선물세트",
-  "warehouse": "한우",
+  "warehouse": "선물세트",
   "spec": "한우 공급",
   "supplyPrice": 145000,
   "courier": "로젠택배",
@@ -7394,7 +7562,7 @@
  {
   "category": "선물세트",
   "name": "한우 투쁠 명품 선물세트",
-  "warehouse": "한우",
+  "warehouse": "선물세트",
   "spec": "한우 공급",
   "supplyPrice": 145000,
   "courier": "로젠택배",
@@ -7406,7 +7574,7 @@
  {
   "category": "선물세트",
   "name": "전통 떡 선물세트",
-  "warehouse": "떡",
+  "warehouse": "선물세트",
   "spec": "떡 공급",
   "supplyPrice": 32500,
   "courier": "씨제이대한통운",
@@ -7418,7 +7586,7 @@
  {
   "category": "선물세트",
   "name": "정성담은 인절미 3종 선물세트",
-  "warehouse": "떡",
+  "warehouse": "선물세트",
   "spec": "떡 공급",
   "supplyPrice": 32500,
   "courier": "씨제이대한통운",
@@ -7430,7 +7598,7 @@
  {
   "category": "선물세트",
   "name": "프리미엄 떡 선물세트",
-  "warehouse": "떡",
+  "warehouse": "선물세트",
   "spec": "떡 공급",
   "supplyPrice": 32500,
   "courier": "씨제이대한통운",
@@ -7442,7 +7610,7 @@
  {
   "category": "선물세트",
   "name": "VIP 굴비 선물세트",
-  "warehouse": "영광",
+  "warehouse": "선물세트",
   "spec": "영광 공급",
   "supplyPrice": 36000,
   "courier": "씨제이대한통운",
@@ -7454,7 +7622,7 @@
  {
   "category": "선물세트",
   "name": "프리미엄 영광굴비 선물세트",
-  "warehouse": "영광",
+  "warehouse": "선물세트",
   "spec": "영광 공급",
   "supplyPrice": 33000,
   "courier": "씨제이대한통운",
@@ -7466,7 +7634,7 @@
  {
   "category": "선물세트",
   "name": "특왕 민물장어 선물세트",
-  "warehouse": "민장",
+  "warehouse": "선물세트",
   "spec": "민장 공급",
   "supplyPrice": 27000,
   "courier": "로젠택배/씨제이대한통운",
@@ -7478,7 +7646,7 @@
  {
   "category": "선물세트",
   "name": "프리미엄 민물장어 선물세트",
-  "warehouse": "민장",
+  "warehouse": "선물세트",
   "spec": "민장 공급",
   "supplyPrice": 44000,
   "courier": "로젠택배/씨제이대한통운",
@@ -7490,7 +7658,7 @@
  {
   "category": "선물세트",
   "name": "특대 9-10미 전복 선물세트",
-  "warehouse": "완전",
+  "warehouse": "선물세트",
   "spec": "완전 공급",
   "supplyPrice": 25000,
   "courier": "로젠택배/우체국택배",
@@ -7502,7 +7670,7 @@
  {
   "category": "선물세트",
   "name": "특대 9-10미 전복 선물세트 2kg",
-  "warehouse": "완전",
+  "warehouse": "선물세트",
   "spec": "완전 공급",
   "supplyPrice": 45000,
   "courier": "로젠택배/우체국택배",
@@ -7514,7 +7682,7 @@
  {
   "category": "선물세트",
   "name": "초특대 7-8미 전복 선물세트",
-  "warehouse": "완전",
+  "warehouse": "선물세트",
   "spec": "완전 공급",
   "supplyPrice": 26000,
   "courier": "로젠택배/우체국택배",
@@ -7526,7 +7694,7 @@
  {
   "category": "선물세트",
   "name": "초특대 7-8미 전복 선물세트 2kg",
-  "warehouse": "완전",
+  "warehouse": "선물세트",
   "spec": "완전 공급",
   "supplyPrice": 48000,
   "courier": "로젠택배/우체국택배",
@@ -7538,7 +7706,7 @@
  {
   "category": "선물세트",
   "name": "임금님 5-6미 전복 선물세트",
-  "warehouse": "완전",
+  "warehouse": "선물세트",
   "spec": "완전 공급",
   "supplyPrice": 27000,
   "courier": "로젠택배/우체국택배",
@@ -7550,7 +7718,7 @@
  {
   "category": "선물세트",
   "name": "임금님 5-6미 전복 선물세트 2kg",
-  "warehouse": "완전",
+  "warehouse": "선물세트",
   "spec": "완전 공급",
   "supplyPrice": 50000,
   "courier": "로젠택배/우체국택배",
@@ -7562,7 +7730,7 @@
  {
   "category": "선물세트",
   "name": "초이스 양념 LA갈비 선물세트",
-  "warehouse": "스키",
+  "warehouse": "선물세트",
   "spec": "스키 공급",
   "supplyPrice": 53000,
   "courier": "씨제이대한통운",
@@ -7574,7 +7742,7 @@
  {
   "category": "선물세트",
   "name": "초이스 LA꽃갈비 2kg 선물세트",
-  "warehouse": "한돈",
+  "warehouse": "선물세트",
   "spec": "한돈 공급",
   "supplyPrice": 83000,
   "courier": "씨제이대한통운",
