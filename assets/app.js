@@ -473,7 +473,7 @@
         return {
           category: r.category, name: r.name, warehouse: r.warehouse, spec: r.spec,
           supplyPrice: r.supply_price, courier: r.courier, shipFee: r.ship_fee,
-          tax: r.tax, image: r.image, show: r.show
+          tax: r.tax, image: r.image, link: r.link, show: r.show
         };
       });
     });
