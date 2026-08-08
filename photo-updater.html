@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상품 사진·스펙 자동 업데이트 도구 설치</title>
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+body{background:#f4f6f5;padding:28px 16px 70px;}
+main{max-width:680px;margin:0 auto;}
+h1{font-size:21px;letter-spacing:-.4px;margin-bottom:4px;}
+.sub{color:#6a7671;font-size:12.5px;margin-bottom:20px;}
+.card{background:#fff;border:1px solid #e4e8e3;border-radius:13px;padding:18px 20px;margin-bottom:14px;}
+h2{font-size:15px;margin-bottom:8px;}
+p,li{font-size:13.5px;line-height:1.6;}
+ol{margin:8px 0 0 18px;}
+li{margin-bottom:6px;}
+.bm{display:inline-block;background:#0E8A8F;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:11px 22px;border-radius:10px;margin:10px 0 6px;cursor:grab;}
+.hint{background:#e7f3ed;border-radius:9px;padding:10px 13px;font-size:12.5px;color:#0b5f46;margin-top:10px;}
+code{background:#eef1ec;padding:1px 5px;border-radius:4px;font-size:12px;}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:11px;word-break:break-all;background:#eef1ec;padding:10px;border-radius:8px;margin-top:8px;color:#18211f;}
+button.cp{border:1px solid #e4e8e3;background:#fff;color:#18211f;border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;margin-top:8px;font-weight:600;}
+button.cp:hover{border-color:#0E8A8F;color:#0E8A8F;}
+a{color:#0E8A8F;}
+</style></head><body><main>
+<h1>📸 상품 사진·스펙 자동 업데이트 도구</h1>
+<div class="sub">상품 관리자에 등록해둔 원본 링크(masterc.kr 등)에서 사진·스펙을 다시 긁어와 채워줍니다.</div>
+
+<div class="card">
+  <h2>0. 준비물</h2>
+  <ol>
+    <li><a href="admin.html" target="_blank">상품 관리자</a>에서 상품마다 <b>"원본 링크"</b> 칸에 masterc.kr 등 상세페이지 주소를 넣고 저장해둡니다.</li>
+    <li>상품 관리자 상단의 <b>[📸 북마클릿 토큰 복사]</b> 버튼을 눌러 로그인 토큰을 복사해둡니다. (1시간 동안 유효 — 만료되면 다시 복사)</li>
+  </ol>
+</div>
+
+<div class="card">
+  <h2>1. 즐겨찾기에 한 번만 등록</h2>
+  <p>아래 초록 버튼을 <b>즐겨찾기 바로 끌어다 놓으세요.</b> (Ctrl+Shift+B 로 즐겨찾기 바 켜기)</p>
+  <a class="bm" id="bm" href="#">📸 사진·스펙 업데이트</a>
+  <p style="font-size:12.5px;color:#6a7671;">끌어다 놓기가 안 되면 즐겨찾기를 새로 추가하고 URL 칸에 아래 주소를 붙여넣으세요.</p>
+  <div class="mono" id="code"></div>
+  <button class="cp" id="cp">📋 주소 복사</button>
+</div>
+
+<div class="card">
+  <h2>2. 쓰는 법</h2>
+  <ol>
+    <li><b>masterc.kr에 로그인된 탭</b>을 엽니다. (사진은 로그인해야 보이므로 반드시 그 사이트 위에서 실행해야 합니다)</li>
+    <li>즐겨찾기의 <b>📸 사진·스펙 업데이트</b>를 누르면 오른쪽 아래에 패널이 뜹니다.</li>
+    <li>처음 실행 시 <b>토큰 붙여넣기</b> 창이 뜨면, 0번에서 복사해둔 토큰을 붙여넣습니다. (이 탭에서만 기억되고, 창을 닫으면 사라집니다 — 다음에 또 붙여넣으면 됩니다)</li>
+    <li>업데이트할 상품을 고릅니다.
+      <ul style="margin:6px 0 0 16px;">
+        <li><b>누락만</b> — 사진 또는 스펙이 비어 있는 상품</li>
+        <li><b>전체</b> — 링크가 있는 모든 상품 다시 긁기</li>
+      </ul>
+    </li>
+    <li><b>선택 N건 업데이트</b>를 누르면 순서대로 긁어서 바로 저장됩니다.</li>
+    <li>공개 사이트나 관리자 화면을 새로고침하면 반영됩니다.</li>
+  </ol>
+  <div class="hint">⚠️ 사진·스펙을 뽑아내는 규칙(어떤 태그에서 가져올지)은 masterc.kr 실제 페이지 구조를 보고 튜닝이 필요할 수 있어요. <code>assets/photo-updater.js</code> 맨 위 <code>EXTRACT 규칙</code> 부분만 고치면 됩니다. 처음 몇 건 돌려보고 결과가 안 맞으면 알려주세요 — 선택자를 맞춰드릴게요.</div>
+</div>
+
+<div class="card">
+  <h2>3. 어디에 저장되나</h2>
+  <p>긁은 사진 주소·스펙 텍스트는 그 상품의 Supabase <code>products</code> 행에 바로 저장됩니다. 상품 관리자에서 직접 고쳐도 되고, 특정 상품 사진을 지우고 싶으면 관리자에서 사진 칸을 비우면 "사진 준비중"으로 표시됩니다.</p>
+  <p style="margin-top:8px;"><a href="admin.html">→ 상품 관리자 열기</a></p>
+</div>
+</main>
+<script>
+var SRC=location.href.replace(/photo-updater\.html.*$/, 'assets/photo-updater.js');
+var BM="javascript:(function(){var s=document.createElement('script');s.src='"+SRC+"?'+Date.now();document.body.appendChild(s);})()";
+document.getElementById('bm').href=BM;
+document.getElementById('code').textContent=BM;
+document.getElementById('cp').onclick=function(){
+  navigator.clipboard.writeText(BM).then(function(){var b=document.getElementById('cp');b.textContent='복사됨!';setTimeout(function(){b.textContent='📋 주소 복사';},2000);});
+};
+</script>
+</body></html>

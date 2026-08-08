@@ -140,9 +140,29 @@
       "택배비": "shipFee", "배송비": "shipFee", "shipfee": "shipFee",
       "면과세": "tax", "과세": "tax", "tax": "tax",
       "사진": "image", "이미지": "image", "image": "image", "img": "image",
-      "노출": "show", "표시": "show", "show": "show"
+      "노출": "show", "표시": "show", "show": "show",
+      "링크": "link", "link": "link", "url": "link", "주소": "link"
     };
     return map[s] || null;
+  }
+
+  // 시트 셀 하나(Sheets API v4 gridData 형식)에서 하이퍼링크 주소를 뽑아냄.
+  // 1) 셀 전체에 건 링크  2) 텍스트 일부에만 건 리치텍스트 링크  3) =HYPERLINK() 수식
+  function linkOf(cell) {
+    if (!cell) return "";
+    if (cell.hyperlink) return cell.hyperlink;
+    if (cell.textFormatRuns) {
+      for (var i = 0; i < cell.textFormatRuns.length; i++) {
+        var f = cell.textFormatRuns[i].format;
+        if (f && f.link && f.link.uri) return f.link.uri;
+      }
+    }
+    var formula = cell.userEnteredValue && cell.userEnteredValue.formulaValue;
+    if (formula) {
+      var m = formula.match(/HYPERLINK\(\s*"([^"]+)"/i);
+      if (m) return m[1];
+    }
+    return "";
   }
 
   function rowsToProducts(rows) {
@@ -179,6 +199,7 @@
         shipFee: toNumber(p.shipFee),
         tax: String(p.tax || "").trim(),
         image: resolveImage(p.image),
+        link: String(p.link || "").trim(),
         badgeColor: WH_COLOR[wh] || CAT[cat].accent
       });
     });
@@ -191,6 +212,9 @@
     var imgHtml = p.image
       ? '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">'
       : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#9aa7ad;font-size:13px;">사진 준비중</div>';
+    var nameHtml = p.link
+      ? '<a href="' + esc(p.link) + '" target="_blank" rel="noopener">' + esc(p.name) + '</a>'
+      : esc(p.name);
     return '' +
       '<div class="prod-card">' +
         '<div class="prod-img' + (c.fit === "contain" ? " contain" : "") + '" style="background:' + c.imgBg + ';">' +
@@ -199,7 +223,7 @@
           (p.tax ? '<div class="badge-tax">' + esc(p.tax) + '</div>' : '') +
         '</div>' +
         '<div class="prod-body">' +
-          '<h3>' + esc(p.name) + '</h3>' +
+          '<h3>' + nameHtml + '</h3>' +
           // 설명이 없어도 자리를 유지해야 아래 공급가 위치가 어긋나지 않음
           '<div class="prod-spec">' + esc(p.spec || "") + '</div>' +
           '<div class="price-row">' +
@@ -449,13 +473,13 @@
         return {
           category: r.category, name: r.name, warehouse: r.warehouse, spec: r.spec,
           supplyPrice: r.supply_price, courier: r.courier, shipFee: r.ship_fee,
-          tax: r.tax, image: r.image, show: r.show
+          tax: r.tax, image: r.image, link: r.link, show: r.show
         };
       });
     });
   }
 
-  function loadSheet() {
+  function loadSheetCsv() {
     var id = (CFG.sheetId || "").trim();
     if (!id) return Promise.reject("no-sheet");
     var gid = (CFG.sheetGid || "0").trim();
@@ -471,6 +495,66 @@
         if (!prods.length) throw new Error("sheet empty");
         return prods;
       });
+  }
+
+  // 구글 시트를 Sheets API v4로 직접 읽어옴 (gviz CSV와 달리 상품명 셀의
+  // 하이퍼링크까지 함께 읽힘). CFG.sheetApiKey가 채워져 있을 때만 시도한다.
+  // 키는 "HTTP 리퍼러 제한 + Sheets API 전용"으로 만든 공개용 API 키를 쓴다 —
+  // 서명 권한이 있는 서비스 계정 비밀키를 프론트엔드에 심는 것과 달리 안전하다.
+  function loadSheetApi() {
+    var id = (CFG.sheetId || "").trim();
+    var key = (CFG.sheetApiKey || "").trim();
+    if (!id || !key) return Promise.reject("no-sheet-api");
+    var gid = String(CFG.sheetGid || "0").trim();
+    var base = "https://sheets.googleapis.com/v4/spreadsheets/" + id;
+    var metaUrl = base + "?fields=" + encodeURIComponent("sheets.properties(sheetId,title)") +
+                  "&key=" + encodeURIComponent(key);
+    return fetch(metaUrl, { cache: "no-store" })
+      .then(function (r) {
+        if (!r.ok) throw new Error("sheet-api meta " + r.status);
+        return r.json();
+      })
+      .then(function (meta) {
+        var props = (meta.sheets || []).map(function (s) { return s.properties; });
+        var target = props.filter(function (p) { return String(p.sheetId) === gid; })[0] || props[0];
+        if (!target) throw new Error("sheet-api no-tab");
+        var range = "'" + String(target.title).replace(/'/g, "''") + "'!A1:Z2000";
+        var fields = "sheets(data.rowData.values(formattedValue,hyperlink,textFormatRuns(format.link.uri),userEnteredValue.formulaValue))";
+        var dataUrl = base + "?ranges=" + encodeURIComponent(range) + "&fields=" + encodeURIComponent(fields) +
+                      "&key=" + encodeURIComponent(key);
+        return fetch(dataUrl, { cache: "no-store" });
+      })
+      .then(function (r) {
+        if (!r.ok) throw new Error("sheet-api data " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        var rowData = (data.sheets && data.sheets[0] && data.sheets[0].data &&
+                       data.sheets[0].data[0] && data.sheets[0].data[0].rowData) || [];
+        var rows = rowData.map(function (r) { return r.values || []; });
+        if (rows.length < 2) throw new Error("sheet-api empty");
+        var head = rows[0].map(function (cell) { return headerKey(cell && cell.formattedValue); });
+        var nameCol = head.indexOf("name");
+        var out = [];
+        for (var r = 1; r < rows.length; r++) {
+          var cells = rows[r], obj = {};
+          for (var c = 0; c < head.length; c++) {
+            if (head[c]) obj[head[c]] = (cells[c] && cells[c].formattedValue) || "";
+          }
+          if (!obj.name || !String(obj.name).trim()) continue;
+          if (nameCol > -1) obj.link = linkOf(cells[nameCol]) || obj.link;
+          out.push(obj);
+        }
+        if (!out.length) throw new Error("sheet-api no-rows");
+        return out;
+      });
+  }
+
+  function loadSheet() {
+    return loadSheetApi().catch(function (e) {
+      if (e !== "no-sheet-api") console.warn("시트 API 로드 실패 → CSV 방식으로 재시도:", e);
+      return loadSheetCsv();
+    });
   }
 
   document.getElementById("app").innerHTML =

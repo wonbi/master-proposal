@@ -124,6 +124,9 @@
           '<div><span class="mini">면과세</span><select data-f="tax">'+taxSel("면세")+taxSel("과세")+'</select></div>'+
           '<div><span class="mini">&nbsp;</span></div>'+
         '</div>'+
+        '<div class="row r4">'+
+          '<div><span class="mini">원본 링크 (masterc.kr 등 — 상품명 클릭 링크 + 사진·스펙 자동수집용, 선택)</span><input data-f="link" value="'+esc(it.link||"")+'" placeholder="https://masterc.kr/..."></div>'+
+        '</div>'+
         '<div class="card-foot">'+
           '<label class="toggle"><input type="checkbox" data-f="show"'+(it.show!==false?' checked':'')+'> 사이트에 표시</label>'+
           '<button class="btn-saveone" data-saveone="'+it._key+'">저장</button>'+
@@ -221,7 +224,8 @@
       "택배비":"shipFee","배송비":"shipFee","shipfee":"shipFee",
       "면과세":"tax","과세":"tax","tax":"tax",
       "사진":"image","이미지":"image","image":"image","img":"image",
-      "노출":"show","표시":"show","show":"show"
+      "노출":"show","표시":"show","show":"show",
+      "링크":"link","link":"link","url":"link","주소":"link"
     };
     return map[s]||null;
   }
@@ -317,7 +321,7 @@
         var taxVal=(o.tax==="과세") ? "과세" : "면세";
         return { category:catKey, name:String(o.name||"").trim(), warehouse:String(o.warehouse||"").trim(),
           spec:String(o.spec||"").trim(), supply_price:cleanNum(o.supplyPrice), courier:String(o.courier||"").trim(),
-          ship_fee:cleanNum(o.shipFee), tax:taxVal, image:String(o.image||"").trim(), show:showVal,
+          ship_fee:cleanNum(o.shipFee), tax:taxVal, image:String(o.image||"").trim(), link:String(o.link||"").trim(), show:showVal,
           sort_order:order, version_id:currentVersion.id, updated_at:new Date().toISOString() };
       }).filter(function(r){ return r.name; });
       importedCount=rowsDb.length;
@@ -513,6 +517,9 @@
           '<div><span class="mini">면과세</span><select data-nf="tax">'+taxSel("면세")+taxSel("과세")+'</select></div>'+
           '<div><span class="mini">&nbsp;</span></div>'+
         '</div>'+
+        '<div class="row r4">'+
+          '<div><span class="mini">원본 링크 (masterc.kr 등 — 상품명 클릭 링크 + 사진·스펙 자동수집용, 선택)</span><input data-nf="link" value="'+esc(it.link||"")+'" placeholder="https://masterc.kr/..."></div>'+
+        '</div>'+
         '<div class="card-foot">'+
           '<label class="toggle"><input type="checkbox" data-nf="show"'+(it.show!==false?' checked':'')+'> 사이트에 표시</label>'+
           '<button class="btn-cancel" id="btn-add-cancel">취소</button>'+
@@ -541,6 +548,7 @@
       statsChipHTML()+
       '<span class="spacer"></span>'+
       '<button class="btn-ghost" id="btn-sheet-link" title="상품명 자동완성을 구글 시트에서 실시간으로">🔗 시트연동'+(apiUrl()?' ✓':'')+'</button>'+
+      '<button class="btn-ghost" id="btn-copy-token" title="photo-updater.html 북마클릿에 붙여넣을 로그인 토큰 복사 (1시간 유효)">📸 북마클릿 토큰 복사</button>'+
       '<a href="'+pubHref+'" target="_blank" rel="noopener">공개 사이트 보기 ↗</a>'+
       '<button class="btn-ghost" id="btn-logout">로그아웃</button></div>'+
       '<div class="wrap">'+
@@ -649,6 +657,7 @@
     root.addEventListener("click", function(e){
       if(e.target.id==="btn-logout"){ client.auth.signOut().then(function(){ items=[];deletedIds=[];dirty=false; addingCat=null;newItem=null; showLogin(); }); return; }
       if(e.target.id==="btn-sheet-link"){ setApiUrl(); renderEditor(); return; }
+      if(e.target.id==="btn-copy-token"){ copyBookmarkletToken(); return; }
       if(e.target.id==="btn-save"){ saveAll(); return; }
       if(e.target.closest && e.target.closest("#sp-toggle")){ settingsOpen=!settingsOpen; renderEditor(); return; }
       if(e.target.id==="btn-save-settings"){ saveSettings(e.target); return; }
@@ -683,7 +692,7 @@
       var addCat=e.target.getAttribute("data-add");
       if(addCat){
         addingCat=addCat; expandedCats[addCat]=true;
-        newItem={_key:"NEW",category:addCat,name:"",warehouse:"",spec:"",supply_price:0,courier:"",ship_fee:addCat==="living"?2500:4000,tax:addCat==="fish"?"면세":"과세",image:"",show:true};
+        newItem={_key:"NEW",category:addCat,name:"",warehouse:"",spec:"",supply_price:0,courier:"",ship_fee:addCat==="living"?2500:4000,tax:addCat==="fish"?"면세":"과세",image:"",link:"",show:true};
         renderEditor(); focusNewName(); return;
       }
       // 자동완성 후보 클릭 → 값 채우기
@@ -756,6 +765,22 @@
     if(v) loadCatalogFromApi();
   }
 
+  // photo-updater.html 북마클릿이 Supabase에 쓰기 위한 로그인 토큰을 복사.
+  // 토큰 자체는 서버에 저장하지 않고 지금 이 로그인 세션의 것을 그대로 넘겨줌 —
+  // masterc.kr 탭(다른 도메인)은 이 관리자 페이지의 로그인 상태를 알 방법이 없어서,
+  // 딱 한 번 복사해 붙여넣는 방식으로 권한을 넘긴다. (Supabase 기본 만료: 1시간)
+  function copyBookmarkletToken(){
+    client.auth.getSession().then(function(res){
+      var token=res && res.data && res.data.session && res.data.session.access_token;
+      if(!token){ toast("로그인 세션을 찾을 수 없어요. 새로고침 후 다시 시도하세요.", true); return; }
+      var text=token;
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(function(){ toast("토큰 복사됨 ✅ photo-updater.html 북마클릿에 붙여넣으세요 (1시간 유효)"); },
+          function(){ window.prompt("아래 토큰을 복사하세요 (1시간 유효)", text); });
+      } else { window.prompt("아래 토큰을 복사하세요 (1시간 유효)", text); }
+    });
+  }
+
   // 구글 시트 Apps Script 웹앱에서 전체 카탈로그를 JSONP로 받아옴(1회 캐시)
   function loadCatalogFromApi(){
     var url=apiUrl();
@@ -823,7 +848,7 @@
       var r=(res.data && res.data[0]) || null;
       if(r){
         items.push({ _key:uid(), id:r.id, category:r.category||"fish", name:r.name||"", warehouse:r.warehouse||"", spec:r.spec||"",
-          supply_price:r.supply_price||0, courier:r.courier||"", ship_fee:r.ship_fee||0, tax:r.tax||"면세", image:r.image||"", show:r.show!==false, sort_order:r.sort_order||(maxSort+10) });
+          supply_price:r.supply_price||0, courier:r.courier||"", ship_fee:r.ship_fee||0, tax:r.tax||"면세", image:r.image||"", link:r.link||"", show:r.show!==false, sort_order:r.sort_order||(maxSort+10) });
         addingCat=null; newItem=null; renderEditor();
         toast("상품이 추가됐어요 ✅ 공개 사이트에 반영됩니다");
       } else {
@@ -864,7 +889,7 @@
   function dbRow(it, order){
     var r={ category:it.category, name:(it.name||"").trim(), warehouse:(it.warehouse||"").trim(), spec:(it.spec||"").trim(),
       supply_price:parseInt(it.supply_price,10)||0, courier:(it.courier||"").trim(), ship_fee:parseInt(it.ship_fee,10)||0,
-      tax:it.tax||"면세", image:(it.image||"").trim(), show:it.show!==false, sort_order:order, updated_at:new Date().toISOString() };
+      tax:it.tax||"면세", image:(it.image||"").trim(), link:(it.link||"").trim(), show:it.show!==false, sort_order:order, updated_at:new Date().toISOString() };
     if(it.id) r.id=it.id;
     if(currentVersion) r.version_id=currentVersion.id;
     return r;
@@ -1075,7 +1100,7 @@
       items=(res.data||[]).map(function(r){ return {
         _key:uid(), id:r.id, category:r.category||"fish", name:r.name||"", warehouse:r.warehouse||"", spec:r.spec||"",
         supply_price:r.supply_price||0, courier:r.courier||"", ship_fee:r.ship_fee||0, tax:r.tax||"면세",
-        image:r.image||"", show:r.show!==false, sort_order:r.sort_order||0 }; });
+        image:r.image||"", link:r.link||"", show:r.show!==false, sort_order:r.sort_order||0 }; });
     });
   }
 

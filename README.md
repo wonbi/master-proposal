@@ -32,6 +32,9 @@
 | `all-products.html` | 로그인·가격숨김 없이 전체 상품(약 630종)을 **창고별로** 모아 보여주는 별도 페이지. `data/all-products.json` 스냅샷 기반, 상품명 검색 지원 |
 | `data/all-products.json` | `all-products.html` 이 읽는 전체 상품 데이터(마스터 유통시트 스냅샷) |
 | `images/products/` | 상품 사진 24장 |
+| `admin.html` / `assets/admin.js` | 상품 관리자(Supabase 로그인 편집) |
+| `photo-updater.html` / `assets/photo-updater.js` | 상품 원본 링크(masterc.kr 등)에서 사진·스펙을 긁어와 자동으로 채우는 북마클릿 도구 |
+| `supabase/link-field.sql` | 상품에 원본 링크(`link`) 컬럼 추가하는 마이그레이션 |
 | `.github/workflows/deploy-pages.yml` | 푸시 시 자동 배포 |
 | `SETUP.md` | 사용 설명서 |
 
