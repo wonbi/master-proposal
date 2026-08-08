@@ -30,6 +30,7 @@
   var siteSettings = {};  // 상단·회사 문구 설정(현재 버전)
   var settingsOpen = false;
   var catsOpen = false;   // 카테고리 관리 패널 펼침
+  var bulkOpen = false;   // CSV 대량 가져오기 패널 펼침
   var statsOpen = false;  // 조회수 패널 펼침
   var statsRows = null;   // 조회 기록 (null=아직 안 불러옴, []=없음)
   var statsErr = "";
@@ -204,6 +205,139 @@
     function done(){ CATS=CATS.filter(function(x){return x.key!==key;}); renderEditor(); toast("카테고리 삭제됨"); }
     if(c.id){ client.from("categories").delete().eq("id",c.id).then(function(res){ if(res&&res.error) throw res.error; done(); }).catch(function(err){ toast("삭제 실패: "+(err.message||err), true); }); }
     else done();
+  }
+
+  /* ---------------- CSV 대량 가져오기 ---------------- */
+  // 상품시트-템플릿.csv 와 같은 헤더 별칭(공개 사이트 app.js 의 규칙과 동일)
+  function bulkHeaderKey(h){
+    var s=String(h||"").trim().replace(/\s+/g,"").toLowerCase();
+    var map={
+      "카테고리":"category","분류":"category","category":"category",
+      "상품명":"name","이름":"name","name":"name",
+      "창고":"warehouse","배지":"warehouse","태그":"warehouse","warehouse":"warehouse",
+      "설명":"spec","스펙":"spec","spec":"spec",
+      "공급가":"supplyPrice","가격":"supplyPrice","단가":"supplyPrice","price":"supplyPrice",
+      "택배사":"courier","courier":"courier",
+      "택배비":"shipFee","배송비":"shipFee","shipfee":"shipFee",
+      "면과세":"tax","과세":"tax","tax":"tax",
+      "사진":"image","이미지":"image","image":"image","img":"image",
+      "노출":"show","표시":"show","show":"show"
+    };
+    return map[s]||null;
+  }
+  function parseBulkCSV(text){
+    var rows=[],row=[],field="",inQ=false,i=0,c;
+    while(i<text.length){
+      c=text[i];
+      if(inQ){
+        if(c==='"'){ if(text[i+1]==='"'){field+='"';i+=2;continue;} inQ=false;i++;continue; }
+        field+=c;i++;continue;
+      }
+      if(c==='"'){ inQ=true;i++;continue; }
+      if(c===','){ row.push(field);field="";i++;continue; }
+      if(c==='\r'){ i++;continue; }
+      if(c==='\n'){ row.push(field);rows.push(row);row=[];field="";i++;continue; }
+      field+=c;i++;
+    }
+    row.push(field); rows.push(row);
+    return rows.filter(function(r){ return r.length>1 || (r[0]||"").trim()!==""; });
+  }
+  function bulkRowsToObjects(text){
+    var rows=parseBulkCSV(text); if(!rows.length) return [];
+    var head=rows[0].map(bulkHeaderKey);
+    var out=[];
+    for(var r=1;r<rows.length;r++){
+      var obj={};
+      for(var c=0;c<head.length;c++){ if(head[c]) obj[head[c]]=(rows[r][c]||"").trim(); }
+      if(!obj.name) continue;
+      out.push(obj);
+    }
+    return out;
+  }
+  function cleanNum(s){ var d=String(s||"").replace(/[^0-9]/g,""); return d?parseInt(d,10):0; }
+
+  function bulkPanelHTML(){
+    if(!bulkOpen){
+      return '<div class="settings-panel"><div class="sp-head" id="bulk-toggle"><span>📋 CSV로 대량 가져오기 (전체 상품 한 번에)</span><span class="sp-caret">펼치기 ▾</span></div></div>';
+    }
+    return '<div class="settings-panel open">'+
+      '<div class="sp-head" id="bulk-toggle"><span>📋 CSV로 대량 가져오기 (전체 상품 한 번에)</span><span class="sp-caret">접기 ▴</span></div>'+
+      '<div class="sp-body">'+
+        '<div class="sp-note" style="margin-bottom:8px;">'+
+          '<code>상품시트-템플릿.csv</code>와 같은 형식(헤더: 카테고리,상품명,창고,설명,공급가,택배사,택배비,면과세,사진,노출)의 CSV를 붙여넣거나 파일을 선택하세요.'+
+          '<br>시트에 없는 카테고리 이름은 자동으로 새 카테고리로 만들어집니다.'+
+        '</div>'+
+        '<textarea id="bulk-csv-text" rows="6" placeholder="여기에 CSV 내용을 붙여넣으세요"></textarea>'+
+        '<div class="row r2" style="margin-top:8px;align-items:end;">'+
+          '<div><span class="mini">또는 CSV 파일 선택</span><input type="file" id="bulk-csv-file" accept=".csv,text/csv"></div>'+
+          '<div><label class="toggle"><input type="checkbox" id="bulk-replace" checked> 이 버전의 기존 상품을 지우고 새로 채우기</label></div>'+
+        '</div>'+
+        '<div class="sp-foot"><span class="sp-note">현재 버전(<b>'+(currentVersion?esc(currentVersion.name):"버전 없음")+'</b>)에 가져옵니다.</span>'+
+        '<button class="btn-addsave" id="btn-bulk-import">가져오기 실행</button></div>'+
+      '</div></div>';
+  }
+
+  function runBulkImport(){
+    if(!currentVersion){ toast("먼저 버전을 만들거나 선택하세요", true); return; }
+    var ta=document.getElementById("bulk-csv-text");
+    var text=(ta&&ta.value||"").trim();
+    if(!text){ toast("CSV 내용을 붙여넣거나 파일을 선택하세요", true); return; }
+    var raw=bulkRowsToObjects(text);
+    if(!raw.length){ toast("가져올 상품이 없습니다. 헤더와 내용을 확인하세요.", true); return; }
+    var replace=!!(document.getElementById("bulk-replace") && document.getElementById("bulk-replace").checked);
+    var btn=document.getElementById("btn-bulk-import"); btn.disabled=true; btn.textContent="가져오는 중…";
+
+    // 1) CSV의 카테고리 이름 → key. 없는 이름은 새 카테고리로 생성.
+    var byName={}; CATS.forEach(function(c){ byName[(c.name||"").trim()]=c.key; });
+    var newNames=[], seenNew={};
+    raw.forEach(function(o){
+      var cn=(o.category||"").trim();
+      if(cn && !byName[cn] && !seenNew[cn]){ seenNew[cn]=1; newNames.push(cn); }
+    });
+    var palette=["#0E8A8F","#FF5B39","#3BA559","#C0392B","#9B5DE5","#E8A33D","#3D7DCB","#B23A48","#5A8F3C","#7A5C3E"];
+    var baseSort=(CATS.length?Math.max.apply(null,CATS.map(function(c){return c.sort_order||0;})):0);
+
+    var createCats=newNames.length ? Promise.all(newNames.map(function(name,idx){
+      var key="cat"+uid().replace(/[^a-z0-9]/gi,"").slice(0,8).toLowerCase();
+      var c={ key:key, name:name, mark:name.charAt(0)||"", eyebrow:"", descr:"", meta:"", accent:palette[idx%palette.length], fit:"cover", show:true, sort_order:baseSort+10+idx*10 };
+      return client.from("categories").insert(withOwner(c)).select().then(function(res){
+        if(res.error) throw res.error;
+        if(res.data && res.data[0]) c.id=res.data[0].id;
+        CATS.push(c); byName[name]=key;
+      });
+    })) : Promise.resolve();
+
+    var importedCount=0;
+    createCats.then(function(){
+      var order=0;
+      var rowsDb=raw.map(function(o){
+        order+=10;
+        var catKey=byName[(o.category||"").trim()] || (CATS[0]&&CATS[0].key) || "meal";
+        var showVal=/숨김|hide|false/i.test(String(o.show||"")) ? false : true;
+        var taxVal=(o.tax==="과세") ? "과세" : "면세";
+        return { category:catKey, name:String(o.name||"").trim(), warehouse:String(o.warehouse||"").trim(),
+          spec:String(o.spec||"").trim(), supply_price:cleanNum(o.supplyPrice), courier:String(o.courier||"").trim(),
+          ship_fee:cleanNum(o.shipFee), tax:taxVal, image:String(o.image||"").trim(), show:showVal,
+          sort_order:order, version_id:currentVersion.id, updated_at:new Date().toISOString() };
+      }).filter(function(r){ return r.name; });
+      importedCount=rowsDb.length;
+
+      var delChain = replace ? client.from("products").delete().eq("version_id",currentVersion.id).then(chk) : Promise.resolve();
+      return delChain.then(function(){
+        var chunks=[]; for(var i=0;i<rowsDb.length;i+=200) chunks.push(rowsDb.slice(i,i+200));
+        var chain=Promise.resolve();
+        chunks.forEach(function(chunk){ chain=chain.then(function(){ return client.from("products").insert(chunk.map(withOwner)).then(chk); }); });
+        return chain;
+      });
+    }).then(function(){
+      return loadProducts();
+    }).then(function(){
+      dirty=false; bulkOpen=false; renderEditor();
+      toast(importedCount+"개 상품을 가져왔어요 ✅"+(newNames.length?(" (새 카테고리 "+newNames.length+"개 생성)"):""));
+    }).catch(function(err){
+      if(btn){ btn.disabled=false; btn.textContent="가져오기 실행"; }
+      toast("가져오기 실패: "+(err.message||err), true);
+    });
   }
 
   /* ---------------- 조회수 통계 ---------------- */
@@ -412,7 +546,8 @@
       '<div class="wrap">'+
       '<div class="hint">상품을 고친 뒤 그 상품의 <b>[저장]</b> 버튼을 누르면 바로 공개 사이트에 반영됩니다. 사진은 <b>[사진 업로드]</b>, 삭제는 <b>[삭제]</b>로 즉시 처리돼요. (아래 <b>[전체 저장]</b>은 여러 개를 한 번에 저장할 때만 쓰세요.)</div>'+
       settingsPanelHTML()+
-      catPanelHTML();
+      catPanelHTML()+
+      bulkPanelHTML();
 
     var anyOpen = CATS.some(function(c){ return expandedCats[c.key]; });
     html+='<div class="prodlist-head"><span class="plh-title">상품 목록 <span class="plh-hint">(카테고리 제목을 눌러 펼치기/접기)</span></span>'+
@@ -492,6 +627,12 @@
         if(nf==="category"){ newItem.category=e.target.value; addingCat=e.target.value; renderEditor(); focusNewName(); return; }
       }
       if(e.target.getAttribute("data-nfile") && e.target.files && e.target.files[0]){ uploadNew(e.target.files[0]); return; }
+      if(e.target.id==="bulk-csv-file" && e.target.files && e.target.files[0]){
+        var bf=e.target.files[0], reader=new FileReader();
+        reader.onload=function(ev){ var bta=document.getElementById("bulk-csv-text"); if(bta) bta.value=String(ev.target.result||""); };
+        reader.readAsText(bf, "utf-8");
+        return;
+      }
 
       // 기존 상품
       var f=e.target.getAttribute("data-f");
@@ -520,6 +661,8 @@
       // 팝업 닫기 (X 버튼 또는 바깥 배경 클릭)
       if(e.target.id==="btn-st-close" || e.target.id==="st-close-back"){ statsOpen=false; renderEditor(); return; }
       if(e.target.closest && e.target.closest("#cat-toggle")){ catsOpen=!catsOpen; renderEditor(); return; }
+      if(e.target.closest && e.target.closest("#bulk-toggle")){ bulkOpen=!bulkOpen; renderEditor(); return; }
+      if(e.target.id==="btn-bulk-import"){ runBulkImport(); return; }
       if(e.target.id==="btn-cat-new"){ newCategory(); return; }
       var catSaveKey=e.target.getAttribute("data-catsave");
       if(catSaveKey){ saveCategory(catSaveKey, e.target); return; }

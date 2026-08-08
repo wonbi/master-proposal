@@ -28,6 +28,7 @@
 | `config.js` | **여기만 고침** — 구글 시트 연결 + 회사/담당자 정보 |
 | `data/products.json` | 기본 상품 24종 (시트 미연결 시 사용) |
 | `상품시트-템플릿.csv` | 구글 시트에 가져올 상품 템플릿 |
+| `전체상품-시트.csv` | 취급 전체 상품(약 630종)을 담은 CSV — 관리자의 [CSV 대량 가져오기]로 "전체상품" 버전을 만들 때 사용 (`ADMIN-SETUP.md` 참고) |
 | `images/products/` | 상품 사진 24장 |
 | `.github/workflows/deploy-pages.yml` | 푸시 시 자동 배포 |
 | `SETUP.md` | 사용 설명서 |

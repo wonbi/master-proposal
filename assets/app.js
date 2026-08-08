@@ -66,6 +66,11 @@
     if (!isFinite(v) || v === 0 && (n === "" || n == null)) return esc(n || "");
     return "₩" + wonKR.format(v);
   }
+  function shipLabel(n) {
+    var v = Number(n);
+    if (isFinite(v) && v === 0) return "무료";
+    return money(n);
+  }
   function toNumber(s) {
     if (typeof s === "number") return s;
     var d = String(s || "").replace(/[^0-9.-]/g, "");
@@ -204,7 +209,7 @@
           '</div>' +
           '<div class="ship-row" style="background:' + c.rowBg + ';">' +
             (p.courier ? '<span class="pill" style="color:' + c.accent + ';background:' + c.pillBg + ';">' + esc(p.courier) + '</span>' : '') +
-            '<span class="txt">택배비 ' + money(p.shipFee) + '</span>' +
+            '<span class="txt">택배비 ' + shipLabel(p.shipFee) + '</span>' +
           '</div>' +
         '</div>' +
       '</div>';
