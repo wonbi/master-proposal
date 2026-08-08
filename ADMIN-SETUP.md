@@ -110,8 +110,86 @@ masterc.kr 같은 원본 상세페이지 주소를 상품마다 등록해두면,
 
 ### 1) Apps Script 만들기
 1. [script.google.com](https://script.google.com) → **새 프로젝트**
-2. 기본 코드 지우고, 아래 코드 전체를 붙여넣기 (`SECRET` 값은 원하는 비밀번호로 변경)
+2. 기본 코드 지우고, 아래 코드 전체를 붙여넣기 (`SHEET_ID`·`SECRET` 값은 회원님 것으로 변경)
 3. 저장(💾)
+
+```js
+var SHEET_ID = '여기에_마스터_유통시트_ID';
+var SECRET   = 'wonbi-master-key';   // ← 원하는 비밀키로 변경
+
+function doGet(e){
+  var cb  = (e && e.parameter && e.parameter.callback) || '';
+  var key = (e && e.parameter && e.parameter.key) || '';
+  var payload;
+  if (key !== SECRET) { payload = { error: 'unauthorized' }; }
+  else { try { payload = buildCatalog(); } catch (err) { payload = { error: String(err) }; } }
+  var json = JSON.stringify(payload);
+  if (cb) return ContentService.createTextOutput(cb + '(' + json + ')')
+                 .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  return ContentService.createTextOutput(json).setMimeType(ContentService.MimeType.JSON);
+}
+
+function buildCatalog(){
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var sheets = ss.getSheets(), seen = {}, out = [];
+  for (var s = 0; s < sheets.length; s++){
+    var sh = sheets[s];
+    if (sh.getName().indexOf('변동') > -1) continue;   // 변동사항 탭 제외
+    var range = sh.getDataRange();
+    var rows = range.getValues();
+    var richRows = range.getRichTextValues();   // 상품명 셀 하이퍼링크를 읽기 위해 필요
+    var formulaRows = range.getFormulas();       // =HYPERLINK() 수식 링크도 보조로 읽음
+    for (var r = 0; r < rows.length; r++){
+      var row = rows[r], idx = -1;
+      for (var j = row.length - 1; j >= 0; j--){
+        var v = String(row[j]).trim();
+        if (v === '면세' || v === '과세'){ idx = j; break; }
+      }
+      if (idx < 4) continue;
+      var tax = String(row[idx]).trim();
+      var courier = String(row[idx-2]).trim();
+      var priceC  = String(row[idx-3]);
+      var pname   = String(row[idx-4]).trim();
+      var wh      = (idx-5 >= 0) ? String(row[idx-5]).trim() : '';
+      if (!(courier.indexOf('택배') > -1 || courier.indexOf('통운') > -1)) continue;
+      var price = toNum(priceC);
+      if (!pname || price === null || pname.indexOf('상품명') > -1) continue;
+      if (seen[pname]) continue;
+      seen[pname] = true;
+      var link = linkOf(richRows[r][idx-4], formulaRows[r][idx-4]);
+      out.push({ name: pname, warehouse: wh, supply_price: price,
+                 courier: courier, ship_fee: toShip(String(row[idx-1])), tax: tax, link: link });
+    }
+  }
+  return out;
+}
+function linkOf(richTextValue, formula){
+  try {
+    if (richTextValue) {
+      var direct = richTextValue.getLinkUrl();
+      if (direct) return direct;
+      var runs = richTextValue.getRuns();
+      for (var i = 0; i < runs.length; i++){
+        var u = runs[i].getLinkUrl();
+        if (u) return u;
+      }
+    }
+  } catch (e) {}
+  if (formula) {
+    var m = String(formula).match(/HYPERLINK\(\s*"([^"]+)"/i);
+    if (m) return m[1];
+  }
+  return '';
+}
+function toNum(s){ s=String(s); var i=s.indexOf('>'); if(i>-1) s=s.substring(i+1);
+  var d=s.replace(/[^0-9]/g,''); return d===''?null:parseInt(d,10); }
+function toShip(s){ if(String(s).indexOf('무료')>-1) return 0; var n=toNum(s); return n===null?0:n; }
+```
+
+> 이미 이 Apps Script를 쓰고 계셨다면, `buildCatalog()` / `linkOf()` / `toNum()` / `toShip()` 을 위 코드로
+> 통째로 덮어쓰기만 하면 됩니다(`SHEET_ID`·`SECRET`는 원래 쓰시던 값 그대로 두세요).
+> 저장한 뒤 **꼭 재배포**해야 반영됩니다 — 오른쪽 위 **배포 → 배포 관리** → 기존 배포 옆 연필(✏️)
+> → 버전 **"새 버전"** 선택 → **배포**. (기존 URL이 그대로 유지되어 관리자에 다시 붙여넣지 않아도 됩니다.)
 
 ### 2) 웹앱으로 배포
 1. 오른쪽 위 **배포 → 새 배포**

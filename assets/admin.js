@@ -700,7 +700,8 @@
       if(acEl && newItem){
         var r=acResults[parseInt(acEl.getAttribute("data-ac"),10)];
         if(r){ newItem.name=r.name; newItem.warehouse=r.warehouse||""; newItem.spec=r.spec||"";
-          newItem.supply_price=r.supply_price||0; newItem.courier=r.courier||""; newItem.ship_fee=r.ship_fee||0; newItem.tax=r.tax||"면세"; }
+          newItem.supply_price=r.supply_price||0; newItem.courier=r.courier||""; newItem.ship_fee=r.ship_fee||0; newItem.tax=r.tax||"면세";
+          newItem.link=r.link||""; }
         renderEditor(); focusNewName(); return;
       }
       if(e.target.id==="btn-add-cancel"){ addingCat=null; newItem=null; renderEditor(); return; }
